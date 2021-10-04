@@ -12,17 +12,6 @@ public class Person {
     private String motherID;
     private String spouseID;
 
-    public Person() {
-        id = null;
-        username = null;
-        firstName = null;
-        lastName = null;
-        gender = null;
-        fatherID = null;
-        motherID = null;
-        spouseID = null;
-    }
-
     public Person(String id, String username, String firstName, String lastName, String gender, String fatherID,
                   String motherID, String spouseID) {
         this.id = id;

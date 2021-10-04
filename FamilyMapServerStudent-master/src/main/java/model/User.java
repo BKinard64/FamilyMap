@@ -9,27 +9,17 @@ public class User {
     private String firstName;
     private String lastName;
     private String gender;
-    private String id;
-
-    public User() {
-        username = null;
-        password = null;
-        email = null;
-        firstName = null;
-        lastName = null;
-        gender = null;
-        id = null;
-    }
+    private String personID;
 
     public User(String username, String password, String email, String firstName, String lastName, String gender,
-                String id) {
+                String personID) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
-        this.id = id;
+        this.personID = personID;
     }
 
     public String getUsername() {
@@ -80,12 +70,12 @@ public class User {
         this.gender = gender;
     }
 
-    public String getId() {
-        return id;
+    public String getPersonID() {
+        return personID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPersonID(String personID) {
+        this.personID = personID;
     }
 
     @Override
@@ -95,12 +85,12 @@ public class User {
         User user = (User) o;
         return username.equals(user.username) && password.equals(user.password) && email.equals(user.email) &&
                 firstName.equals(user.firstName) && lastName.equals(user.lastName) && gender.equals(user.gender) &&
-                id.equals(user.id);
+                personID.equals(user.personID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, email, firstName, lastName, gender, id);
+        return Objects.hash(username, password, email, firstName, lastName, gender, personID);
     }
 
     @Override
@@ -112,7 +102,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", gender='" + gender + '\'' +
-                ", id='" + id + '\'' +
+                ", personID='" + personID + '\'' +
                 '}';
     }
 }

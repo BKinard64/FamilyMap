@@ -6,26 +6,14 @@ public class Event {
     private String id;
     private String username;
     private String personID;
-    private double latitude;
-    private double longitude;
+    private float latitude;
+    private float longitude;
     private String country;
     private String city;
     private String type;
     private int year;
 
-    public Event() {
-        id = null;
-        username = null;
-        personID = null;
-        latitude = 0.0;
-        longitude = 0.0;
-        country = null;
-        city = null;
-        type = null;
-        year = 0;
-    }
-
-    public Event(String id, String username, String personID, double latitude, double longitude, String country,
+    public Event(String id, String username, String personID, float latitude, float longitude, String country,
                  String city, String type, int year) {
         this.id = id;
         this.username = username;
@@ -66,7 +54,7 @@ public class Event {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(float latitude) {
         this.latitude = latitude;
     }
 
@@ -74,7 +62,7 @@ public class Event {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(float longitude) {
         this.longitude = longitude;
     }
 
