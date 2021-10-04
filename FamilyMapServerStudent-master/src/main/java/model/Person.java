@@ -23,7 +23,8 @@ public class Person {
         spouseID = null;
     }
 
-    public Person(String id, String username, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID) {
+    public Person(String id, String username, String firstName, String lastName, String gender, String fatherID,
+                  String motherID, String spouseID) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
