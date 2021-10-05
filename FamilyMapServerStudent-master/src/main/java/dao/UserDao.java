@@ -12,7 +12,7 @@ public class UserDao {
         this.conn = conn;
     }
 
-    public void register(User user) {}
+    public AuthToken register(User user) {return null;}
 
     public AuthToken login(User user) {return null;}
 }
