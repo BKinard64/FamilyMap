@@ -1,6 +1,8 @@
 package dao;
 
+import model.AuthToken;
 import model.Person;
+
 
 import java.sql.Connection;
 
@@ -12,6 +14,5 @@ public class PersonDao {
     }
 
     public Person find(String personID) {return null;}
-
 
 }
