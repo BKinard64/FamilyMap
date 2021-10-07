@@ -14,4 +14,6 @@ public class EventDao {
     public void insert(Event event) {}
 
     public Event find(String eventID) {return null;}
+
+    public void delete(Event event) {}
 }

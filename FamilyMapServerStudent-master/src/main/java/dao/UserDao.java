@@ -14,7 +14,9 @@ public class UserDao {
 
     public AuthToken register(User user) {return null;}
 
-    public AuthToken login(User user) {return null;}
+    public User find(String username) {return null;}
 
     public void delete(User user) {}
+
+    public AuthToken login(User user) {return null;}
 }

@@ -12,6 +12,12 @@ public class AuthTokenDao {
 
     public AuthTokenDao(Connection conn) { this.conn = conn; }
 
+    public void insert(AuthToken token) {}
+
+    public AuthToken find(String tokenID) {return null;}
+
+    public void delete(AuthToken token) {}
+
     public List<Person> getFamily(AuthToken token) {return null;}
 
     public List<Event> getFamilyEvents(AuthToken token) {return null;}
