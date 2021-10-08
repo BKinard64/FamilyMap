@@ -1,12 +1,39 @@
 package service.results;
 
+/**
+ * A result object for the register API.
+ */
 public class RegisterResult {
+    /**
+     * The authtoken genearated by a successful register.
+     */
     private String authtoken;
+    /**
+     * The username for the registered user.
+     */
     private String username;
+    /**
+     * The ID of the Person object generated for the registered user.
+     */
     private String personID;
+    /**
+     * The error message in the event of an unsuccessful registration.
+     */
     private String message;
+    /**
+     * An indicator of a successful/unsuccessful registration.
+     */
     private boolean success;
 
+    /**
+     * Create a RegisterResult object with the following parameters.
+     *
+     * @param authtoken the authtoken genearated by a successful register.
+     * @param username the username for the registered user.
+     * @param personID the ID of the Person object generated for the registered user.
+     * @param message the error message in the event of an unsuccessful registration.
+     * @param success an indicator of a successful/unsuccessful registration.
+     */
     public RegisterResult(String authtoken, String username, String personID, String message, boolean success) {
         this.authtoken = authtoken;
         this.username = username;
