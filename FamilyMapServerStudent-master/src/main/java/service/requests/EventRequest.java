@@ -6,4 +6,8 @@ public class EventRequest {
     public EventRequest(String eventID) {
         this.eventID = eventID;
     }
+
+    public String getEventID() {
+        return eventID;
+    }
 }

@@ -8,4 +8,12 @@ public class FillResult {
         this.message = message;
         this.success = success;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getSuccess() {
+        return success;
+    }
 }

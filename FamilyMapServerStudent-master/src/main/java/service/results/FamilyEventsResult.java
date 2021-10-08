@@ -14,4 +14,16 @@ public class FamilyEventsResult {
         this.message = message;
         this.success = success;
     }
+
+    public List<Event> getData() {
+        return data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
 }

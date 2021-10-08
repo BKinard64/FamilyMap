@@ -16,4 +16,16 @@ public class LoadRequest {
         this.persons = persons;
         this.events = events;
     }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public List<Person> getPersons() {
+        return persons;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
 }

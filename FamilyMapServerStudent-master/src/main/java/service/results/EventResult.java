@@ -27,4 +27,48 @@ public class EventResult {
         this.year = year;
         this.success = success;
     }
+
+    public String getAssociatedUsername() {
+        return associatedUsername;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public String getPersonID() {
+        return personID;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
 }

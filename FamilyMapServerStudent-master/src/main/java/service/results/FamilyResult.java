@@ -14,4 +14,16 @@ public class FamilyResult {
         this.message = message;
         this.success = success;
     }
+
+    public List<Person> getData() {
+        return data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
 }
