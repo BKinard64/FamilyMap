@@ -33,7 +33,7 @@ public class PersonDao {
     /**
      * Find a Person with the given person ID.
      *
-     * @param personID the ID of the person to find.
+     * @param personID the ID of the Person to find.
      * @return a Person object corresponding to the given person ID.
      */
     public Person find(String personID) {return null;}
@@ -41,8 +41,8 @@ public class PersonDao {
     /**
      * Find the family members of the current user.
      *
-     * @param username the username of the current user.
-     * @return a list of Person objects representing the family members of the current user.
+     * @param username the username of the current User.
+     * @return a list of Person objects representing the family members of the current User.
      */
     public List<Person> getFamily(String username) {return null;}
 

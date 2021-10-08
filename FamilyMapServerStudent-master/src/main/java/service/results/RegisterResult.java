@@ -5,15 +5,15 @@ package service.results;
  */
 public class RegisterResult {
     /**
-     * The authtoken genearated by a successful register.
+     * The AuthToken genearated by a successful register.
      */
     private String authtoken;
     /**
-     * The username for the registered user.
+     * The username for the registered User.
      */
     private String username;
     /**
-     * The ID of the Person object generated for the registered user.
+     * The ID of the Person object generated for the registered User.
      */
     private String personID;
     /**
@@ -28,9 +28,9 @@ public class RegisterResult {
     /**
      * Create a RegisterResult object with the following parameters.
      *
-     * @param authtoken the authtoken genearated by a successful register.
-     * @param username the username for the registered user.
-     * @param personID the ID of the Person object generated for the registered user.
+     * @param authtoken the AuthToken genearated by a successful register.
+     * @param username the username for the registered User.
+     * @param personID the ID of the Person object generated for the registered User.
      * @param message the error message in the event of an unsuccessful registration.
      * @param success an indicator of a successful/unsuccessful registration.
      */

@@ -5,39 +5,39 @@ package service.requests;
  */
 public class RegisterRequest {
     /**
-     * The username to register as a new user.
+     * The username to register as a new User.
      */
     private String username;
     /**
-     * The password for the user to register.
+     * The password for the User to register.
      */
     private String password;
     /**
-     * The email address for the user to register.
+     * The email address for the User to register.
      */
     private String email;
     /**
-     * The first name of the user registering.
+     * The first name of the User registering.
      */
     private String firstName;
     /**
-     *  The last name of the user registering.
+     *  The last name of the User registering.
      */
     private String lastName;
     /**
-     * The gender of the user registering.
+     * The gender of the User registering.
      */
     private String gender;
 
     /**
      * Create a RegisterRequest object.
      *
-     * @param username the username to register as a new user.
-     * @param password the password for the user to register.
-     * @param email the email address of the user registering.
-     * @param firstName the first name of the user registering.
-     * @param lastName the last name of the user registering.
-     * @param gender the gender of the user registering.
+     * @param username the username to register as a new User.
+     * @param password the password for the User to register.
+     * @param email the email address of the User registering.
+     * @param firstName the first name of the User registering.
+     * @param lastName the last name of the User registering.
+     * @param gender the gender of the User registering.
      */
     public RegisterRequest(String username, String password, String email, String firstName, String lastName, String gender) {
         this.username = username;

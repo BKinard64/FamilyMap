@@ -13,7 +13,7 @@ public class FamilyEventsService {
     public FamilyEventsService() {}
 
     /**
-     * Returns every event for each family member of the current user.
+     * Returns every event for each family member of the current User.
      *
      * @return a FamilyEventsResult object.
      */

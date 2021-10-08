@@ -14,7 +14,7 @@ public class FillService {
     public FillService() {}
 
     /**
-     * Populate the database with generated data for specified user.
+     * Populate the database with generated data for specified User.
      *
      * @param r a FillRequest object.
      * @return a FillResult object.

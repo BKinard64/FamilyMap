@@ -14,7 +14,7 @@ public class PersonService {
     public PersonService() {}
 
     /**
-     * Return a person object.
+     * Return a Person object.
      *
      * @param r a PersonRequest object.
      * @return a PersonResult object.

@@ -26,30 +26,30 @@ public class EventDao {
     /**
      * Insert an Event to the Event table.
      *
-     * @param event the event to insert.
+     * @param event the Event to insert.
      */
     public void insert(Event event) {}
 
     /**
      * Find an Event with the given event ID.
      *
-     * @param eventID the ID of the event to find.
+     * @param eventID the ID of the Event to find.
      * @return an Event object with the corresponding event ID.
      */
     public Event find(String eventID) {return null;}
 
     /**
-     * Find the all the events of every family member of the current user.
+     * Find the all the Events of every family member of the current User.
      *
-     * @param username the username of the current user.
-     * @return a list of Event objects representing the current user's family member's events.
+     * @param username the username of the current User.
+     * @return a list of Event objects representing the current User's family member's events.
      */
     public List<Event> getFamilyEvents(String username) {return null;}
 
     /**
-     * Remove an event from the Event table.
+     * Remove an Event from the Event table.
      *
-     * @param event the event to remove.
+     * @param event the Event to remove.
      */
     public void delete(Event event) {}
 }

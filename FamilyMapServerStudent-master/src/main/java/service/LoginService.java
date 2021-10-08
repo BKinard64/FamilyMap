@@ -14,7 +14,7 @@ public class LoginService {
     public LoginService() {}
 
     /**
-     * Log a user into the database.
+     * Log a User into the database.
      *
      * @param r a LoginRequest object.
      * @return a LoginResult object.

@@ -14,7 +14,7 @@ public class LoadService {
     public LoadService() {}
 
     /**
-     * Load provided users, persons, and events into the database.
+     * Load provided Users, Persons, and Events into the database.
      *
      * @param r a LoadRequest object.
      * @return a LoadResult object.

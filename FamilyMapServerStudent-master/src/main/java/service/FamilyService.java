@@ -13,7 +13,7 @@ public class FamilyService {
     public FamilyService() {}
 
     /**
-     * Returns all family members of the current user.
+     * Returns all family members of the current User.
      *
      * @return a FamilyResult object.
      */

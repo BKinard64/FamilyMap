@@ -7,54 +7,54 @@ import java.util.Objects;
  */
 public class Event {
     /**
-     * The unique identifier for this event.
+     * The unique identifier for this Event.
      */
     private String id;
     /**
-     * The username to which this person belongs.
+     * The username to which this Person belongs.
      */
     private String username;
     /**
-     * The ID of the person to which this event belongs.
+     * The ID of the Person to which this Event belongs.
      */
     private String personID;
     /**
-     * The latitude of the event's location.
+     * The latitude of the Event's location.
      */
     private float latitude;
     /**
-     * The longitude of the event's location.
+     * The longitude of the Event's location.
      */
     private float longitude;
     /**
-     * The country in which the event occurred.
+     * The country in which the Event occurred.
      */
     private String country;
     /**
-     * The city in which the event occurred.
+     * The city in which the Event occurred.
      */
     private String city;
     /**
-     * The type of the event.
+     * The type of the Event.
      */
     private String type;
     /**
-     * The year in which the event occurred.
+     * The year in which the Event occurred.
      */
     private int year;
 
     /**
-     * Creates an event with the following parameters.
+     * Creates an Event with the following parameters.
      *
-     * @param id the event's unique identifier.
-     * @param username the person's associated username to which this event belongs.
-     * @param personID the unique identifier of the person to which this event belongs.
-     * @param latitude the latitude of the event's location.
-     * @param longitude the longitude of the event's location.
-     * @param country the country in which the event occurred.
-     * @param city the city in which the event occurred.
-     * @param type the type of the event.
-     * @param year the year in which the event occurred.
+     * @param id the Event's unique identifier.
+     * @param username the Person's associated username to which this Event belongs.
+     * @param personID the unique identifier of the Person to which this Event belongs.
+     * @param latitude the latitude of the Event's location.
+     * @param longitude the longitude of the Event's location.
+     * @param country the country in which the Event occurred.
+     * @param city the city in which the Event occurred.
+     * @param type the type of the Event.
+     * @param year the year in which the Event occurred.
      */
     public Event(String id, String username, String personID, float latitude, float longitude, String country,
                  String city, String type, int year) {

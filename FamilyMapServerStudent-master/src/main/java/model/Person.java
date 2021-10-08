@@ -7,49 +7,49 @@ import java.util.Objects;
  */
 public class Person {
     /**
-     * The unique identifier for this person.
+     * The unique identifier for this Person.
      */
     private String id;
     /**
-     * The username to which this person belongs.
+     * The username to which this Person belongs.
      */
     private String username;
     /**
-     * The person's first name.
+     * The Person's first name.
      */
     private String firstName;
     /**
-     * The person's last name.
+     * The Person's last name.
      */
     private String lastName;
     /**
-     * The person's gender.
+     * The Person's gender.
      */
     private String gender;
     /**
-     * The person ID of this person's father.
+     * The person ID of this Person's father.
      */
     private String fatherID;
     /**
-     * The person ID of this person's mother.
+     * The person ID of this Person's mother.
      */
     private String motherID;
     /**
-     * The person ID of this person's spouse.
+     * The person ID of this Person's spouse.
      */
     private String spouseID;
 
     /**
-     * Creates a person with the following parameters.
+     * Creates a Person with the following parameters.
      *
-     * @param id the person's unique identifier.
-     * @param username the person's associated username.
-     * @param firstName the person's first name.
-     * @param lastName the person's last name.
-     * @param gender the person's gender.
-     * @param fatherID the unique identifier of the person's father.
-     * @param motherID the unique identifier of the person's mother.
-     * @param spouseID the unique identifier of the person's spouse.
+     * @param id the Person's unique identifier.
+     * @param username the Person's associated username.
+     * @param firstName the Person's first name.
+     * @param lastName the Person's last name.
+     * @param gender the Person's gender.
+     * @param fatherID the unique identifier of the Person's father.
+     * @param motherID the unique identifier of the Person's mother.
+     * @param spouseID the unique identifier of the Person's spouse.
      */
     public Person(String id, String username, String firstName, String lastName, String gender, String fatherID,
                   String motherID, String spouseID) {

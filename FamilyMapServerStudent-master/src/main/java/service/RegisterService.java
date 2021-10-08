@@ -14,7 +14,7 @@ public class RegisterService {
     public RegisterService() {}
 
     /**
-     * Register a user in the database.
+     * Register a User in the database.
      *
      * @param r a RegisterRequest object.
      * @return a RegisterResult object.

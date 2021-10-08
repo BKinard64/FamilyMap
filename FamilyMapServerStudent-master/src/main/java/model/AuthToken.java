@@ -11,15 +11,15 @@ public class AuthToken {
      */
     private String username;
     /**
-     * The unique token generated for the given user.
+     * The unique token generated for the given User.
      */
     private String token;
 
     /**
-     * Create an authtoken with the following parameters.
+     * Create an AuthToken with the following parameters.
      *
      * @param username the username the token is being generated for.
-     * @param token the unique token generated for the given user.
+     * @param token the unique token generated for the given User.
      */
     public AuthToken(String username, String token) {
         this.username = username;

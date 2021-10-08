@@ -7,44 +7,44 @@ import java.util.Objects;
  */
 public class User {
     /**
-     * The user's unique username.
+     * The User's unique username.
      */
     private String username;
     /**
-     * The user's password.
+     * The User's password.
      */
     private String password;
     /**
-     * The user's email address.
+     * The User's email address.
      */
     private String email;
     /**
-     * The user's first name.
+     * The User's first name.
      */
     private String firstName;
     /**
-     * The user's last name.
+     * The User's last name.
      */
     private String lastName;
     /**
-     * The user's gender.
+     * The User's gender.
      */
     private String gender;
     /**
-     * The unique Person ID assigned to this user's generated Person object.
+     * The unique Person ID assigned to this User's generated Person object.
      */
     private String personID;
 
     /**
-     * Creates a user with the following parameters.
+     * Creates a User with the following parameters.
      *
-     * @param username the user's username.
-     * @param password the user's password.
-     * @param email the user's email address.
-     * @param firstName the user's first name.
-     * @param lastName the user's last name.
-     * @param gender the user's gender.
-     * @param personID the unique Person ID for this user.
+     * @param username the User's username.
+     * @param password the User's password.
+     * @param email the User's email address.
+     * @param firstName the User's first name.
+     * @param lastName the User's last name.
+     * @param gender the User's gender.
+     * @param personID the unique Person ID for this User.
      */
     public User(String username, String password, String email, String firstName, String lastName, String gender,
                 String personID) {

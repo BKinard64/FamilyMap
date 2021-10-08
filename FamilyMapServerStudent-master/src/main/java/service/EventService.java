@@ -14,7 +14,7 @@ public class EventService {
     public EventService() {}
 
     /**
-     * Returns the single event object with the provided event ID.
+     * Returns the single Event object with the provided event ID.
      *
      * @param r an EventRequest object.
      * @return an EventResult object.
