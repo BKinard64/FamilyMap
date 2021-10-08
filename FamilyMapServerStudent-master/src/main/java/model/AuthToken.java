@@ -2,10 +2,25 @@ package model;
 
 import java.util.Objects;
 
+/**
+ * A record from the AuthToken table in the database.
+ */
 public class AuthToken {
+    /**
+     * The username associated with this token.
+     */
     private String username;
+    /**
+     * The unique token generated for the given user.
+     */
     private String token;
 
+    /**
+     * Create an authtoken with the following parameters.
+     *
+     * @param username the username the token is being generated for.
+     * @param token the unique token generated for the given user.
+     */
     public AuthToken(String username, String token) {
         this.username = username;
         this.token = token;

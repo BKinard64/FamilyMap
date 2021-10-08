@@ -2,15 +2,50 @@ package model;
 
 import java.util.Objects;
 
+/**
+ * A record from the User table in the database.
+ */
 public class User {
+    /**
+     * The user's unique username.
+     */
     private String username;
+    /**
+     * The user's password.
+     */
     private String password;
+    /**
+     * The user's email address.
+     */
     private String email;
+    /**
+     * The user's first name.
+     */
     private String firstName;
+    /**
+     * The user's last name.
+     */
     private String lastName;
+    /**
+     * The user's gender.
+     */
     private String gender;
+    /**
+     * The unique Person ID assigned to this user's generated Person object.
+     */
     private String personID;
 
+    /**
+     * Creates a user with the following parameters.
+     *
+     * @param username the user's username.
+     * @param password the user's password.
+     * @param email the user's email address.
+     * @param firstName the user's first name.
+     * @param lastName the user's last name.
+     * @param gender the user's gender.
+     * @param personID the unique Person ID for this user.
+     */
     public User(String username, String password, String email, String firstName, String lastName, String gender,
                 String personID) {
         this.username = username;

@@ -2,16 +2,55 @@ package model;
 
 import java.util.Objects;
 
+/**
+ * A record from the Person table in the database.
+ */
 public class Person {
+    /**
+     * The unique identifier for this person.
+     */
     private String id;
+    /**
+     * The username to which this person belongs.
+     */
     private String username;
+    /**
+     * The person's first name.
+     */
     private String firstName;
+    /**
+     * The person's last name.
+     */
     private String lastName;
+    /**
+     * The person's gender.
+     */
     private String gender;
+    /**
+     * The person ID of this person's father.
+     */
     private String fatherID;
+    /**
+     * The person ID of this person's mother.
+     */
     private String motherID;
+    /**
+     * The person ID of this person's spouse.
+     */
     private String spouseID;
 
+    /**
+     * Creates a person with the following parameters.
+     *
+     * @param id the person's unique identifier.
+     * @param username the person's associated username.
+     * @param firstName the person's first name.
+     * @param lastName the person's last name.
+     * @param gender the person's gender.
+     * @param fatherID the unique identifier of the person's father.
+     * @param motherID the unique identifier of the person's mother.
+     * @param spouseID the unique identifier of the person's spouse.
+     */
     public Person(String id, String username, String firstName, String lastName, String gender, String fatherID,
                   String motherID, String spouseID) {
         this.id = id;
