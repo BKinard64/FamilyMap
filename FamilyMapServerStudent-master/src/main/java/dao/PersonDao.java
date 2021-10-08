@@ -1,10 +1,9 @@
 package dao;
 
-import model.AuthToken;
 import model.Person;
 
-
 import java.sql.Connection;
+import java.util.List;
 
 public class PersonDao {
     private final Connection conn;
@@ -16,6 +15,8 @@ public class PersonDao {
     public void insert(Person person) {}
 
     public Person find(String personID) {return null;}
+
+    public List<Person> getFamily(String username) {return null;}
 
     public void delete(Person person) {}
 }

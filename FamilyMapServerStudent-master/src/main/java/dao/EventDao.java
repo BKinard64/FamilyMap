@@ -3,6 +3,7 @@ package dao;
 import model.Event;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class EventDao {
     private final Connection conn;
@@ -14,6 +15,8 @@ public class EventDao {
     public void insert(Event event) {}
 
     public Event find(String eventID) {return null;}
+
+    public List<Event> getFamilyEvents(String username) {return null;}
 
     public void delete(Event event) {}
 }
