@@ -12,11 +12,9 @@ public class UserDao {
         this.conn = conn;
     }
 
-    public AuthToken register(User user) {return null;}
+    public void insert(User user) {}
 
     public User find(String username) {return null;}
 
     public void delete(User user) {}
-
-    public AuthToken login(User user) {return null;}
 }

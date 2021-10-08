@@ -1,6 +1,9 @@
 package service.requests;
 
 public class EventRequest {
+    private String eventID;
 
-    public EventRequest() {}
+    public EventRequest(String eventID) {
+        this.eventID = eventID;
+    }
 }

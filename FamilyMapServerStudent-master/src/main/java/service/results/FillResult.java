@@ -1,6 +1,11 @@
 package service.results;
 
 public class FillResult {
+    private String message;
+    private String success;
 
-    public FillResult() {}
+    public FillResult(String message, String success) {
+        this.message = message;
+        this.success = success;
+    }
 }

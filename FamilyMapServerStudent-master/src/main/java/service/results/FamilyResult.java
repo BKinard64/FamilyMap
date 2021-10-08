@@ -1,6 +1,17 @@
 package service.results;
 
-public class FamilyResult {
+import model.Person;
 
-    public FamilyResult() {}
+import java.util.List;
+
+public class FamilyResult {
+    private List<Person> data;
+    private String message;
+    private boolean success;
+
+    public FamilyResult(List<Person> data, String message, boolean success) {
+        this.data = data;
+        this.message = message;
+        this.success = success;
+    }
 }

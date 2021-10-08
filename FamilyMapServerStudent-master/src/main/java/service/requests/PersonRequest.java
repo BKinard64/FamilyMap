@@ -1,6 +1,9 @@
 package service.requests;
 
 public class PersonRequest {
+    private String personID;
 
-    public PersonRequest() {}
+    public PersonRequest(String personID) {
+        this.personID = personID;
+    }
 }
