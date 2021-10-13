@@ -56,22 +56,20 @@ public class PersonDaoTest {
 
     @Test
     public void findPass() throws DataAccessException {
-        // Call the insert method on the pDao (defined in setUp()) and pass it bestPerson (defined in setUp())
-        pDao.insert(bestPerson);
-        // Call the find method on pDao, looking for bestPerson
-        Person compareTest = pDao.find(bestPerson.getId());
-        // Determine that a Person object was returned
-        assertNotNull(compareTest);
-        // Determine that the returning Person object equals bestPerson
-        assertEquals(bestPerson, compareTest);
-    }
-
-    @Test
-    public void findFail() throws DataAccessException {
         // Call the find method on pDao, looking for bestPerson
         Person compareTest = pDao.find(bestPerson.getId());
         // Determine that a null reference was returned
         assertNull(compareTest);
+    }
+
+    @Test
+    public void findFail() throws DataAccessException {
+        // Close the database connection
+        db.closeConnection(false);
+        // The find method should not work because the connection is now closed
+        assertThrows(DataAccessException.class, ()-> pDao.find(bestPerson.getId()));
+        // Reopen the connection so the tearDown() method does not fail
+        db.openConnection();
     }
 
     @Test
