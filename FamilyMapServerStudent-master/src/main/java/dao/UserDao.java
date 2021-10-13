@@ -2,10 +2,7 @@ package dao;
 
 import model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * A data-access object for the User table.
@@ -58,7 +55,34 @@ public class UserDao {
      * @param username the username being searched for.
      * @return a User object with the provided username.
      */
-    public User find(String username) {return null;}
+    public User find(String username) throws DataAccessException {
+        User user;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM user WHERE username = ?;";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                user = new User(rs.getString("username"), rs.getString("pwd"),
+                        rs.getString("email"), rs.getString("first_name"),
+                        rs.getString("last_name"), rs.getString("gender"),
+                        rs.getString("person_id"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding user");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * Remove the User from the User table.
