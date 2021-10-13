@@ -53,4 +53,16 @@ public class PersonDaoTest {
         // attempting to insert bestPerson again should result in a DataAccessException
         assertThrows(DataAccessException.class, ()-> pDao.insert(bestPerson));
     }
+
+    @Test
+    public void clearPass() throws DataAccessException {
+        // Call the insert method on the pDao (defined in setUp()) and pass it bestPerson (defined in setUp())
+        pDao.insert(bestPerson);
+        // Call the clear method on pDao
+        pDao.clear();
+        // Call the find method on pDao, looking for bestPerson
+        Person compareTest = pDao.find(bestPerson.getId());
+        // Determine that a null reference was returned
+        assertNull(compareTest);
+    }
 }
