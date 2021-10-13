@@ -45,4 +45,13 @@ public class UserDaoTest {
         // Determine that the returning User object equals bestUser
         assertEquals(bestUser, compareTest);
     }
+
+    @Test
+    public void insertFail() throws DataAccessException {
+        // Insert bestUser (defined in setUp()) to the database
+        uDao.insert(bestUser);
+        // The database should not allow duplicate usernames so,
+        // attempting to insert bestUser again should result in a DataAccessException
+        assertThrows(DataAccessException.class, ()-> uDao.insert(bestUser));
+    }
 }
