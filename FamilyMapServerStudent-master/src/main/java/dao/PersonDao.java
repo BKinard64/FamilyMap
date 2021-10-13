@@ -1,11 +1,9 @@
 package dao;
 
 import model.Person;
+import model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -60,7 +58,34 @@ public class PersonDao {
      * @param personID the ID of the Person to find.
      * @return a Person object corresponding to the given person ID.
      */
-    public Person find(String personID) {return null;}
+    public Person find(String personID) throws DataAccessException {
+        Person person;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM person WHERE id = ?;";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                person = new Person(rs.getString("id"), rs.getString("username"),
+                        rs.getString("first_name"), rs.getString("last_name"),
+                        rs.getString("gender"), rs.getString("father_id"),
+                        rs.getString("mother_id"), rs.getString("spouse_id"));
+                return person;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding person");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * Find the family members of the current user.
