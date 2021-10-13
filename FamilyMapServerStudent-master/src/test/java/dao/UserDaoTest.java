@@ -1,8 +1,10 @@
 package dao;
 
 import model.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 
 public class UserDaoTest {
@@ -21,5 +23,11 @@ public class UserDaoTest {
         db.clearTables();
         // Pass the Database Connection to the UserDao object
         uDao = new UserDao(conn);
+    }
+
+    @AfterEach
+    public void tearDown() throws DataAccessException {
+        // Close the connection and do not commit changes from tests to the database
+        db.closeConnection(false);
     }
 }
