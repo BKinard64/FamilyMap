@@ -1,5 +1,6 @@
 package dao;
 
+import model.Person;
 import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,5 +53,17 @@ public class UserDaoTest {
         // The database should not allow duplicate usernames so,
         // attempting to insert bestUser again should result in a DataAccessException
         assertThrows(DataAccessException.class, ()-> uDao.insert(bestUser));
+    }
+
+    @Test
+    public void clearPass() throws DataAccessException {
+        // Call the insert method on the uDao (defined in setUp()) and pass it bestUser (defined in setUp())
+        uDao.insert(bestUser);
+        // Call the clear method on uDao
+        uDao.clear();
+        // Call the find method on uDao, looking for bestUser
+        User compareTest = uDao.find(bestUser.getUsername());
+        // Determine that a null reference was returned
+        assertNull(compareTest);
     }
 }
