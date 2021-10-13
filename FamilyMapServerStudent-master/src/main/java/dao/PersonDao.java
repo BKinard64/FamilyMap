@@ -5,6 +5,7 @@ import model.Person;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 /**
@@ -75,4 +76,18 @@ public class PersonDao {
      * @param person the Person to remove.
      */
     public void delete(Person person) {}
+
+    /**
+     * Delete all records from the Person table
+     *
+     * @throws DataAccessException
+     */
+    public void clear() throws DataAccessException {
+        try (Statement stmt = conn.createStatement()){
+            String sql = "DELETE FROM person";
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new DataAccessException("SQL Error encountered while clearing person table");
+        }
+    }
 }

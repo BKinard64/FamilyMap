@@ -5,6 +5,7 @@ import model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * A data-access object for the User table.
@@ -65,4 +66,18 @@ public class UserDao {
      * @param user the User to remove
      */
     public void delete(User user) {}
+
+    /**
+     * Delete all records from the User table
+     *
+     * @throws DataAccessException
+     */
+    public void clear() throws DataAccessException {
+        try (Statement stmt = conn.createStatement()){
+            String sql = "DELETE FROM user";
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new DataAccessException("SQL Error encountered while clearing user table");
+        }
+    }
 }
