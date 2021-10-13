@@ -3,9 +3,12 @@ package dao;
 import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.crypto.Data;
 import java.sql.Connection;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserDaoTest {
     private Database db;
@@ -29,5 +32,17 @@ public class UserDaoTest {
     public void tearDown() throws DataAccessException {
         // Close the connection and do not commit changes from tests to the database
         db.closeConnection(false);
+    }
+
+    @Test
+    public void insertPass() throws DataAccessException {
+        // Call the insert method on the uDao (defined in setUp()) and pass it bestUser (defined in setUp())
+        uDao.insert(bestUser);
+        // Call the find method on uDao, looking for bestUser
+        User compareTest = uDao.find(bestUser.getUsername());
+        // Determine that a User object was returned
+        assertNotNull(compareTest);
+        // Determine that the returning User object equals bestUser
+        assertEquals(bestUser, compareTest);
     }
 }
