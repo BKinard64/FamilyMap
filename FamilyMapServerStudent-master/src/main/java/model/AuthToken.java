@@ -21,7 +21,7 @@ public class AuthToken {
      * @param username the username the token is being generated for.
      * @param token the unique token generated for the given User.
      */
-    public AuthToken(String username, String token) {
+    public AuthToken(String token, String username) {
         this.username = username;
         this.token = token;
     }

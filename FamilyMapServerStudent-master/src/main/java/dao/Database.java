@@ -66,10 +66,14 @@ public class Database {
         // Initialize DAO objects
         PersonDao pDao = new PersonDao(conn);
         UserDao uDao = new UserDao(conn);
+        EventDao eDao = new EventDao(conn);
+        AuthTokenDao atDao = new AuthTokenDao(conn);
 
         // Call each DAO object's clear method
         pDao.clear();
         uDao.clear();
+        eDao.clear();
+        atDao.clear();
     }
 }
 
