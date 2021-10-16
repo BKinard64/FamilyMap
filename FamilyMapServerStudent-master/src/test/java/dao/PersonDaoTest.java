@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,6 +71,56 @@ public class PersonDaoTest {
         assertThrows(DataAccessException.class, ()-> pDao.find(bestPerson.getId()));
         // Reopen the connection so the tearDown() method does not fail
         db.openConnection();
+    }
+
+    @Test
+    public void getFamilyEmpty() throws DataAccessException {
+        // Insert bestPerson (defined in setUp()) to the database
+        pDao.insert(bestPerson);
+        // Get the family of bestPerson
+        List<Person> fam = pDao.getFamily(bestPerson);
+        // The List should be empty because no other Person objects are in the database
+        assertTrue(fam.isEmpty());
+    }
+
+    @Test
+    public void getFamilyPass() throws DataAccessException {
+        // Insert bestPerson (defined in setUp()) to the database
+        pDao.insert(bestPerson);
+
+        // Create Person objects for bestPerson's family members and add them to the database
+        Person spouse = new Person("123s", "Spouse123", "Spouse", "Button",
+                "f", "321f", "321m", "123b");
+        Person father = new Person("123f", "Father123", "Father", "Button",
+                "m", "000f", "000m", "123m");
+        Person mother = new Person("123m", "Mother123", "Mother", "Button",
+                "f", "111f", "111m", "123f");
+        pDao.insert(spouse);
+        pDao.insert(father);
+        pDao.insert(mother);
+
+        // Get the family of bestPerson
+        List<Person> fam = pDao.getFamily(bestPerson);
+
+        // The List should have 3 Person Objects
+        assertEquals(3, fam.size());
+
+        // The List should contain the spouse, father, and mother objects
+        assertTrue(fam.contains(spouse));
+        assertTrue(fam.contains(father));
+        assertTrue(fam.contains(mother));
+    }
+
+    @Test
+    public void deletePass() throws DataAccessException {
+        // Call the insert method on the pDao (defined in setUp()) and pass it bestPerson (defined in setUp())
+        pDao.insert(bestPerson);
+        // Call the delete method on pDao
+        pDao.delete(bestPerson.getId());
+        // Call the find method on pDao, looking for bestPerson
+        Person compareTest = pDao.find(bestPerson.getId());
+        // Determine that a null reference was returned
+        assertNull(compareTest);
     }
 
     @Test

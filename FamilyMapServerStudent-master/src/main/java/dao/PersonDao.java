@@ -1,9 +1,9 @@
 package dao;
 
 import model.Person;
-import model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +28,7 @@ public class PersonDao {
      * Insert a Person into the Person table.
      *
      * @param person the Person object to be inserted.
+     * @throws DataAccessException
      */
     public void insert(Person person) throws DataAccessException {
         // Create string to pass into the connection's prepareStatement method
@@ -56,6 +57,7 @@ public class PersonDao {
      * Find a Person with the given person ID.
      *
      * @param personID the ID of the Person to find.
+     * @throws DataAccessException
      * @return a Person object corresponding to the given person ID.
      */
     public Person find(String personID) throws DataAccessException {
@@ -90,17 +92,86 @@ public class PersonDao {
     /**
      * Find the family members of the current user.
      *
-     * @param username the username of the current User.
+     * @param p the Person object associated with the current User.
+     * @throws DataAccessException
      * @return a list of Person objects representing the family members of the current User.
      */
-    public List<Person> getFamily(String username) {return null;}
+    public List<Person> getFamily(Person p) throws DataAccessException {
+        // Create the List Object to return
+        List<Person> family = new ArrayList<>();
+
+        // **NOTE: Find person object associated with current User in FamilyService
+
+        // Find the Person Objects associated with the current User's spouse, father, and mother
+        Person spouse = find(p.getSpouseID());
+        Person father = find(p.getFatherID());
+        Person mother = find(p.getMotherID());
+
+        // If the current User has a spouse, father, or mother in the database, add to returning list
+        if (spouse != null) {
+            family.add(spouse);
+        }
+        if (father != null) {
+            family.add(father);
+        }
+        if (mother != null) {
+            family.add(mother);
+        }
+
+        // Add the parents of the Current User's mother, father, and spouse to the list
+        if (mother != null) {
+            getParents(mother, family);
+        }
+        if (father != null) {
+            getParents(father, family);
+        }
+        if (spouse != null) {
+            getParents(spouse, family);
+        }
+
+        return family;
+    }
+
+    /**
+     * Add the parents of a given Person object to a provided List
+     *
+     * @param p the Person object to search for parents
+     * @param family the List of Person objects to add the parents to
+     * @throws DataAccessException
+     */
+    private void getParents(Person p, List<Person> family) throws DataAccessException {
+        // Find the Person Objects associated with this Person's mother and father
+        Person mother = find(p.getMotherID());
+        Person father = find(p.getFatherID());
+
+        // If this Person has a mother or father in the database, add them to the List
+        if (mother != null) {
+            family.add(mother);
+            // Add the parents of the mother to the list
+            getParents(mother, family);
+        }
+        if (father != null) {
+            family.add(father);
+            // Add the parents of the father to the list
+            getParents(father, family);
+        }
+    }
 
     /**
      * Remove a Person from the Person table.
      *
-     * @param person the Person to remove.
+     * @param personID the ID of the Person to remove.
+     * @throws DataAccessException
      */
-    public void delete(Person person) {}
+    public void delete(String personID) throws DataAccessException {
+        String sql = "DELETE FROM person WHERE id = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting person from table");
+        }
+    }
 
     /**
      * Delete all records from the Person table
@@ -112,7 +183,7 @@ public class PersonDao {
             String sql = "DELETE FROM person";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
-            throw new DataAccessException("SQL Error encountered while clearing person table");
+            throw new DataAccessException("Error encountered while clearing person table");
         }
     }
 }
