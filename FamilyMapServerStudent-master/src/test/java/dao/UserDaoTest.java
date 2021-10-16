@@ -74,6 +74,18 @@ public class UserDaoTest {
     }
 
     @Test
+    public void deletePass() throws DataAccessException {
+        // Call the insert method on the uDao (defined in setUp()) and pass it bestUser (defined in setUp())
+        uDao.insert(bestUser);
+        // Call the delete method on uDao
+        uDao.delete(bestUser.getUsername());
+        // Call the find method on uDao, looking for bestUser
+        User compareTest = uDao.find(bestUser.getUsername());
+        // Determine that a null reference was returned
+        assertNull(compareTest);
+    }
+
+    @Test
     public void clearPass() throws DataAccessException {
         // Call the insert method on the uDao (defined in setUp()) and pass it bestUser (defined in setUp())
         uDao.insert(bestUser);

@@ -26,6 +26,7 @@ public class UserDao {
      * Insert a User into the User table.
      *
      * @param user the User to be inserted into the table.
+     * @throws DataAccessException
      */
     public void insert(User user) throws DataAccessException {
         // Create string to pass into the connection's prepareStatement method
@@ -54,6 +55,7 @@ public class UserDao {
      *
      * @param username the username being searched for.
      * @return a User object with the provided username.
+     * @throws DataAccessException
      */
     public User find(String username) throws DataAccessException {
         User user;
@@ -87,9 +89,18 @@ public class UserDao {
     /**
      * Remove the User from the User table.
      *
-     * @param user the User to remove
+     * @param username the username of the User to remove
+     * @throws DataAccessException
      */
-    public void delete(User user) {}
+    public void delete(String username) throws DataAccessException {
+        String sql = "DELETE FROM user WHERE username = ?;";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting user");
+        }
+    }
 
     /**
      * Delete all records from the User table
@@ -101,7 +112,7 @@ public class UserDao {
             String sql = "DELETE FROM user";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
-            throw new DataAccessException("SQL Error encountered while clearing user table");
+            throw new DataAccessException("Error encountered while clearing user table");
         }
     }
 }
