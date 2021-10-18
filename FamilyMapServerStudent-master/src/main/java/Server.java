@@ -1,4 +1,5 @@
 import com.sun.net.httpserver.HttpServer;
+import handler.FileHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -34,5 +35,9 @@ public class Server {
         System.out.println("Server started. Listening on port " + port);
     }
 
-    private void registerHandlers() {}
+    private void registerHandlers() {
+        System.out.println("Creating contexts");
+        // Create and install the HTTP handler for the Web-site
+        server.createContext("/", new FileHandler());
+    }
 }
