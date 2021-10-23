@@ -7,19 +7,11 @@ import java.util.List;
 /**
  * A result object for the event API.
  */
-public class FamilyEventsResult {
+public class FamilyEventsResult extends Result {
     /**
      * A list of every Event for every family member of the current User.
      */
     private List<Event> data;
-    /**
-     * An error message in the event the request fails.
-     */
-    private String message;
-    /**
-     * An indicator of a successful/unsuccessful request.
-     */
-    private boolean success;
 
     /**
      * Create a FamilyEventsResult.
@@ -36,13 +28,5 @@ public class FamilyEventsResult {
 
     public List<Event> getData() {
         return data;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public boolean isSuccess() {
-        return success;
     }
 }

@@ -7,19 +7,11 @@ import java.util.List;
 /**
  * A result object for the person API.
  */
-public class FamilyResult {
+public class FamilyResult extends Result {
     /**
      * A list of family members of the current User.
      */
     private List<Person> data;
-    /**
-     * An error message in the event the request fails.
-     */
-    private String message;
-    /**
-     * An indicator of a successful/unsuccessful request.
-     */
-    private boolean success;
 
     /**
      * Create a FamilyResult object.
@@ -36,13 +28,5 @@ public class FamilyResult {
 
     public List<Person> getData() {
         return data;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public boolean isSuccess() {
-        return success;
     }
 }

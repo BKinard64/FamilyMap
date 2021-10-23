@@ -3,7 +3,7 @@ package service.results;
 /**
  * A result object for the event/[eventID] API.
  */
-public class EventResult {
+public class EventResult extends Result {
     /**
      * The username associated with the current User.
      */
@@ -29,10 +29,6 @@ public class EventResult {
      */
     private String eventType;
     /**
-     * An error message in the event of a failed request.
-     */
-    private String message;
-    /**
      * The latitude of the Event's location.
      */
     private float latitude;
@@ -44,10 +40,6 @@ public class EventResult {
      * The year the Event occurred.
      */
     private int year;
-    /**
-     * An indicator of a successful/failed request.
-     */
-    private boolean success;
 
     /**
      * Create an EventResult object.
@@ -103,10 +95,6 @@ public class EventResult {
         return eventType;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
     public float getLatitude() {
         return latitude;
     }
@@ -117,9 +105,5 @@ public class EventResult {
 
     public int getYear() {
         return year;
-    }
-
-    public boolean isSuccess() {
-        return success;
     }
 }

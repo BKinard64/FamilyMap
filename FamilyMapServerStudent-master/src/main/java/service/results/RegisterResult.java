@@ -3,7 +3,7 @@ package service.results;
 /**
  * A result object for the register API.
  */
-public class RegisterResult {
+public class RegisterResult extends Result {
     /**
      * The AuthToken genearated by a successful register.
      */
@@ -16,14 +16,6 @@ public class RegisterResult {
      * The ID of the Person object generated for the registered User.
      */
     private String personID;
-    /**
-     * The error message in the event of an unsuccessful registration.
-     */
-    private String message;
-    /**
-     * An indicator of a successful/unsuccessful registration.
-     */
-    private boolean success;
 
     /**
      * Create a RegisterResult object with the following parameters.
@@ -52,13 +44,5 @@ public class RegisterResult {
 
     public String getPersonID() {
         return personID;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public boolean isSuccess() {
-        return success;
     }
 }
