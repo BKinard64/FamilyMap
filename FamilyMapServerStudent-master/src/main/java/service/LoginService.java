@@ -36,27 +36,31 @@ public class LoginService {
             String username = r.getUsername();
             User user = uDao.find(username);
 
-            // Confirm password is valid
-            if (!r.getPassword().equals(user.getPassword())) {
-                throw new DataAccessException("Invalid Password.");
+            // Confirm username is registered
+            if (user != null) {
+                // Confirm password is valid
+                if (r.getPassword().equals(user.getPassword())) {
+                    // Generate AuthToken and store in database
+                    String tokenString = UUID.randomUUID().toString();
+                    AuthToken authToken = new AuthToken(tokenString, username);
+                    new AuthTokenDao(db.getConnection()).insert(authToken);
+
+                    // Get Person ID associated with this user and then close connection to Database
+                    String personID = user.getPersonID();
+                    db.closeConnection(true);
+
+                    return new LoginResult(tokenString, username, personID, null, true);
+                } else {
+                    throw new DataAccessException("Invalid Password.");
+                }
+            } else {
+                throw new DataAccessException("Username is not registered.");
             }
-
-            // Generate AuthToken and store in database
-            String tokenString = UUID.randomUUID().toString();
-            AuthToken authToken = new AuthToken(tokenString, username);
-            new AuthTokenDao(db.getConnection()).insert(authToken);
-
-            // Get Person ID associated with this user and then close connection to Database
-            String personID = user.getPersonID();
-            db.closeConnection(true);
-
-            return new LoginResult(tokenString, username, personID, null, true);
         } catch (DataAccessException ex) {
             ex.printStackTrace();
             try {
                 db.closeConnection(false);
             } catch (DataAccessException e) {
-                System.out.println(e.getMessage());
                 e.printStackTrace();
             }
             return new LoginResult(null, null, null, ex.getMessage(), false);
