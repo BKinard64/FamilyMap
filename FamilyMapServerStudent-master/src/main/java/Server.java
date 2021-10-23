@@ -39,7 +39,7 @@ public class Server {
     private void registerHandlers() {
         System.out.println("Creating contexts");
         // Create and install the HTTP handler for the load API
-        server.createContext("/login", new LoginHandler());
+        server.createContext("/user/login", new LoginHandler());
         // Create and install the HTTP handler for the Web-site
         server.createContext("/", new FileHandler());
     }
