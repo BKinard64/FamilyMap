@@ -3,7 +3,7 @@ package service.results;
 /**
  * A result object for the login API.
  */
-public class LoginResult {
+public class LoginResult extends Result {
     /**
      * The generated AuthToken for the User logging in.
      */
@@ -16,14 +16,6 @@ public class LoginResult {
      * The ID of the Person this User is associated with.
      */
     private String personID;
-    /**
-     * An error message in the event the request fails.
-     */
-    private String message;
-    /**
-     * An indicator of a successful/unsuccessful login.
-     */
-    private boolean success;
 
     /**
      * Create a LoginResult object.
@@ -52,13 +44,5 @@ public class LoginResult {
 
     public String getPersonID() {
         return personID;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public boolean isSuccess() {
-        return success;
     }
 }

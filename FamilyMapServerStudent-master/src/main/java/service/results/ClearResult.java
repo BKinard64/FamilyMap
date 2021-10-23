@@ -3,16 +3,7 @@ package service.results;
 /**
  * A result object for the Clear API.
  */
-public class ClearResult {
-    /**
-     * A message describing the success/failure of the request.
-     */
-    private String message;
-    /**
-     * An indicator of a successful/failed request.
-     */
-    private boolean success;
-
+public class ClearResult extends Result {
     /**
      * Create a ClearResult object.
      *
@@ -22,13 +13,5 @@ public class ClearResult {
     public ClearResult(String message, boolean success) {
         this.message = message;
         this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public boolean isSuccess() {
-        return success;
     }
 }

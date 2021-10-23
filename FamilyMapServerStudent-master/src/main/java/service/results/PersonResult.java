@@ -3,7 +3,7 @@ package service.results;
 /**
  * A result object for the person/[personID] API.
  */
-public class PersonResult {
+public class PersonResult extends Result {
     /**
      * The username of the Person found.
      */
@@ -36,14 +36,6 @@ public class PersonResult {
      * The ID of the Person's spouse.
      */
     private String spouseID;
-    /**
-     * An error message in the event the request fails.
-     */
-    private String message;
-    /**
-     * An indicator of the request being successful or not.
-     */
-    private boolean success;
 
     /**
      * Create a PersonResult object.
@@ -103,13 +95,5 @@ public class PersonResult {
 
     public String getSpouseID() {
         return spouseID;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public boolean isSuccess() {
-        return success;
     }
 }

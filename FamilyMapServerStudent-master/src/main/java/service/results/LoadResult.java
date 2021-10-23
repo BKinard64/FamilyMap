@@ -3,16 +3,7 @@ package service.results;
 /**
  * A result object for the load API.
  */
-public class LoadResult {
-    /**
-     * A message describing the success/failure of the request.
-     */
-    private String message;
-    /**
-     * An indicator of a successful/unsuccessful load.
-     */
-    private boolean success;
-
+public class LoadResult extends Result {
     /**
      * Create a LoadResult object.
      *
@@ -22,13 +13,5 @@ public class LoadResult {
     public LoadResult(String message, boolean success) {
         this.message = message;
         this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public boolean isSuccess() {
-        return success;
     }
 }
