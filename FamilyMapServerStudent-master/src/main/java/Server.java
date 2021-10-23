@@ -1,5 +1,6 @@
 import com.sun.net.httpserver.HttpServer;
 import handler.FileHandler;
+import handler.LoginHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -37,6 +38,8 @@ public class Server {
 
     private void registerHandlers() {
         System.out.println("Creating contexts");
+        // Create and install the HTTP handler for the load API
+        server.createContext("/login", new LoginHandler());
         // Create and install the HTTP handler for the Web-site
         server.createContext("/", new FileHandler());
     }
