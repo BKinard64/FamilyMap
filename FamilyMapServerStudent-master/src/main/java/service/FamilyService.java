@@ -1,5 +1,6 @@
 package service;
 
+import model.Person;
 import service.results.FamilyResult;
 
 /**
@@ -17,5 +18,5 @@ public class FamilyService {
      *
      * @return a FamilyResult object.
      */
-    public FamilyResult family() {return null;}
+    public FamilyResult family(Person person) {return null;}
 }
