@@ -52,7 +52,7 @@ public class LoginServiceTest {
     }
 
     @Test
-    public void loginValidUser() throws DataAccessException {
+    public void loginValidUser() {
         // Call login on bestService
         result = bestService.login(request);
         // The response should return an AuthToken
