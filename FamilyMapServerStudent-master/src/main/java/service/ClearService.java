@@ -25,6 +25,8 @@ public class ClearService {
             db.openConnection();
             // Clear the database
             db.clearTables();
+            // Close the connection and commit the changes
+            db.closeConnection(true);
             return new ClearResult("Clear succeeded.", true);
         } catch (DataAccessException ex) {
             ex.printStackTrace();
