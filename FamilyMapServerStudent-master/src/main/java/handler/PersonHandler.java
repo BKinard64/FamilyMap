@@ -43,7 +43,7 @@ public class PersonHandler implements HttpHandler {
 
                     if (authToken != null) {
 
-                        // Create UserDao to validate personID
+                        // Create UserDao to validate personID or to get associated Person object
                         UserDao uDao = new UserDao(db.getConnection());
                         User user = uDao.find(authToken.getUsername());
 

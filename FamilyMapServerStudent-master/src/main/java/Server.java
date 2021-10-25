@@ -2,6 +2,7 @@ import com.sun.net.httpserver.HttpServer;
 import handler.ClearHandler;
 import handler.FileHandler;
 import handler.LoginHandler;
+import handler.PersonHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -43,6 +44,8 @@ public class Server {
         server.createContext("/user/login", new LoginHandler());
         // Create and install the HTTP handler for the clear API
         server.createContext("/clear", new ClearHandler());
+        // Create and install the HTTP handler for the person API
+        server.createContext("/person", new PersonHandler());
         // Create and install the HTTP handler for the Web-site
         server.createContext("/", new FileHandler());
     }
