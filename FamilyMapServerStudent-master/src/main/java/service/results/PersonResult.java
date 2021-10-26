@@ -65,6 +65,11 @@ public class PersonResult extends Result {
         this.success = success;
     }
 
+    public PersonResult(String message, boolean success) {
+        this.message = message;
+        this.success = success;
+    }
+
     public String getAssociatedUsername() {
         return associatedUsername;
     }
