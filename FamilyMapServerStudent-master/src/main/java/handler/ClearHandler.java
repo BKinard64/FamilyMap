@@ -27,6 +27,7 @@ public class ClearHandler implements HttpHandler {
                 } else {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 }
+
                 // Serialize LoginResult to JSON String
                 Gson gson = new Gson();
                 Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
