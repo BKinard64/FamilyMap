@@ -18,5 +18,5 @@ public class FamilyService {
      *
      * @return a FamilyResult object.
      */
-    public FamilyResult family(Person person) {return null;}
+    public FamilyResult family(String token) {return null;}
 }

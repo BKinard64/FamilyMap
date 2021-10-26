@@ -34,95 +34,67 @@ public class PersonHandler implements HttpHandler {
 
                     // Extract the AuthToken from the Header
                     String tokenString = reqHeaders.getFirst("Authorization");
-                    // Create Database connection
-                    Database db = new Database();
-                    db.openConnection();
-                    // Create AuthTokenDao to validate AuthToken
-                    AuthTokenDao atDao = new AuthTokenDao(db.getConnection());
-                    AuthToken authToken = atDao.find(tokenString);
 
-                    if (authToken != null) {
+                    // Get the URL path from the Request
+                    String urlPath = exchange.getRequestURI().toString();
 
-                        // Create UserDao to validate personID or to get associated Person object
-                        UserDao uDao = new UserDao(db.getConnection());
-                        User user = uDao.find(authToken.getUsername());
+                    // If the path specifies a specific PersonID, call the PersonService
+                    if (urlPath.length() > 8) {
 
-                        // Get the URL path from the Request
-                        String urlPath = exchange.getRequestURI().toString();
+                        // Extract the personID from the URL
+                        String personID = urlPath.substring(8);
 
-                        // If the path specifies a specific PersonID, call the PersonService
-                        if (urlPath.length() > 8) {
+                        // Create PersonRequest object to pass to PersonService
+                        PersonRequest pRequest = new PersonRequest(personID, tokenString);
 
-                            // Close database connection
-                            db.closeConnection(false);
+                        // Execute PersonRequest logic in PersonService
+                        PersonService pService = new PersonService();
+                        PersonResult pResult = pService.person(pRequest);
 
-                            // Extract the personID from the URL
-                            String personID = urlPath.substring(8);
-                            // Confirm specified PersonID belongs to current user
-                            if (user.getPersonID().equals(personID)) {
-
-                                // Create PersonRequest object to pass to PersonService
-                                PersonRequest pRequest = new PersonRequest(personID);
-
-                                // Execute PersonRequest logic in PersonService
-                                PersonService pService = new PersonService();
-                                PersonResult pResult = pService.person(pRequest);
-
-                                // Send HTTP Response
-                                if (pResult.isSuccess()) {
-                                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                                } else {
-                                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-                                }
-
-                                // Serialize PersonResult to JSON String
-                                Gson gson = new Gson();
-                                Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
-                                gson.toJson(pResult, resBody);
-                                resBody.close();
-
-                            } else {
-                                // Specified personID does not belong to current user
-                                exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
-                                // Close the output stream for the response body
-                                exchange.getResponseBody().close();
-                            }
+                        // Send HTTP Response
+                        if (pResult.isSuccess()) {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                         } else {
-                            // The path does not specify a PersonID, so call FamilyService instead
-
-                            // Find Person associated with Username
-                            PersonDao pDao = new PersonDao(db.getConnection());
-                            Person person = pDao.find(user.getPersonID());
-
-                            // Close database connection
-                            db.closeConnection(false);
-
-                            // Execute Request Logic in FamilyService
-                            FamilyService fService = new FamilyService();
-                            FamilyResult fResult = fService.family(person);
-
-                            // Send HTTP Response
-                            if (fResult.isSuccess()) {
-                                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                            } else {
-                                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-                            }
-
-                            // Serialize FamilyResult to JSON String
-                            Gson gson = new Gson();
-                            Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
-                            gson.toJson(fResult, resBody);
-                            resBody.close();
-
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                         }
+
+                        // Serialize PersonResult to JSON String
+                        Gson gson = new Gson();
+                        Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
+                        gson.toJson(pResult, resBody);
+                        resBody.close();
+
+                                // ADD TO SERVICE
+
+                                // ADD TO SERVICE
                     } else {
-                        // The AuthToken is not valid
-                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
-                        // Close the output stream for the response body
-                        exchange.getResponseBody().close();
-                        // Close database connection
-                        db.closeConnection(false);
+                        // The path does not specify a PersonID, so call FamilyService instead
+
+                                    // ADD TO SERVICE
+                                    // Find Person associated with Username
+                                    // PersonDao pDao = new PersonDao(db.getConnection());
+                                    // Person person = pDao.find(user.getPersonID());
+                                    // ADD TO SERVICE
+
+                        // Execute Request Logic in FamilyService
+                        FamilyService fService = new FamilyService();
+                        FamilyResult fResult = fService.family(tokenString);
+
+                        // Send HTTP Response
+                        if (fResult.isSuccess()) {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                        } else {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                        }
+
+                        // Serialize FamilyResult to JSON String
+                        Gson gson = new Gson();
+                        Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
+                        gson.toJson(fResult, resBody);
+                        resBody.close();
+
                     }
+
                 } else {
                     // The Request Method does not provide an AuthToken
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
