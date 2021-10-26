@@ -16,7 +16,6 @@ import java.sql.Connection;
 
 public class PersonServiceTest {
     private Database db;
-    private User user;
     private PersonRequest request;
     private PersonService service;
     private PersonResult result;
@@ -29,7 +28,7 @@ public class PersonServiceTest {
         // Initialize a Database
         db = new Database();
         // Create an arbitrary User object
-        user = new User("Ben123", "1111", "ben@cs.byu.edu", "Ben",
+        User user = new User("Ben123", "1111", "ben@cs.byu.edu", "Ben",
                         "Button", "m", "123b");
         // Clear all tables from the Database and Insert the User into the Table
         Connection conn = db.getConnection();

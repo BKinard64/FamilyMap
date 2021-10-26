@@ -6,6 +6,8 @@ import model.Person;
 import model.User;
 import service.results.FamilyResult;
 
+import java.util.List;
+
 /**
  * A service object for the person API.
  */
@@ -43,7 +45,9 @@ public class FamilyService {
                 // Confirm Person is in Database
                 if (person != null) {
                     // Return the family of the above person
-                    return new FamilyResult(pDao.getFamily(person), true);
+                    List<Person> family = pDao.getFamily(person);
+                    db.closeConnection(true);
+                    return new FamilyResult(family, true);
                 } else {
                     // Person is not in Database
                     throw new DataAccessException("Could not find Person for current User.");
