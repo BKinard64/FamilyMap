@@ -17,5 +17,5 @@ public class FamilyEventsService {
      *
      * @return a FamilyEventsResult object.
      */
-    public FamilyEventsResult familyEvents() {return null;}
+    public FamilyEventsResult familyEvents(String token) {return null;}
 }
