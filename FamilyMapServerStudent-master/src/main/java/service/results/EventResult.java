@@ -31,11 +31,11 @@ public class EventResult extends Result {
     /**
      * The latitude of the Event's location.
      */
-    private float latitude;
+    private double latitude;
     /**
      * The longitude of the Event's location.
      */
-    private float longitude;
+    private double longitude;
     /**
      * The year the Event occurred.
      */
@@ -50,24 +50,27 @@ public class EventResult extends Result {
      * @param country the country where the Event occurred.
      * @param city the city where the Event occurred.
      * @param eventType the type of the Event.
-     * @param message an error message in the event the request fails.
      * @param latitude the latitude of the Event's location.
      * @param longitude the longitude of the Event's location.
      * @param year the year the Event occurred.
      * @param success an indicator of a successful/failed request.
      */
     public EventResult(String associatedUsername, String eventID, String personID, String country, String city,
-                       String eventType, String message, float latitude, float longitude, int year, boolean success) {
+                       String eventType, double latitude, double longitude, int year, boolean success) {
         this.associatedUsername = associatedUsername;
         this.eventID = eventID;
         this.personID = personID;
         this.country = country;
         this.city = city;
         this.eventType = eventType;
-        this.message = message;
         this.latitude = latitude;
         this.longitude = longitude;
         this.year = year;
+        this.success = success;
+    }
+
+    public EventResult(String message, boolean success) {
+        this.message = message;
         this.success = success;
     }
 
@@ -95,11 +98,11 @@ public class EventResult extends Result {
         return eventType;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
