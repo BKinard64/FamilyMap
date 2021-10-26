@@ -4,10 +4,6 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import dao.*;
-import model.AuthToken;
-import model.Person;
-import model.User;
 import service.FamilyService;
 import service.PersonService;
 import service.requests.PersonRequest;
@@ -64,9 +60,6 @@ public class PersonHandler implements HttpHandler {
                         gson.toJson(pResult, resBody);
                         resBody.close();
 
-                                // ADD TO SERVICE
-
-                                // ADD TO SERVICE
                     } else {
                         // The path does not specify a PersonID, so call FamilyService instead
 
@@ -107,7 +100,7 @@ public class PersonHandler implements HttpHandler {
                 // Close the output stream for the response body
                 exchange.getResponseBody().close();
             }
-        } catch (IOException | DataAccessException e) {
+        } catch (IOException e) {
             // Report an internal server error
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
             // Close the output stream for the response body
