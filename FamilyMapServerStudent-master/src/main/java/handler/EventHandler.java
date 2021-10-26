@@ -9,6 +9,7 @@ import service.FamilyEventsService;
 import service.requests.EventRequest;
 import service.results.EventResult;
 import service.results.FamilyEventsResult;
+import service.results.Result;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -47,17 +48,17 @@ public class EventHandler implements HttpHandler {
                         EventService service = new EventService();
                         EventResult eResult = service.event(request);
 
-                        // Send HTTP Response
-                        if (eResult.isSuccess()) {
-                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                        } else {
-                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-                        }
-
-                        // Serialize PersonResult to JSON String
+                        // Send HTTP Response and Serialize EventResult to JSON String
                         Gson gson = new Gson();
                         Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
-                        gson.toJson(eResult, resBody);
+                        if (eResult.isSuccess()) {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                            gson.toJson(eResult, resBody);
+                        } else {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                            Result baseResult = new Result(eResult.getMessage(), eResult.isSuccess());
+                            gson.toJson(baseResult, resBody);
+                        }
                         resBody.close();
 
                     } else {

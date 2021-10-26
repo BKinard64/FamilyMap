@@ -13,6 +13,13 @@ public class Result {
      */
     protected boolean success;
 
+    public Result(String messsage, boolean success) {
+        this.message = messsage;
+        this.success = success;
+    }
+
+    public Result() {}
+
     public String getMessage() {
         return message;
     }
