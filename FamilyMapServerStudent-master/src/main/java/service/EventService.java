@@ -56,7 +56,7 @@ public class EventService {
                     } else {
                         // The specified eventID does not belong to the current User
                         db.closeConnection(false);
-                        return new EventResult("Error: Requested event does not belong to the user.",
+                        return new EventResult("Error: Requested event does not belong to this user.",
                                                 false);
                     }
                 } else {
