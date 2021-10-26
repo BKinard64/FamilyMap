@@ -6,7 +6,6 @@ import model.Event;
 import model.Person;
 import model.User;
 import service.results.FamilyEventsResult;
-import service.results.FamilyResult;
 
 import java.util.List;
 
