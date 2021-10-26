@@ -63,12 +63,6 @@ public class PersonHandler implements HttpHandler {
                     } else {
                         // The path does not specify a PersonID, so call FamilyService instead
 
-                                    // ADD TO SERVICE
-                                    // Find Person associated with Username
-                                    // PersonDao pDao = new PersonDao(db.getConnection());
-                                    // Person person = pDao.find(user.getPersonID());
-                                    // ADD TO SERVICE
-
                         // Execute Request Logic in FamilyService
                         FamilyService fService = new FamilyService();
                         FamilyResult fResult = fService.family(tokenString);
@@ -85,7 +79,6 @@ public class PersonHandler implements HttpHandler {
                         Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
                         gson.toJson(fResult, resBody);
                         resBody.close();
-
                     }
 
                 } else {
