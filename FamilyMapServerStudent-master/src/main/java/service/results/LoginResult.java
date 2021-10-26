@@ -34,6 +34,11 @@ public class LoginResult extends Result {
         this.success = success;
     }
 
+    public LoginResult(String message, boolean success) {
+        this.message = message;
+        this.success = success;
+    }
+
     public String getAuthtoken() {
         return authtoken;
     }

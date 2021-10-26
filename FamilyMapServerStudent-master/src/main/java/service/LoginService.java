@@ -63,7 +63,7 @@ public class LoginService {
             } catch (DataAccessException e) {
                 e.printStackTrace();
             }
-            return new LoginResult(null, null, null, ex.getMessage(), false);
+            return new LoginResult(ex.getMessage(), false);
         }
     }
 }
