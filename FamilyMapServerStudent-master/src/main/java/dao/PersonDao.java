@@ -100,8 +100,6 @@ public class PersonDao {
         // Create the List Object to return
         List<Person> family = new ArrayList<>();
 
-        // **NOTE: Find person object associated with current User in FamilyService
-
         // Find the Person Objects associated with the current User's spouse, father, and mother
         Person spouse = find(p.getSpouseID());
         Person father = find(p.getFatherID());
