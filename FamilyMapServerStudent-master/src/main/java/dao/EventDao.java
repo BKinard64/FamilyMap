@@ -141,8 +141,6 @@ public class EventDao {
         // Create the List Object to return
         List<Event> familyEvents;
 
-        // **NOTE: Find person object associated with current User in FamilyEventsService
-
         // Get the events of the current User
         familyEvents = getPersonEvents(p.getId());
 

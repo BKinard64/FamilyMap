@@ -17,11 +17,14 @@ public class FamilyEventsResult extends Result {
      * Create a FamilyEventsResult.
      *
      * @param data a list of every Event for every family member of the current User.
-     * @param message an error message in the event the request fails.
      * @param success an indicator of a successful/unsuccessful request.
      */
-    public FamilyEventsResult(List<Event> data, String message, boolean success) {
+    public FamilyEventsResult(List<Event> data, boolean success) {
         this.data = data;
+        this.success = success;
+    }
+
+    public FamilyEventsResult(String message, boolean success) {
         this.message = message;
         this.success = success;
     }
