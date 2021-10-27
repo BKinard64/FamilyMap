@@ -70,16 +70,16 @@ public class Server {
         System.out.println("Storing JSON Data for family tree generation");
         Gson gson = new Gson();
         // Store location data
-        Reader reader = new FileReader("locations.json");
+        Reader reader = new FileReader("json/locations.json");
         LocationData locData = (LocationData)gson.fromJson(reader, LocationData.class);
         // Store female name data
-        reader = new FileReader("fnames.json");
+        reader = new FileReader("json/fnames.json");
         FemaleNames fNames = (FemaleNames)gson.fromJson(reader, FemaleNames.class);
         // Store male name data
-        reader = new FileReader("mnames.json");
+        reader = new FileReader("json/mnames.json");
         MaleNames mNames = (MaleNames)gson.fromJson(reader, MaleNames.class);
         // Store surname data
-        reader = new FileReader("snames.json");
+        reader = new FileReader("json/snames.json");
         Surnames sNames = (Surnames)gson.fromJson(reader, Surnames.class);
     }
 }
