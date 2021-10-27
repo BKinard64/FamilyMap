@@ -1,7 +1,14 @@
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
 import handler.*;
+import jsondata.FemaleNames;
+import jsondata.LocationData;
+import jsondata.MaleNames;
+import jsondata.Surnames;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.InetSocketAddress;
 
 public class Server {
@@ -28,6 +35,14 @@ public class Server {
         // Map urls to appropriate handler classes
         registerHandlers();
 
+        // Cache JSON data for family tree generation
+        try {
+            cacheJsonData();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
         System.out.println("Starting server");
         // Have the server start receiving incoming client connections
         server.start();
@@ -49,5 +64,22 @@ public class Server {
         server.createContext("/event", new EventHandler());
         // Create and install the HTTP handler for the Web-site
         server.createContext("/", new FileHandler());
+    }
+
+    private void cacheJsonData() throws IOException {
+        System.out.println("Storing JSON Data for family tree generation");
+        Gson gson = new Gson();
+        // Store location data
+        Reader reader = new FileReader("json/locations.json");
+        LocationData locData = (LocationData)gson.fromJson(reader, LocationData.class);
+        // Store female name data
+        reader = new FileReader("json/fnames.json");
+        FemaleNames fNames = (FemaleNames)gson.fromJson(reader, FemaleNames.class);
+        // Store male name data
+        reader = new FileReader("json/mnames.json");
+        MaleNames mNames = (MaleNames)gson.fromJson(reader, MaleNames.class);
+        // Store surname data
+        reader = new FileReader("json/snames.json");
+        Surnames sNames = (Surnames)gson.fromJson(reader, Surnames.class);
     }
 }
