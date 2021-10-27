@@ -1,7 +1,10 @@
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
 import handler.*;
+import jsondata.FemaleNames;
 import jsondata.LocationData;
+import jsondata.MaleNames;
+import jsondata.Surnames;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -66,7 +69,17 @@ public class Server {
     private void cacheJsonData() throws IOException {
         System.out.println("Storing JSON Data for family tree generation");
         Gson gson = new Gson();
+        // Store location data
         Reader reader = new FileReader("locations.json");
         LocationData locData = (LocationData)gson.fromJson(reader, LocationData.class);
+        // Store female name data
+        reader = new FileReader("fnames.json");
+        FemaleNames fNames = (FemaleNames)gson.fromJson(reader, FemaleNames.class);
+        // Store male name data
+        reader = new FileReader("mnames.json");
+        MaleNames mNames = (MaleNames)gson.fromJson(reader, MaleNames.class);
+        // Store surname data
+        reader = new FileReader("snames.json");
+        Surnames sNames = (Surnames)gson.fromJson(reader, Surnames.class);
     }
 }
