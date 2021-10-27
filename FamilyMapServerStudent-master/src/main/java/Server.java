@@ -1,7 +1,11 @@
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
 import handler.*;
+import jsondata.LocationData;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.InetSocketAddress;
 
 public class Server {
@@ -28,6 +32,14 @@ public class Server {
         // Map urls to appropriate handler classes
         registerHandlers();
 
+        // Cache JSON data for family tree generation
+        try {
+            cacheJsonData();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
         System.out.println("Starting server");
         // Have the server start receiving incoming client connections
         server.start();
@@ -49,5 +61,12 @@ public class Server {
         server.createContext("/event", new EventHandler());
         // Create and install the HTTP handler for the Web-site
         server.createContext("/", new FileHandler());
+    }
+
+    private void cacheJsonData() throws IOException {
+        System.out.println("Storing JSON Data for family tree generation");
+        Gson gson = new Gson();
+        Reader reader = new FileReader("locations.json");
+        LocationData locData = (LocationData)gson.fromJson(reader, LocationData.class);
     }
 }
