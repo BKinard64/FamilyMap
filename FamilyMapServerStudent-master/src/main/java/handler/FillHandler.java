@@ -26,11 +26,11 @@ public class FillHandler implements HttpHandler {
                 if (url.length > 2) {
 
                     // Determine if optional generations parameter was sent with Request
-                    int generations;
+                    String generations;
                     if (url.length > 3) {
-                        generations = Integer.parseInt(url[3]);
+                        generations = url[3];
                     } else {
-                        generations = 4;
+                        generations = "4";
                     }
 
                     // Create FillRequest object to pass to FillService

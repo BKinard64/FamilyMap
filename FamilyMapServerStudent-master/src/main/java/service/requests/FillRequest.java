@@ -11,7 +11,7 @@ public class FillRequest {
     /**
      * The number of generations of family data that should be generated.
      */
-    private int generations;
+    private String generations;
 
     /**
      * Create a FillRequest object.
@@ -19,7 +19,7 @@ public class FillRequest {
      * @param username the username of the User to generate family data for.
      * @param generations the number of generations of family data to generate.
      */
-    public FillRequest(String username, int generations) {
+    public FillRequest(String username, String generations) {
         this.username = username;
         this.generations = generations;
     }
@@ -28,7 +28,7 @@ public class FillRequest {
         return username;
     }
 
-    public int getGenerations() {
+    public String getGenerations() {
         return generations;
     }
 }
