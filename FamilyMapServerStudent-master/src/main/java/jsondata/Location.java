@@ -1,10 +1,10 @@
 package jsondata;
 
 public class Location {
-    String latitude;
-    String longitude;
-    String city;
-    String country;
+    private String latitude;
+    private String longitude;
+    private String city;
+    private String country;
 
     public Location(String latitude, String longitude, String city, String country) {
         this.latitude = latitude;

@@ -1,7 +1,7 @@
 package jsondata;
 
 public class LocationData {
-    static Location[] data;
+    private static Location[] data;
 
     public static Location[] getData() {
         return data;
