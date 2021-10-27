@@ -41,6 +41,8 @@ public class Server {
         server.createContext("/user/login", new LoginHandler());
         // Create and install the HTTP handler for the clear API
         server.createContext("/clear", new ClearHandler());
+        // Create and install the HTTP handler for the load API
+        server.createContext("/load", new LoadHandler());
         // Create and install the HTTP handler for the person API
         server.createContext("/person", new PersonHandler());
         // Create and install the HTTP handler for the event API
