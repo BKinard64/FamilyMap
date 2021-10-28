@@ -222,6 +222,16 @@ public class EventDao {
         }
     }
 
+    public void deleteFamilyEvents(String username) throws DataAccessException {
+        String sql = "DELETE FROM event WHERE username = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting user's family events from event table");
+        }
+    }
+
     /**
      * Remove all Events associated with a Person
      *

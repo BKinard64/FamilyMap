@@ -42,27 +42,8 @@ public class AncestryGenerator {
     }
 
     public void deleteFamilyData() throws DataAccessException {
-        deletePersonData(user.getPersonID());
-    }
-
-    private void deletePersonData(String personID) throws DataAccessException {
-        if (personID != null) {
-            // DELETE EVENTS ASSOCIATED WITH THIS PERSON
-            EventDao eDao = new EventDao(conn);
-            eDao.deletePersonEvents(personID);
-
-            // DELETE EVENTS ASSOCIATED WITH FAMILY MEMBERS OF THIS PERSON
-            PersonDao pDao = new PersonDao(conn);
-            Person person = pDao.find(personID);
-            if (person != null) {
-                deletePersonData(person.getFatherID());
-                deletePersonData(person.getMotherID());
-                deletePersonData(person.getSpouseID());
-            }
-
-            // DELETE THIS PERSON
-            pDao.delete(personID);
-        }
+        new EventDao(conn).deleteFamilyEvents(user.getUsername());
+        new PersonDao(conn).deleteFamily(user.getUsername());
     }
 
     public int[] generateFamilyData() throws DataAccessException {

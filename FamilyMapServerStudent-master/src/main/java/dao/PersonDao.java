@@ -142,6 +142,16 @@ public class PersonDao {
         }
     }
 
+    public void deleteFamily(String username) throws DataAccessException {
+        String sql = "DELETE FROM person WHERE username = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting user's family from person table");
+        }
+    }
+
     /**
      * Delete all records from the Person table
      *
