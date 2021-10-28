@@ -78,9 +78,10 @@ public class PersonDaoTest {
         // Insert bestPerson (defined in setUp()) to the database
         pDao.insert(bestPerson);
         // Get the family of bestPerson
-        List<Person> fam = pDao.getFamily(bestPerson);
-        // The List should be empty because no other Person objects are in the database
-        assertTrue(fam.isEmpty());
+        List<Person> fam = pDao.getFamily(bestPerson.getUsername());
+        // The List should just have bestPerson because no other Person objects are in the database
+        assertEquals(1, fam.size());
+        assertTrue(fam.contains(bestPerson));
     }
 
     @Test
@@ -89,23 +90,24 @@ public class PersonDaoTest {
         pDao.insert(bestPerson);
 
         // Create Person objects for bestPerson's family members and add them to the database
-        Person spouse = new Person("123s", "Spouse123", "Spouse", "Button",
+        Person spouse = new Person("123s", "Ben123", "Spouse", "Button",
                 "f", "321f", "321m", "123b");
-        Person father = new Person("123f", "Father123", "Father", "Button",
+        Person father = new Person("123f", "Ben123", "Father", "Button",
                 "m", "000f", "000m", "123m");
-        Person mother = new Person("123m", "Mother123", "Mother", "Button",
+        Person mother = new Person("123m", "Ben123", "Mother", "Button",
                 "f", "111f", "111m", "123f");
         pDao.insert(spouse);
         pDao.insert(father);
         pDao.insert(mother);
 
         // Get the family of bestPerson
-        List<Person> fam = pDao.getFamily(bestPerson);
+        List<Person> fam = pDao.getFamily(bestPerson.getUsername());
 
-        // The List should have 3 Person Objects
-        assertEquals(3, fam.size());
+        // The List should have 4 Person Objects
+        assertEquals(4, fam.size());
 
-        // The List should contain the spouse, father, and mother objects
+        // The List should contain bestPerson and the spouse, father, and mother objects
+        assertTrue(fam.contains(bestPerson));
         assertTrue(fam.contains(spouse));
         assertTrue(fam.contains(father));
         assertTrue(fam.contains(mother));

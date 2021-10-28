@@ -55,7 +55,7 @@ public class FamilyServiceTest {
     }
 
     @Test
-    public void personNotInDatabase() throws DataAccessException {
+    public void familyEmptySuccess() throws DataAccessException {
         db.openConnection();
         // Add AuthToken to Database
         AuthToken authToken = new AuthToken("xaybzc123", "Ben123");
@@ -64,8 +64,8 @@ public class FamilyServiceTest {
         // Call the Service with the correct AuthToken
         result = service.family("xaybzc123");
         // This should result in an error b/c a Person Object for the personID associated w/ the User is not in Database
-        assertFalse(result.isSuccess());
-        assertEquals("Error: Internal server error.", result.getMessage());
+        assertTrue(result.isSuccess());
+        assertTrue(result.getData().isEmpty());
     }
 
     @Test
@@ -82,11 +82,11 @@ public class FamilyServiceTest {
         pDao.insert(person);
 
         // Create Person objects for person's family members and add them to the database
-        Person spouse = new Person("123s", "Spouse123", "Spouse", "Button",
+        Person spouse = new Person("123s", "Ben123", "Spouse", "Button",
                 "f", "321f", "321m", "123b");
-        Person father = new Person("123f", "Father123", "Father", "Button",
+        Person father = new Person("123f", "Ben123", "Father", "Button",
                 "m", "000f", "000m", "123m");
-        Person mother = new Person("123m", "Mother123", "Mother", "Button",
+        Person mother = new Person("123m", "Ben123", "Mother", "Button",
                 "f", "111f", "111m", "123f");
         pDao.insert(spouse);
         pDao.insert(father);
@@ -100,33 +100,10 @@ public class FamilyServiceTest {
 
         // This should result in a successful response with each of the family remembers returned in a list
         assertTrue(result.isSuccess());
-        assertEquals(3, result.getData().size());
+        assertEquals(4, result.getData().size());
+        assertTrue(result.getData().contains(person));
         assertTrue(result.getData().contains(spouse));
         assertTrue(result.getData().contains(father));
         assertTrue(result.getData().contains(mother));
-    }
-
-    @Test
-    public void familyEmptySuccess() throws DataAccessException {
-        db.openConnection();
-        // Add AuthToken to Database
-        AuthToken authToken = new AuthToken("xaybzc123", "Ben123");
-        new AuthTokenDao(db.getConnection()).insert(authToken);
-
-        // Add person to Database
-        Person person = new Person("123b", "Ben123", "Ben", "Button",
-                "m", "123f", "123m", "123s");
-        PersonDao pDao = new PersonDao(db.getConnection());
-        pDao.insert(person);
-
-        // Close connection
-        db.closeConnection(true);
-
-        // Call the Service with the correct AuthToken
-        result = service.family("xaybzc123");
-
-        // This should result in a successful response with an empty list
-        assertTrue(result.isSuccess());
-        assertTrue(result.getData().isEmpty());
     }
 }

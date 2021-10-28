@@ -92,67 +92,38 @@ public class PersonDao {
     /**
      * Find the family members of the current user.
      *
-     * @param p the Person object associated with the current User.
+     * @param username the username associated with the current User.
      * @throws DataAccessException
      * @return a list of Person objects representing the family members of the current User.
      */
-    public List<Person> getFamily(Person p) throws DataAccessException {
-        // Create the List Object to return
+    public List<Person> getFamily(String username) throws DataAccessException {
         List<Person> family = new ArrayList<>();
-
-        // Find the Person Objects associated with the current User's spouse, father, and mother
-        Person spouse = find(p.getSpouseID());
-        Person father = find(p.getFatherID());
-        Person mother = find(p.getMotherID());
-
-        // If the current User has a spouse, father, or mother in the database, add to returning list
-        if (spouse != null) {
-            family.add(spouse);
-        }
-        if (father != null) {
-            family.add(father);
-        }
-        if (mother != null) {
-            family.add(mother);
-        }
-
-        // Add the parents of the Current User's mother, father, and spouse to the list
-        if (mother != null) {
-            getParents(mother, family);
-        }
-        if (father != null) {
-            getParents(father, family);
-        }
-        if (spouse != null) {
-            getParents(spouse, family);
+        ResultSet rs = null;
+        String sql = "SELECT * FROM person WHERE username = ?;";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Person person = new Person(rs.getString("id"), rs.getString("username"),
+                                            rs.getString("first_name"), rs.getString("last_name"),
+                                            rs.getString("gender"), rs.getString("father_id"),
+                                            rs.getString("mother_id"), rs.getString("spouse_id"));
+                family.add(person);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding user's family");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return family;
-    }
-
-    /**
-     * Add the parents of a given Person object to a provided List
-     *
-     * @param p the Person object to search for parents
-     * @param family the List of Person objects to add the parents to
-     * @throws DataAccessException
-     */
-    private void getParents(Person p, List<Person> family) throws DataAccessException {
-        // Find the Person Objects associated with this Person's mother and father
-        Person mother = find(p.getMotherID());
-        Person father = find(p.getFatherID());
-
-        // If this Person has a mother or father in the database, add them to the List
-        if (mother != null) {
-            family.add(mother);
-            // Add the parents of the mother to the list
-            getParents(mother, family);
-        }
-        if (father != null) {
-            family.add(father);
-            // Add the parents of the father to the list
-            getParents(father, family);
-        }
     }
 
     /**
