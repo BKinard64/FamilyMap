@@ -3,6 +3,10 @@ package service;
 import dao.DataAccessException;
 import dao.Database;
 import dao.UserDao;
+import jsondata.FemaleNames;
+import jsondata.LocationData;
+import jsondata.MaleNames;
+import jsondata.Surnames;
 import model.AncestryGenerator;
 import model.User;
 import service.requests.FillRequest;
@@ -12,11 +16,20 @@ import service.results.FillResult;
  * A service object for the fill API.
  */
 public class FillService {
+    private LocationData locData;
+    private FemaleNames fmlNames;
+    private MaleNames mlNames;
+    private Surnames srNames;
 
     /**
      * Create a FillService object.
      */
-    public FillService() {}
+    public FillService(LocationData locData, FemaleNames fmlNames, MaleNames mlNames, Surnames srNames) {
+        this.locData = locData;
+        this.fmlNames = fmlNames;
+        this.mlNames = mlNames;
+        this.srNames = srNames;
+    }
 
     /**
      * Populate the database with generated data for specified User.
@@ -41,7 +54,8 @@ public class FillService {
                 if (generations >= 0) {
 
                     // Delete any existing data for current User and fill with new data
-                    AncestryGenerator generator = new AncestryGenerator(db.getConnection(), user, generations);
+                    AncestryGenerator generator = new AncestryGenerator(db.getConnection(), user, generations,
+                                                                        locData, fmlNames, mlNames, srNames);
                     generator.deleteFamilyData();
                     int[] generatedData = generator.generateFamilyData();
                     return new FillResult("Successfully added " + generatedData[0] + " persons and " +

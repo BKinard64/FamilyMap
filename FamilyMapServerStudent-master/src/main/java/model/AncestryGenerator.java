@@ -4,9 +4,10 @@ import dao.DataAccessException;
 import dao.EventDao;
 import dao.PersonDao;
 import dao.UserDao;
-import jsondata.Location;
+import jsondata.*;
 
 import java.sql.Connection;
+import java.util.Random;
 import java.util.UUID;
 
 public class AncestryGenerator {
@@ -17,8 +18,13 @@ public class AncestryGenerator {
     private Gender userGender;
     private int personsGenerated;
     private int eventsGenerated;
+    private LocationData locData;
+    private FemaleNames fmlNames;
+    private MaleNames mlNames;
+    private Surnames srNames;
 
-    public AncestryGenerator(Connection conn, User user, int generations) {
+    public AncestryGenerator(Connection conn, User user, int generations, LocationData locData, FemaleNames fmlNames,
+                             MaleNames mlNames, Surnames srNames) {
         this.conn = conn;
         this.user = user;
         this.generations = generations;
@@ -29,6 +35,10 @@ public class AncestryGenerator {
         }
         this.personsGenerated = 0;
         this.eventsGenerated = 0;
+        this.locData = locData;
+        this.fmlNames = fmlNames;
+        this. mlNames = mlNames;
+        this.srNames = srNames;
     }
 
     public void deleteFamilyData() throws DataAccessException {
@@ -90,21 +100,30 @@ public class AncestryGenerator {
             father.setSpouseID(mother.getId());
             mother.setSpouseID(father.getId());
 
-            generateEvent(father.getId(), "Marriage", marriageYear, null);
-            generateEvent(mother.getId(), "Marriage", marriageYear, null);
+            Random random = new Random();
+            int index = random.nextInt(locData.data.length);
+            Location location = locData.data[index];
+
+            generateEvent(father.getId(), "Marriage", marriageYear, location);
+            generateEvent(mother.getId(), "Marriage", marriageYear, location);
         }
 
         // Create Person
         Person person = new Person();
         personsGenerated++;
         person.setId(UUID.randomUUID().toString());
-        // Set first name
-        // Set last name
+        Random random = new Random();
         if (gender.equals(Gender.MALE)) {
             person.setGender("m");
+            int index = random.nextInt(mlNames.data.length);
+            person.setFirstName(mlNames.data[index]);
         } else {
             person.setGender("f");
+            int index = random.nextInt(fmlNames.data.length);
+            person.setFirstName(fmlNames.data[index]);
         }
+        int index = random.nextInt(srNames.data.length);
+        person.setLastName(srNames.data[index]);
         if (father != null && mother != null) {
             person.setFatherID(father.getId());
             person.setMotherID(mother.getId());
@@ -129,7 +148,15 @@ public class AncestryGenerator {
         eventsGenerated++;
         event.setId(UUID.randomUUID().toString());
         event.setPersonID(personID);
-        // Set location data
+        if (location == null) {
+            Random random = new Random();
+            int index = random.nextInt(locData.data.length);
+            location = locData.data[index];
+        }
+        event.setLatitude(location.getLatitude());
+        event.setLongitude(location.getLongitude());
+        event.setCountry(location.getCountry());
+        event.setCity(location.getCity());
         event.setType(eventType);
         event.setYear(year);
 

@@ -3,6 +3,10 @@ package handler;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import jsondata.FemaleNames;
+import jsondata.LocationData;
+import jsondata.MaleNames;
+import jsondata.Surnames;
 import service.FillService;
 import service.requests.FillRequest;
 import service.results.FillResult;
@@ -13,6 +17,18 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 
 public class FillHandler implements HttpHandler {
+    private LocationData locData;
+    private FemaleNames fmlNames;
+    private MaleNames mlNames;
+    private Surnames srNames;
+
+    public FillHandler(LocationData locData, FemaleNames fmlNames, MaleNames mlNames, Surnames srNames) {
+        this.locData = locData;
+        this.fmlNames = fmlNames;
+        this.mlNames = mlNames;
+        this.srNames = srNames;
+    }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
@@ -37,7 +53,7 @@ public class FillHandler implements HttpHandler {
                     FillRequest request = new FillRequest(url[2], generations);
 
                     // Execute FillRequest logic in FillService
-                    FillService service = new FillService();
+                    FillService service = new FillService(locData, fmlNames, mlNames, srNames);
                     FillResult result = service.fill(request);
 
                     // Send HTTP Response
