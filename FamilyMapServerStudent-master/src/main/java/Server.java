@@ -36,8 +36,6 @@ public class Server {
             e.printStackTrace();
             return;
         }
-        // Map urls to appropriate handler classes
-        registerHandlers();
 
         // Cache JSON data for family tree generation
         try {
@@ -46,6 +44,11 @@ public class Server {
             e.printStackTrace();
             return;
         }
+
+        // Map urls to appropriate handler classes
+        registerHandlers();
+
+
 
         System.out.println("Starting server");
         // Have the server start receiving incoming client connections

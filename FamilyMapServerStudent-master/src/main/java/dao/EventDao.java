@@ -71,8 +71,8 @@ public class EventDao {
             rs = stmt.executeQuery();
             if (rs.next()) {
                 event = new Event(rs.getString("id"), rs.getString("username"),
-                        rs.getString("person_id"), rs.getDouble("latitude"),
-                        rs.getDouble("longitude"), rs.getString("country"),
+                        rs.getString("person_id"), rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
                         rs.getString("city"), rs.getString("type"),
                         rs.getInt("year"));
                 return event;
@@ -108,8 +108,8 @@ public class EventDao {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Event event = new Event(rs.getString("id"), rs.getString("username"),
-                        rs.getString("person_id"), rs.getDouble("latitude"),
-                        rs.getDouble("longitude"), rs.getString("country"),
+                        rs.getString("person_id"), rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
                         rs.getString("city"), rs.getString("type"),
                         rs.getInt("year"));
                 personEvents.add(event);
@@ -133,77 +133,39 @@ public class EventDao {
     /**
      * Find all the Events of every family member of the current User.
      *
-     * @param p the Person object associated with the current User.
+     * @param username the username associated with the current User.
      * @throws DataAccessException
      * @return a list of Event objects representing the current User's family member's events.
      */
-    public List<Event> getFamilyEvents(Person p) throws DataAccessException {
-        // Create the List Object to return
-        List<Event> familyEvents;
-
-        // Get the events of the current User
-        familyEvents = getPersonEvents(p.getId());
-
-        // Find the Person Objects associated with the current User's spouse, father, and mother
-        PersonDao pDao = new PersonDao(conn);
-        Person spouse = pDao.find(p.getSpouseID());
-        Person father = pDao.find(p.getFatherID());
-        Person mother = pDao.find(p.getMotherID());
-
-        // Add the Events of the User's spouse, mother, and father to the returning list
-        if (spouse != null) {
-            List<Event> spouseEvents = getPersonEvents(spouse.getId());
-            familyEvents.addAll(spouseEvents);
-        }
-        if (mother != null) {
-            List<Event> motherEvents = getPersonEvents(mother.getId());
-            familyEvents.addAll(motherEvents);
-        }
-        if (father != null) {
-            List<Event> fatherEvents = getPersonEvents(father.getId());
-            familyEvents.addAll(fatherEvents);
-        }
-
-        // Add the Events of the parents of the Current User's mother, father, and spouse to the list
-        if (mother != null) {
-            getParentEvents(mother, pDao, familyEvents);
-        }
-        if (father != null) {
-            getParentEvents(father, pDao, familyEvents);
-        }
-        if (spouse != null) {
-            getParentEvents(spouse, pDao, familyEvents);
+    public List<Event> getFamilyEvents(String username) throws DataAccessException {
+        List<Event> familyEvents = new ArrayList<>();
+        ResultSet rs = null;
+        String sql = "SELECT * FROM event WHERE username = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Event event = new Event(rs.getString("id"), rs.getString("username"),
+                        rs.getString("person_id"), rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
+                        rs.getString("city"), rs.getString("type"),
+                        rs.getInt("year"));
+                familyEvents.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding user's family's events");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return familyEvents;
-    }
-
-    /**
-     * Find the events of a given Person's parents
-     *
-     * @param p the Person
-     * @param pDao a Person Data-Access Object to find the Person's parents
-     * @param familyEvents a List of family Events to add to
-     * @throws DataAccessException
-     */
-    private void getParentEvents(Person p, PersonDao pDao, List<Event> familyEvents) throws DataAccessException {
-        // Find the Person Objects associated with this Person's mother and father
-        Person mother = pDao.find(p.getMotherID());
-        Person father = pDao.find(p.getFatherID());
-
-        // If this Person has a mother or father in the database, add their Events to the List
-        if (mother != null) {
-            List<Event> motherEvents = getPersonEvents(mother.getId());
-            familyEvents.addAll(motherEvents);
-            // Add the Events of the mother's parents to the list
-            getParentEvents(mother, pDao, familyEvents);
-        }
-        if (father != null) {
-            List<Event> fatherEvents = getPersonEvents(father.getId());
-            familyEvents.addAll(fatherEvents);
-            // Add the Events of the father's parents to the list
-            getParentEvents(father, pDao, familyEvents);
-        }
     }
 
     /**
@@ -219,6 +181,16 @@ public class EventDao {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Error encountered while deleting event from table");
+        }
+    }
+
+    public void deleteFamilyEvents(String username) throws DataAccessException {
+        String sql = "DELETE FROM event WHERE username = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
         }
     }
 

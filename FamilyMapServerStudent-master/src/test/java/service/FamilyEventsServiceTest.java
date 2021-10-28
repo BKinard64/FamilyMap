@@ -57,20 +57,6 @@ public class FamilyEventsServiceTest {
     }
 
     @Test
-    public void personNotInDatabase() throws DataAccessException {
-        db.openConnection();
-        // Add AuthToken to Database
-        AuthToken authToken = new AuthToken("xaybzc123", "Ben123");
-        new AuthTokenDao(db.getConnection()).insert(authToken);
-        db.closeConnection(true);
-        // Call the Service with the correct AuthToken
-        result = service.familyEvents("xaybzc123");
-        // This should result in an error b/c a Person Object for the personID associated w/ the User is not in Database
-        assertFalse(result.isSuccess());
-        assertEquals("Error: Internal server error.", result.getMessage());
-    }
-
-    @Test
     public void familySuccess() throws DataAccessException {
         db.openConnection();
         // Add AuthToken to Database
@@ -84,37 +70,37 @@ public class FamilyEventsServiceTest {
         pDao.insert(person);
 
         // Create Event objects for above Person and add them to the Database
-        Event event1 = new Event("123e1", "Ben123", "123b", 10.0, 10.0,
+        Event event1 = new Event("123e1", "Ben123", "123b", 10.0F, 10.0F,
                                 "USA", "Provo", "birth", 2000);
-        Event event2 = new Event("123e2", "Ben123", "123b", 20.0, 20.0,
+        Event event2 = new Event("123e2", "Ben123", "123b", 20.0F, 20.0F,
                 "USA", "Provo", "death", 2070);
         EventDao eDao = new EventDao(db.getConnection());
         eDao.insert(event1);
         eDao.insert(event2);
 
         // Create Person objects for person's family members and add them to the database
-        Person spouse = new Person("123s", "Spouse123", "Spouse", "Button",
+        Person spouse = new Person("123s", "Ben123", "Spouse", "Button",
                 "f", "321f", "321m", "123b");
-        Person father = new Person("123f", "Father123", "Father", "Button",
+        Person father = new Person("123f", "Ben123", "Father", "Button",
                 "m", "000f", "000m", "123m");
-        Person mother = new Person("123m", "Mother123", "Mother", "Button",
+        Person mother = new Person("123m", "Ben123", "Mother", "Button",
                 "f", "111f", "111m", "123f");
         pDao.insert(spouse);
         pDao.insert(father);
         pDao.insert(mother);
 
         // Create Event Objects for family members and insert them into the Database
-        Event eventf1 = new Event("123ef1", "Father123", "123f", 70.0, 70.0,
+        Event eventf1 = new Event("123ef1", "Ben123", "123f", 70.0F, 70.0F,
                 "USA", "Provo", "birth", 1975);
-        Event eventf2 = new Event("123ef2", "Father123", "123f", 80.0, 80.0,
+        Event eventf2 = new Event("123ef2", "Ben123", "123f", 80.0F, 80.0F,
                 "USA", "Provo", "death", 2045);
-        Event eventm1 = new Event("123em1", "Mother123", "123m", 50.0, 50.0,
+        Event eventm1 = new Event("123em1", "Ben123", "123m", 50.0F, 50.0F,
                 "USA", "Provo", "birth", 1975);
-        Event eventm2 = new Event("123em2", "Mother123", "123m", 60.0, 60.0,
+        Event eventm2 = new Event("123em2", "Ben123", "123m", 60.0F, 60.0F,
                 "USA", "Provo", "death", 2045);
-        Event events1 = new Event("123es1", "Spouse123", "123s", 30.0, 30.0,
+        Event events1 = new Event("123es1", "Ben123", "123s", 30.0F, 30.0F,
                 "USA", "Provo", "birth", 1975);
-        Event events2 = new Event("123es2", "Spouse123", "123s", 40.0, 40.0,
+        Event events2 = new Event("123es2", "Ben123", "123s", 40.0F, 40.0F,
                 "USA", "Provo", "death", 2045);
         eDao.insert(eventf1);
         eDao.insert(eventf2);

@@ -34,24 +34,12 @@ public class FamilyService {
 
             if (authToken != null) {
 
-                // Get User associated with valid AuthToken
-                UserDao uDao = new UserDao(db.getConnection());
-                User user = uDao.find(authToken.getUsername());
-
-                // Get Person associated with User
+                // Return the family of the user
                 PersonDao pDao = new PersonDao(db.getConnection());
-                Person person = pDao.find(user.getPersonID());
+                List<Person> family = pDao.getFamily(authToken.getUsername());
+                db.closeConnection(true);
+                return new FamilyResult(family, true);
 
-                // Confirm Person is in Database
-                if (person != null) {
-                    // Return the family of the above person
-                    List<Person> family = pDao.getFamily(person);
-                    db.closeConnection(true);
-                    return new FamilyResult(family, true);
-                } else {
-                    // Person is not in Database
-                    throw new DataAccessException("Could not find Person for current User.");
-                }
             } else {
                 // The AuthToken is not valid
                 db.closeConnection(false);

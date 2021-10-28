@@ -8,7 +8,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.requests.EventRequest;
-import service.requests.PersonRequest;
 import service.results.EventResult;
 
 import java.sql.Connection;
@@ -66,7 +65,7 @@ public class EventServiceTest {
         new AuthTokenDao(db.getConnection()).insert(authToken);
 
         // Create Event Object that does not belong to User/Person created in setUp()
-        Event badEvent = new Event("321e", "Braden321", "321b", 37.0, 35.0,
+        Event badEvent = new Event("321e", "Braden321", "321b", 37.0F, 35.0F,
                                     "USA", "Provo", "Birth", 2020);
         new EventDao(db.getConnection()).insert(badEvent);
         db.closeConnection(true);
@@ -103,7 +102,7 @@ public class EventServiceTest {
         new AuthTokenDao(db.getConnection()).insert(authToken);
 
         // Add Event to Database
-        Event event = new Event("123e", "Ben123", "123b", 37.0, 35.0,
+        Event event = new Event("123e", "Ben123", "123b", 37.0F, 35.0F,
                 "USA", "Provo", "Birth", 2020);
         new EventDao(db.getConnection()).insert(event);
         db.closeConnection(true);
@@ -115,8 +114,8 @@ public class EventServiceTest {
         assertEquals("Ben123", result.getAssociatedUsername());
         assertEquals("123e", result.getEventID());
         assertEquals("123b", result.getPersonID());
-        assertEquals(37.0, result.getLatitude());
-        assertEquals(35.0, result.getLongitude());
+        assertEquals(37.0F, result.getLatitude());
+        assertEquals(35.0F, result.getLongitude());
         assertEquals("USA", result.getCountry());
         assertEquals("Provo", result.getCity());
         assertEquals("Birth", result.getEventType());

@@ -11,17 +11,17 @@ import java.util.Random;
 import java.util.UUID;
 
 public class AncestryGenerator {
-    private Connection conn;
-    private User user;
-    private int generations;
-    private enum Gender {MALE, FEMALE};
-    private Gender userGender;
+    private final Connection conn;
+    private final User user;
+    private final int generations;
+    private enum Gender {MALE, FEMALE}
+    private final Gender userGender;
     private int personsGenerated;
     private int eventsGenerated;
-    private LocationData locData;
-    private FemaleNames fmlNames;
-    private MaleNames mlNames;
-    private Surnames srNames;
+    private final LocationData locData;
+    private final FemaleNames fmlNames;
+    private final MaleNames mlNames;
+    private final Surnames srNames;
 
     public AncestryGenerator(Connection conn, User user, int generations, LocationData locData, FemaleNames fmlNames,
                              MaleNames mlNames, Surnames srNames) {
@@ -42,27 +42,8 @@ public class AncestryGenerator {
     }
 
     public void deleteFamilyData() throws DataAccessException {
-        deleteUserData(user.getPersonID());
-    }
-
-    private void deleteUserData(String personID) throws DataAccessException {
-        if (personID != null) {
-            // DELETE EVENTS ASSOCIATED WITH THIS PERSON
-            EventDao eDao = new EventDao(conn);
-            eDao.deletePersonEvents(personID);
-
-            // DELETE EVENTS ASSOCIATED WITH FAMILY MEMBERS OF THIS PERSON
-            PersonDao pDao = new PersonDao(conn);
-            Person person = pDao.find(personID);
-            if (person != null) {
-                deleteUserData(person.getFatherID());
-                deleteUserData(person.getMotherID());
-                deleteUserData(person.getSpouseID());
-            }
-
-            // DELETE THIS PERSON
-            pDao.delete(personID);
-        }
+        new EventDao(conn).deleteFamilyEvents(user.getUsername());
+        new PersonDao(conn).deleteFamily(user.getUsername());
     }
 
     public int[] generateFamilyData() throws DataAccessException {
@@ -71,8 +52,7 @@ public class AncestryGenerator {
         // Create a new User object for current user with updated PersonID
         User newUser = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstName(),
                                 user.getLastName(), user.getGender(), userPerson.getId());
-        // Update User's Person object with original username, first name, and last name
-        userPerson.setUsername(newUser.getUsername());
+        // Update User's Person object with original first name, and last name
         userPerson.setFirstName(newUser.getFirstName());
         userPerson.setLastName(newUser.getLastName());
         // Remove old User object from Database
@@ -80,8 +60,6 @@ public class AncestryGenerator {
         uDao.delete(user.getUsername());
         // Add new User object to Database
         uDao.insert(newUser);
-
-        // EDIT USER'S EVENT DATA
 
         return new int[] {personsGenerated, eventsGenerated};
     }
@@ -112,6 +90,7 @@ public class AncestryGenerator {
         Person person = new Person();
         personsGenerated++;
         person.setId(UUID.randomUUID().toString());
+        person.setUsername(user.getUsername());
         Random random = new Random();
         if (gender.equals(Gender.MALE)) {
             person.setGender("m");
@@ -147,6 +126,7 @@ public class AncestryGenerator {
         Event event = new Event();
         eventsGenerated++;
         event.setId(UUID.randomUUID().toString());
+        event.setUsername(user.getUsername());
         event.setPersonID(personID);
         if (location == null) {
             Random random = new Random();

@@ -36,7 +36,7 @@ public class ClearServiceTest {
                 "Button", "m", "123b");
         bestPerson = new Person("123b", "Ben123", "Ben", "Button", "m",
                 "123f", "123,", "123s");
-        bestEvent = new Event("123e", "Ben123", "123b", 39.0, 37.0, "USA",
+        bestEvent = new Event("123e", "Ben123", "123b", 39.0F, 37.0F, "USA",
                 "Provo", "Birth", 2020);
         bestAuthToken = new AuthToken("xaybzc123", "Ben123");
         // Initialize a connection to the database and clear any existing data from the database

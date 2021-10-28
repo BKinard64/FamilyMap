@@ -35,25 +35,12 @@ public class FamilyEventsService {
 
             if (authToken != null) {
 
-                // Get User associated with valid AuthToken
-                UserDao uDao = new UserDao(db.getConnection());
-                User user = uDao.find(authToken.getUsername());
+                // Return all Events for each Family Member of the above Person
+                EventDao eDao = new EventDao(db.getConnection());
+                List<Event> familyEvents = eDao.getFamilyEvents(authToken.getUsername());
+                db.closeConnection(true);
+                return new FamilyEventsResult(familyEvents, true);
 
-                // Get Person associated with User
-                PersonDao pDao = new PersonDao(db.getConnection());
-                Person person = pDao.find(user.getPersonID());
-
-                // Confirm Person is in Database
-                if (person != null) {
-                    // Return all Events for each Family Member of the above Person
-                    EventDao eDao = new EventDao(db.getConnection());
-                    List<Event> familyEvents = eDao.getFamilyEvents(person);
-                    db.closeConnection(true);
-                    return new FamilyEventsResult(familyEvents, true);
-                } else {
-                    // Person is not in Database
-                    throw new DataAccessException("Could not find Person for current User.");
-                }
             } else {
                 // The AuthToken is not valid
                 db.closeConnection(false);

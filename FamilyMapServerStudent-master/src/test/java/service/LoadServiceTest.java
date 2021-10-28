@@ -44,7 +44,7 @@ public class LoadServiceTest {
                 "Button", "m", "123b");
         bestPerson = new Person("123b", "Ben123", "Ben", "Button", "m",
                 "123f", "123,", "123s");
-        bestEvent = new Event("456e", "Ben123", "123b", 39.0, 37.0, "USA",
+        bestEvent = new Event("456e", "Ben123", "123b", 39.0F, 37.0F, "USA",
                 "Provo", "Birth", 2020);
         AuthToken bestAuthToken = new AuthToken("xaybzc123", "Ben123");
         // Initialize a connection to the database and clear any existing data from the database
@@ -93,9 +93,9 @@ public class LoadServiceTest {
         persons.add(newPerson2);
 
         // Create new Event list to be loaded
-        Event newEvent1 = new Event("123e", "John123", "123j", 20.0, 20.0,
+        Event newEvent1 = new Event("123e", "John123", "123j", 20.0F, 20.0F,
                                     "USA", "Provo", "birth", 0);
-        Event newEvent2 = new Event("321e", "Peter123", "123p", 30.0, 30.0,
+        Event newEvent2 = new Event("321e", "Peter123", "123p", 30.0F, 30.0F,
                 "USA", "Provo", "birth", 0);
         events.add(newEvent1);
         events.add(newEvent2);

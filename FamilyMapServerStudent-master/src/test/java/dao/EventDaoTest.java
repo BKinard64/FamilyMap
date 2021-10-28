@@ -20,7 +20,7 @@ public class EventDaoTest {
     public void setUp() throws DataAccessException {
         // Initialize a Database and an arbitrary Event object
         db = new Database();
-        bestEvent = new Event("123e", "Ben123", "123b", 39.0, 43.0,
+        bestEvent = new Event("123e", "Ben123", "123b", 39.0F, 43.0F,
                 "USA", "Provo", "Birth", 2016);
         // Initialize a connection to the database and clear any existing data from the database
         Connection conn = db.getConnection();
@@ -80,7 +80,7 @@ public class EventDaoTest {
         Person bestPerson = new Person("123b", "Ben123", "Ben", "Button",
                 "m", "123f", "123m", "123s");
         // Get the Events of bestPerson's family
-        List<Event> famEvents = eDao.getFamilyEvents(bestPerson);
+        List<Event> famEvents = eDao.getFamilyEvents(bestPerson.getUsername());
         // The List should be empty because no Event objects are in the database
         assertTrue(famEvents.isEmpty());
     }
@@ -97,29 +97,29 @@ public class EventDaoTest {
         eDao.insert(bestEvent);
 
         // Create Person objects for bestPerson's family members and add them to the database
-        Person spouse = new Person("123s", "Spouse123", "Spouse", "Button",
+        Person spouse = new Person("123s", "Ben123", "Spouse", "Button",
                 "f", "321f", "321m", "123b");
-        Person father = new Person("123f", "Father123", "Father", "Button",
+        Person father = new Person("123f", "Ben123", "Father", "Button",
                 "m", "000f", "000m", "123m");
-        Person mother = new Person("123m", "Mother123", "Mother", "Button",
+        Person mother = new Person("123m", "Ben123", "Mother", "Button",
                 "f", "111f", "111m", "123f");
         pDao.insert(spouse);
         pDao.insert(father);
         pDao.insert(mother);
 
         // Create an Event object for each member of bestPerson's family and add them to the database
-        Event spouseEvent = new Event("123se", "Spouse123", "123s", 37.0, 45.0,
+        Event spouseEvent = new Event("123se", "Ben123", "123s", 37.0F, 45.0F,
                 "USA", "Salt Lake City", "Birth", 2016);
-        Event fatherEvent = new Event("123fe", "Father123", "123f", 29.0, 53.0,
+        Event fatherEvent = new Event("123fe", "Ben123", "123f", 29.0F, 53.0F,
                 "USA", "Las Vegas", "Birth", 1990);
-        Event motherEvent = new Event("123me", "Mother123", "123m", 30.0, 40.0,
+        Event motherEvent = new Event("123me", "Ben123", "123m", 30.0F, 40.0F,
                 "USA", "Los Angeles", "Birth", 1990);
         eDao.insert(spouseEvent);
         eDao.insert(fatherEvent);
         eDao.insert(motherEvent);
 
         // Get the Events of bestPerson's family
-        List<Event> famEvents = eDao.getFamilyEvents(bestPerson);
+        List<Event> famEvents = eDao.getFamilyEvents(bestPerson.getUsername());
 
         // The List should have 4 Event Objects
         assertEquals(4, famEvents.size());
@@ -137,6 +137,18 @@ public class EventDaoTest {
         eDao.insert(bestEvent);
         // Call the delete method on eDao
         eDao.delete(bestEvent.getId());
+        // Call the find method on eDao, looking for bestEvent
+        Event compareTest = eDao.find(bestEvent.getId());
+        // Determine that a null reference was returned
+        assertNull(compareTest);
+    }
+
+    @Test
+    public void deleteFamilyEventsPass() throws DataAccessException {
+        // Call the insert method on the eDao (defined in setUp()) and pass it bestEvent (defined in setUp())
+        eDao.insert(bestEvent);
+        // Call the deleteFamilyEvents method on eDao
+        eDao.deleteFamilyEvents(bestEvent.getUsername());
         // Call the find method on eDao, looking for bestEvent
         Event compareTest = eDao.find(bestEvent.getId());
         // Determine that a null reference was returned
