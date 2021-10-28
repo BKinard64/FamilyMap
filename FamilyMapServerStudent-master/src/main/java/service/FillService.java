@@ -85,7 +85,7 @@ public class FillService {
             } catch (DataAccessException e) {
                 e.printStackTrace();
             }
-            return new FillResult("Error: Invalid generations parameter", false);
+            return new FillResult("Error: Invalid generations parameter.", false);
         }
     }
 }
