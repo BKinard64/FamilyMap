@@ -71,8 +71,8 @@ public class EventDao {
             rs = stmt.executeQuery();
             if (rs.next()) {
                 event = new Event(rs.getString("id"), rs.getString("username"),
-                        rs.getString("person_id"), rs.getDouble("latitude"),
-                        rs.getDouble("longitude"), rs.getString("country"),
+                        rs.getString("person_id"), rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
                         rs.getString("city"), rs.getString("type"),
                         rs.getInt("year"));
                 return event;
@@ -108,8 +108,8 @@ public class EventDao {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Event event = new Event(rs.getString("id"), rs.getString("username"),
-                        rs.getString("person_id"), rs.getDouble("latitude"),
-                        rs.getDouble("longitude"), rs.getString("country"),
+                        rs.getString("person_id"), rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
                         rs.getString("city"), rs.getString("type"),
                         rs.getInt("year"));
                 personEvents.add(event);
@@ -146,8 +146,8 @@ public class EventDao {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Event event = new Event(rs.getString("id"), rs.getString("username"),
-                        rs.getString("person_id"), rs.getDouble("latitude"),
-                        rs.getDouble("longitude"), rs.getString("country"),
+                        rs.getString("person_id"), rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
                         rs.getString("city"), rs.getString("type"),
                         rs.getInt("year"));
                 familyEvents.add(event);

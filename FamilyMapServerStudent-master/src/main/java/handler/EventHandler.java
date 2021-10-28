@@ -48,17 +48,17 @@ public class EventHandler implements HttpHandler {
                         EventService service = new EventService();
                         EventResult eResult = service.event(request);
 
-                        // Send HTTP Response and Serialize EventResult to JSON String
-                        Gson gson = new Gson();
-                        Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
+                        // Send HTTP Response
                         if (eResult.isSuccess()) {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                            gson.toJson(eResult, resBody);
                         } else {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-                            Result baseResult = new Result(eResult.getMessage(), eResult.isSuccess());
-                            gson.toJson(baseResult, resBody);
                         }
+
+                        // Serialize EventResult to JSON String
+                        Gson gson = new Gson();
+                        Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
+                        gson.toJson(eResult, resBody);
                         resBody.close();
 
                     } else {

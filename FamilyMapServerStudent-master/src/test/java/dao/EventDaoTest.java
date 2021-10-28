@@ -20,7 +20,7 @@ public class EventDaoTest {
     public void setUp() throws DataAccessException {
         // Initialize a Database and an arbitrary Event object
         db = new Database();
-        bestEvent = new Event("123e", "Ben123", "123b", 39.0, 43.0,
+        bestEvent = new Event("123e", "Ben123", "123b", 39.0F, 43.0F,
                 "USA", "Provo", "Birth", 2016);
         // Initialize a connection to the database and clear any existing data from the database
         Connection conn = db.getConnection();
@@ -108,11 +108,11 @@ public class EventDaoTest {
         pDao.insert(mother);
 
         // Create an Event object for each member of bestPerson's family and add them to the database
-        Event spouseEvent = new Event("123se", "Ben123", "123s", 37.0, 45.0,
+        Event spouseEvent = new Event("123se", "Ben123", "123s", 37.0F, 45.0F,
                 "USA", "Salt Lake City", "Birth", 2016);
-        Event fatherEvent = new Event("123fe", "Ben123", "123f", 29.0, 53.0,
+        Event fatherEvent = new Event("123fe", "Ben123", "123f", 29.0F, 53.0F,
                 "USA", "Las Vegas", "Birth", 1990);
-        Event motherEvent = new Event("123me", "Ben123", "123m", 30.0, 40.0,
+        Event motherEvent = new Event("123me", "Ben123", "123m", 30.0F, 40.0F,
                 "USA", "Los Angeles", "Birth", 1990);
         eDao.insert(spouseEvent);
         eDao.insert(fatherEvent);
