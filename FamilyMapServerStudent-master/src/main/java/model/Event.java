@@ -9,11 +9,11 @@ public class Event {
     /**
      * The unique identifier for this Event.
      */
-    private String id;
+    private String eventID;
     /**
-     * The username to which this Person belongs.
+     * The username to which this Event belongs.
      */
-    private String username;
+    private String associatedUsername;
     /**
      * The ID of the Person to which this Event belongs.
      */
@@ -37,7 +37,7 @@ public class Event {
     /**
      * The type of the Event.
      */
-    private String type;
+    private String eventType;
     /**
      * The year in which the Event occurred.
      */
@@ -48,43 +48,43 @@ public class Event {
     /**
      * Creates an Event with the following parameters.
      *
-     * @param id the Event's unique identifier.
-     * @param username the Person's associated username to which this Event belongs.
+     * @param eventID the Event's unique identifier.
+     * @param associatedUsername the Person's associated username to which this Event belongs.
      * @param personID the unique identifier of the Person to which this Event belongs.
      * @param latitude the latitude of the Event's location.
      * @param longitude the longitude of the Event's location.
      * @param country the country in which the Event occurred.
      * @param city the city in which the Event occurred.
-     * @param type the type of the Event.
+     * @param eventType the type of the Event.
      * @param year the year in which the Event occurred.
      */
-    public Event(String id, String username, String personID, double latitude, double longitude, String country,
-                 String city, String type, int year) {
-        this.id = id;
-        this.username = username;
+    public Event(String eventID, String associatedUsername, String personID, double latitude, double longitude, String country,
+                 String city, String eventType, int year) {
+        this.eventID = eventID;
+        this.associatedUsername = associatedUsername;
         this.personID = personID;
         this.latitude = latitude;
         this.longitude = longitude;
         this.country = country;
         this.city = city;
-        this.type = type;
+        this.eventType = eventType;
         this.year = year;
     }
 
     public String getId() {
-        return id;
+        return eventID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String eventID) {
+        this.eventID = eventID;
     }
 
     public String getUsername() {
-        return username;
+        return associatedUsername;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     public String getPersonID() {
@@ -128,11 +128,11 @@ public class Event {
     }
 
     public String getType() {
-        return type;
+        return eventType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType(String eventType) {
+        this.eventType = eventType;
     }
 
     public int getYear() {
@@ -149,27 +149,28 @@ public class Event {
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
         return Double.compare(event.latitude, latitude) == 0 && Double.compare(event.longitude, longitude) == 0 &&
-                year == event.year && id.equals(event.id) && Objects.equals(username, event.username) &&
+                year == event.year && eventID.equals(event.eventID) &&
+                Objects.equals(associatedUsername, event.associatedUsername) &&
                 Objects.equals(personID, event.personID) && Objects.equals(country, event.country) &&
-                Objects.equals(city, event.city) && Objects.equals(type, event.type);
+                Objects.equals(city, event.city) && Objects.equals(eventType, event.eventType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, personID, latitude, longitude, country, city, type, year);
+        return Objects.hash(eventID, associatedUsername, personID, latitude, longitude, country, city, eventType, year);
     }
 
     @Override
     public String toString() {
         return "Event{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
+                "id='" + eventID + '\'' +
+                ", username='" + associatedUsername + '\'' +
                 ", personID='" + personID + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
-                ", type='" + type + '\'' +
+                ", type='" + eventType + '\'' +
                 ", year=" + year +
                 '}';
     }
