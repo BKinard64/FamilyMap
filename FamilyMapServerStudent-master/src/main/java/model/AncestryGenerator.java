@@ -52,8 +52,7 @@ public class AncestryGenerator {
         // Create a new User object for current user with updated PersonID
         User newUser = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstName(),
                                 user.getLastName(), user.getGender(), userPerson.getId());
-        // Update User's Person object with original username, first name, and last name
-        userPerson.setUsername(newUser.getUsername());
+        // Update User's Person object with original first name, and last name
         userPerson.setFirstName(newUser.getFirstName());
         userPerson.setLastName(newUser.getLastName());
         // Remove old User object from Database
@@ -61,8 +60,6 @@ public class AncestryGenerator {
         uDao.delete(user.getUsername());
         // Add new User object to Database
         uDao.insert(newUser);
-
-        // EDIT USER'S EVENT DATA
 
         return new int[] {personsGenerated, eventsGenerated};
     }
@@ -93,6 +90,7 @@ public class AncestryGenerator {
         Person person = new Person();
         personsGenerated++;
         person.setId(UUID.randomUUID().toString());
+        person.setUsername(user.getUsername());
         Random random = new Random();
         if (gender.equals(Gender.MALE)) {
             person.setGender("m");
@@ -128,6 +126,7 @@ public class AncestryGenerator {
         Event event = new Event();
         eventsGenerated++;
         event.setId(UUID.randomUUID().toString());
+        event.setUsername(user.getUsername());
         event.setPersonID(personID);
         if (location == null) {
             Random random = new Random();
