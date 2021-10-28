@@ -80,7 +80,7 @@ public class EventDaoTest {
         Person bestPerson = new Person("123b", "Ben123", "Ben", "Button",
                 "m", "123f", "123m", "123s");
         // Get the Events of bestPerson's family
-        List<Event> famEvents = eDao.getFamilyEvents(bestPerson);
+        List<Event> famEvents = eDao.getFamilyEvents(bestPerson.getUsername());
         // The List should be empty because no Event objects are in the database
         assertTrue(famEvents.isEmpty());
     }
@@ -97,29 +97,29 @@ public class EventDaoTest {
         eDao.insert(bestEvent);
 
         // Create Person objects for bestPerson's family members and add them to the database
-        Person spouse = new Person("123s", "Spouse123", "Spouse", "Button",
+        Person spouse = new Person("123s", "Ben123", "Spouse", "Button",
                 "f", "321f", "321m", "123b");
-        Person father = new Person("123f", "Father123", "Father", "Button",
+        Person father = new Person("123f", "Ben123", "Father", "Button",
                 "m", "000f", "000m", "123m");
-        Person mother = new Person("123m", "Mother123", "Mother", "Button",
+        Person mother = new Person("123m", "Ben123", "Mother", "Button",
                 "f", "111f", "111m", "123f");
         pDao.insert(spouse);
         pDao.insert(father);
         pDao.insert(mother);
 
         // Create an Event object for each member of bestPerson's family and add them to the database
-        Event spouseEvent = new Event("123se", "Spouse123", "123s", 37.0, 45.0,
+        Event spouseEvent = new Event("123se", "Ben123", "123s", 37.0, 45.0,
                 "USA", "Salt Lake City", "Birth", 2016);
-        Event fatherEvent = new Event("123fe", "Father123", "123f", 29.0, 53.0,
+        Event fatherEvent = new Event("123fe", "Ben123", "123f", 29.0, 53.0,
                 "USA", "Las Vegas", "Birth", 1990);
-        Event motherEvent = new Event("123me", "Mother123", "123m", 30.0, 40.0,
+        Event motherEvent = new Event("123me", "Ben123", "123m", 30.0, 40.0,
                 "USA", "Los Angeles", "Birth", 1990);
         eDao.insert(spouseEvent);
         eDao.insert(fatherEvent);
         eDao.insert(motherEvent);
 
         // Get the Events of bestPerson's family
-        List<Event> famEvents = eDao.getFamilyEvents(bestPerson);
+        List<Event> famEvents = eDao.getFamilyEvents(bestPerson.getUsername());
 
         // The List should have 4 Event Objects
         assertEquals(4, famEvents.size());
