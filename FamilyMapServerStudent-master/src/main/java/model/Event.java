@@ -43,6 +43,8 @@ public class Event {
      */
     private int year;
 
+    public Event() {}
+
     /**
      * Creates an Event with the following parameters.
      *

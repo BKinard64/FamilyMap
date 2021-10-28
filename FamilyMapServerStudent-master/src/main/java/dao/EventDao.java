@@ -223,6 +223,22 @@ public class EventDao {
     }
 
     /**
+     * Remove all Events associated with a Person
+     *
+     * @param personID
+     * @throws DataAccessException
+     */
+    public void deletePersonEvents(String personID) throws DataAccessException {
+        String sql = "DELETE FROM event WHERE personID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting persons events.");
+        }
+    }
+
+    /**
      * Delete all records from the Event table.
      *
      * @throws DataAccessException

@@ -14,6 +14,10 @@ import java.net.InetSocketAddress;
 public class Server {
     private static final int MAX_WAITING_CONNECTIONS = 12;
     private HttpServer server;
+    private LocationData locData;
+    private FemaleNames fmlNames;
+    private MaleNames mlNames;
+    private Surnames srNames;
 
     public static void main(String[] args) {
         int port = Integer.parseInt(args[0]);
@@ -56,6 +60,8 @@ public class Server {
         server.createContext("/user/login", new LoginHandler());
         // Create and install the HTTP handler for the clear API
         server.createContext("/clear", new ClearHandler());
+        // Create and install the HTTP handler for the fill API
+        server.createContext("/fill", new FillHandler(locData, fmlNames, mlNames, srNames));
         // Create and install the HTTP handler for the load API
         server.createContext("/load", new LoadHandler());
         // Create and install the HTTP handler for the person API
@@ -71,15 +77,15 @@ public class Server {
         Gson gson = new Gson();
         // Store location data
         Reader reader = new FileReader("json/locations.json");
-        LocationData locData = (LocationData)gson.fromJson(reader, LocationData.class);
+        locData = (LocationData)gson.fromJson(reader, LocationData.class);
         // Store female name data
         reader = new FileReader("json/fnames.json");
-        FemaleNames fNames = (FemaleNames)gson.fromJson(reader, FemaleNames.class);
+        fmlNames = (FemaleNames)gson.fromJson(reader, FemaleNames.class);
         // Store male name data
         reader = new FileReader("json/mnames.json");
-        MaleNames mNames = (MaleNames)gson.fromJson(reader, MaleNames.class);
+        mlNames = (MaleNames)gson.fromJson(reader, MaleNames.class);
         // Store surname data
         reader = new FileReader("json/snames.json");
-        Surnames sNames = (Surnames)gson.fromJson(reader, Surnames.class);
+        srNames = (Surnames)gson.fromJson(reader, Surnames.class);
     }
 }

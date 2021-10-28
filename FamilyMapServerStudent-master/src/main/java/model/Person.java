@@ -39,6 +39,8 @@ public class Person {
      */
     private String spouseID;
 
+    public Person() {}
+
     /**
      * Creates a Person with the following parameters.
      *
