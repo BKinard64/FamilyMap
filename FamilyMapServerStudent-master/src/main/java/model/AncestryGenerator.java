@@ -4,6 +4,7 @@ import dao.DataAccessException;
 import dao.EventDao;
 import dao.PersonDao;
 import dao.UserDao;
+import jsondata.Location;
 
 import java.sql.Connection;
 import java.util.UUID;
@@ -55,7 +56,8 @@ public class AncestryGenerator {
     }
 
     public int[] generateFamilyData() throws DataAccessException {
-        Person userPerson = generatePerson(userGender, generations, false);
+        Person userPerson = generatePerson(userGender, generations, false, 2000,
+                                            2080, 1995);
         // Create a new User object for current user with updated PersonID
         User newUser = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstName(),
                                 user.getLastName(), user.getGender(), userPerson.getId());
@@ -69,23 +71,27 @@ public class AncestryGenerator {
         // Add new User object to Database
         uDao.insert(newUser);
 
+        // EDIT USER'S EVENT DATA
+
         return new int[] {personsGenerated, eventsGenerated};
     }
 
-    private Person generatePerson(Gender gender, int generations, boolean deathEvent) throws DataAccessException {
+    private Person generatePerson(Gender gender, int generations, boolean deathEvent,
+                                  int birthYear, int deathYear, int marriageYear) throws DataAccessException {
         Person mother = null;
         Person father = null;
 
         if (generations > 0) {
-            mother = generatePerson(Gender.FEMALE, generations - 1, true);
-            father = generatePerson(Gender.MALE, generations - 1, true);
+            mother = generatePerson(Gender.FEMALE, generations - 1, true,
+                                    birthYear - 25, deathYear - 25, marriageYear - 25);
+            father = generatePerson(Gender.MALE, generations - 1, true,
+                                    birthYear - 25, deathYear - 25, marriageYear - 25);
 
             father.setSpouseID(mother.getId());
             mother.setSpouseID(father.getId());
 
-            // DETERMINE YEAR
-            generateEvent(father.getId(), "Marriage", 0);
-            generateEvent(mother.getId(), "Marriage", 0);
+            generateEvent(father.getId(), "Marriage", marriageYear, null);
+            generateEvent(mother.getId(), "Marriage", marriageYear, null);
         }
 
         // Create Person
@@ -105,11 +111,9 @@ public class AncestryGenerator {
         }
 
         // Create Events for Person
-        // DETERMINE YEAR
-        generateEvent(person.getId(), "Birth", 0);
+        generateEvent(person.getId(), "Birth", birthYear, null);
         if (deathEvent) {
-            // DETERMINE YEAR
-            generateEvent(person.getId(), "Death", 0);
+            generateEvent(person.getId(), "Death", deathYear, null);
         }
 
         // Save person in database
@@ -118,7 +122,8 @@ public class AncestryGenerator {
         return person;
     }
 
-    private void generateEvent(String personID, String eventType, int year) throws DataAccessException {
+    private void generateEvent(String personID, String eventType, int year,
+                               Location location) throws DataAccessException {
         // Create Event
         Event event = new Event();
         eventsGenerated++;
