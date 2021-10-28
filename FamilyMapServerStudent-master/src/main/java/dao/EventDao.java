@@ -190,7 +190,7 @@ public class EventDao {
             stmt.setString(1, username);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Error encountered while deleting user's family events from event table");
+            throw new DataAccessException(e.getMessage());
         }
     }
 

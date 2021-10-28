@@ -144,6 +144,18 @@ public class EventDaoTest {
     }
 
     @Test
+    public void deleteFamilyEventsPass() throws DataAccessException {
+        // Call the insert method on the eDao (defined in setUp()) and pass it bestEvent (defined in setUp())
+        eDao.insert(bestEvent);
+        // Call the deleteFamilyEvents method on eDao
+        eDao.deleteFamilyEvents(bestEvent.getUsername());
+        // Call the find method on eDao, looking for bestEvent
+        Event compareTest = eDao.find(bestEvent.getId());
+        // Determine that a null reference was returned
+        assertNull(compareTest);
+    }
+
+    @Test
     public void clearPass() throws DataAccessException {
         // Call the insert method on the eDao (defined in setUp()) and pass it bestEvent (defined in setUp())
         eDao.insert(bestEvent);

@@ -11,17 +11,17 @@ import java.util.Random;
 import java.util.UUID;
 
 public class AncestryGenerator {
-    private Connection conn;
-    private User user;
-    private int generations;
-    private enum Gender {MALE, FEMALE};
-    private Gender userGender;
+    private final Connection conn;
+    private final User user;
+    private final int generations;
+    private enum Gender {MALE, FEMALE}
+    private final Gender userGender;
     private int personsGenerated;
     private int eventsGenerated;
-    private LocationData locData;
-    private FemaleNames fmlNames;
-    private MaleNames mlNames;
-    private Surnames srNames;
+    private final LocationData locData;
+    private final FemaleNames fmlNames;
+    private final MaleNames mlNames;
+    private final Surnames srNames;
 
     public AncestryGenerator(Connection conn, User user, int generations, LocationData locData, FemaleNames fmlNames,
                              MaleNames mlNames, Surnames srNames) {

@@ -58,6 +58,7 @@ public class FillService {
                                                                         locData, fmlNames, mlNames, srNames);
                     generator.deleteFamilyData();
                     int[] generatedData = generator.generateFamilyData();
+                    db.closeConnection(true);
                     return new FillResult("Successfully added " + generatedData[0] + " persons and " +
                                             generatedData[1] + " events to the database.", true);
                 } else {
