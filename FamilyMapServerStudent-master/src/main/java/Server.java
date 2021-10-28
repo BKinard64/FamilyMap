@@ -74,12 +74,12 @@ public class Server {
         LocationData locData = (LocationData)gson.fromJson(reader, LocationData.class);
         // Store female name data
         reader = new FileReader("json/fnames.json");
-        FemaleNames fNames = (FemaleNames)gson.fromJson(reader, FemaleNames.class);
+        FemaleNames fmlNames = (FemaleNames)gson.fromJson(reader, FemaleNames.class);
         // Store male name data
         reader = new FileReader("json/mnames.json");
-        MaleNames mNames = (MaleNames)gson.fromJson(reader, MaleNames.class);
+        MaleNames mlNames = (MaleNames)gson.fromJson(reader, MaleNames.class);
         // Store surname data
         reader = new FileReader("json/snames.json");
-        Surnames sNames = (Surnames)gson.fromJson(reader, Surnames.class);
+        Surnames srNames = (Surnames)gson.fromJson(reader, Surnames.class);
     }
 }

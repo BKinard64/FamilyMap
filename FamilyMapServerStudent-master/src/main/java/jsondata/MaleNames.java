@@ -1,5 +1,5 @@
 package jsondata;
 
 public class MaleNames {
-    public static String[] data;
+    public String[] data;
 }
