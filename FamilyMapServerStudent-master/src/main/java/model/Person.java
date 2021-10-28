@@ -9,11 +9,11 @@ public class Person {
     /**
      * The unique identifier for this Person.
      */
-    private String id;
+    private String personID;
     /**
      * The username to which this Person belongs.
      */
-    private String username;
+    private String associatedUsername;
     /**
      * The Person's first name.
      */
@@ -44,8 +44,8 @@ public class Person {
     /**
      * Creates a Person with the following parameters.
      *
-     * @param id the Person's unique identifier.
-     * @param username the Person's associated username.
+     * @param personID the Person's unique identifier.
+     * @param associatedUsername the Person's associated username.
      * @param firstName the Person's first name.
      * @param lastName the Person's last name.
      * @param gender the Person's gender.
@@ -53,10 +53,10 @@ public class Person {
      * @param motherID the unique identifier of the Person's mother.
      * @param spouseID the unique identifier of the Person's spouse.
      */
-    public Person(String id, String username, String firstName, String lastName, String gender, String fatherID,
+    public Person(String personID, String associatedUsername, String firstName, String lastName, String gender, String fatherID,
                   String motherID, String spouseID) {
-        this.id = id;
-        this.username = username;
+        this.personID = personID;
+        this.associatedUsername = associatedUsername;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -66,19 +66,19 @@ public class Person {
     }
 
     public String getId() {
-        return id;
+        return personID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String personID) {
+        this.personID = personID;
     }
 
     public String getUsername() {
-        return username;
+        return associatedUsername;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     public String getFirstName() {
@@ -134,7 +134,7 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return id.equals(person.id) && Objects.equals(username, person.username) && firstName.equals(person.firstName) &&
+        return personID.equals(person.personID) && Objects.equals(associatedUsername, person.associatedUsername) && firstName.equals(person.firstName) &&
                 lastName.equals(person.lastName) && gender.equals(person.gender) &&
                 Objects.equals(fatherID, person.fatherID) && Objects.equals(motherID, person.motherID) &&
                 Objects.equals(spouseID, person.spouseID);
@@ -142,14 +142,14 @@ public class Person {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, firstName, lastName, gender, fatherID, motherID, spouseID);
+        return Objects.hash(personID, associatedUsername, firstName, lastName, gender, fatherID, motherID, spouseID);
     }
 
     @Override
     public String toString() {
         return "Person{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
+                "id='" + personID + '\'' +
+                ", username='" + associatedUsername + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", gender='" + gender + '\'' +
