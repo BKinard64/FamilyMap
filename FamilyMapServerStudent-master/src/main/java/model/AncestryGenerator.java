@@ -55,6 +55,9 @@ public class AncestryGenerator {
         // Update User's Person object with original first name, and last name
         userPerson.setFirstName(newUser.getFirstName());
         userPerson.setLastName(newUser.getLastName());
+        // Add Person object to database
+        PersonDao pDao = new PersonDao(conn);
+        pDao.insert(userPerson);
         // Remove old User object from Database
         UserDao uDao = new UserDao(conn);
         uDao.delete(user.getUsername());
@@ -77,6 +80,10 @@ public class AncestryGenerator {
 
             father.setSpouseID(mother.getId());
             mother.setSpouseID(father.getId());
+
+            PersonDao pDao = new PersonDao(conn);
+            pDao.insert(mother);
+            pDao.insert(father);
 
             Random random = new Random();
             int index = random.nextInt(locData.data.length);
@@ -113,9 +120,6 @@ public class AncestryGenerator {
         if (deathEvent) {
             generateEvent(person.getId(), "Death", deathYear, null);
         }
-
-        // Save person in database
-        new PersonDao(conn).insert(person);
 
         return person;
     }
