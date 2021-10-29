@@ -11,6 +11,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the clear API
+ */
 public class ClearHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {

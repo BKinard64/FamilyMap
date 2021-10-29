@@ -15,6 +15,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the event APIs
+ */
 public class EventHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {

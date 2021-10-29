@@ -14,6 +14,9 @@ import service.results.RegisterResult;
 import java.io.*;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the register API
+ */
 public class RegisterHandler implements HttpHandler {
     private final LocationData locData;
     private final FemaleNames fmlNames;

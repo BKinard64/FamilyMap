@@ -10,6 +10,9 @@ import service.results.LoginResult;
 import java.io.*;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the Login API
+ */
 public class LoginHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {

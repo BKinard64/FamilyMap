@@ -10,6 +10,9 @@ import service.results.LoadResult;
 import java.io.*;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the Load API
+ */
 public class LoadHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {

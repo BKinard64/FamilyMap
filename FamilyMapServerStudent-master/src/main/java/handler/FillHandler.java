@@ -16,6 +16,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the fill API
+ */
 public class FillHandler implements HttpHandler {
     private final LocationData locData;
     private final FemaleNames fmlNames;

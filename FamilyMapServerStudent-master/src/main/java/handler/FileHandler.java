@@ -9,6 +9,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.nio.file.Files;
 
+/**
+ * A default handler
+ */
 public class FileHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
