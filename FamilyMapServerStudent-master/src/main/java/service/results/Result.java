@@ -1,7 +1,7 @@
 package service.results;
 
 /**
- * A parent Result object
+ * A parent Result class
  */
 public class Result {
     /**

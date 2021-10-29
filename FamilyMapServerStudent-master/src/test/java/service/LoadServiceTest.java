@@ -75,6 +75,33 @@ public class LoadServiceTest {
     }
 
     @Test
+    public void loadNoData() throws DataAccessException {
+        // Create LoadRequest Object
+        LoadRequest request = new LoadRequest(users, persons, events);
+
+        // Call load on LoadService object
+        LoadResult result = service.load(request);
+
+        // This should have resulted in a successful response
+        assertTrue(result.isSuccess());
+        assertEquals("Successfully added 0 users, 0 persons, and 0 events to the database.",
+                result.getMessage());
+
+        // The data inserted in setUp() should no longer be there
+        db.openConnection();
+
+        uDao = new UserDao(db.getConnection());
+        pDao = new PersonDao(db.getConnection());
+        eDao = new EventDao(db.getConnection());
+
+        assertNull(uDao.find(bestUser.getUsername()));
+        assertNull(pDao.find(bestPerson.getId()));
+        assertNull(eDao.find(bestEvent.getId()));
+
+        db.closeConnection(true);
+    }
+
+    @Test
     public void loadSuccess() throws DataAccessException {
         // Create new User list to be loaded
         User newUser1 = new User("John123", "abc", "john@cs.byu.edu", "John",
