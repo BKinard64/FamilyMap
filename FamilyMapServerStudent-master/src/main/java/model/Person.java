@@ -39,6 +39,9 @@ public class Person {
      */
     private String spouseID;
 
+    /**
+     * Creates a Person with null members.
+     */
     public Person() {}
 
     /**
