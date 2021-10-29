@@ -15,6 +15,7 @@ public class FileHandler implements HttpHandler {
         try {
             // Confirm the Request Method is a GET Method
             if (exchange.getRequestMethod().toUpperCase().equals("GET")) {
+
                 // Get the URL Path from the Request
                 String urlPath = exchange.getRequestURI().toString();
                 // If the URL Path is null or just a slash, convert the path to /index.html
@@ -27,6 +28,7 @@ public class FileHandler implements HttpHandler {
                 // Confirm the requested file exists
                 File file = new File(filePath);
                 if (file.exists()) {
+
                     // The file exists, so send a successful Response Header
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
@@ -36,7 +38,9 @@ public class FileHandler implements HttpHandler {
 
                     // Close the output stream
                     respBody.close();
+
                 } else {
+
                     // The requested file does not exist
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
 
@@ -47,6 +51,7 @@ public class FileHandler implements HttpHandler {
 
                     // Close the output stream
                     respBody.close();
+
                 }
             } else {
                 // The Request Method was not of type GET

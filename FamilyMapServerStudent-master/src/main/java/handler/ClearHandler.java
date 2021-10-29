@@ -17,6 +17,7 @@ public class ClearHandler implements HttpHandler {
         try {
             // Confirm the Request Method is a POST Method
             if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
+
                 // Execute clear logic via ClearService object
                 ClearService service = new ClearService();
                 ClearResult result = service.clear();
@@ -33,6 +34,7 @@ public class ClearHandler implements HttpHandler {
                 Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
                 gson.toJson(result, resBody);
                 resBody.close();
+
             } else {
                 // The Request Method was not of type POST
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);

@@ -9,7 +9,6 @@ import service.FamilyEventsService;
 import service.requests.EventRequest;
 import service.results.EventResult;
 import service.results.FamilyEventsResult;
-import service.results.Result;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
