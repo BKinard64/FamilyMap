@@ -23,13 +23,16 @@ public class RegisterResult extends Result {
      * @param authtoken the AuthToken genearated by a successful register.
      * @param username the username for the registered User.
      * @param personID the ID of the Person object generated for the registered User.
-     * @param message the error message in the event of an unsuccessful registration.
      * @param success an indicator of a successful/unsuccessful registration.
      */
-    public RegisterResult(String authtoken, String username, String personID, String message, boolean success) {
+    public RegisterResult(String authtoken, String username, String personID, boolean success) {
         this.authtoken = authtoken;
         this.username = username;
         this.personID = personID;
+        this.success = success;
+    }
+
+    public RegisterResult(String message, boolean success) {
         this.message = message;
         this.success = success;
     }
