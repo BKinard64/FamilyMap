@@ -59,6 +59,8 @@ public class Server {
 
     private void registerHandlers() {
         System.out.println("Creating contexts");
+        // Create and insstall the HTTP handler for the register API
+        server.createContext("/user/register", new RegisterHandler(locData, fmlNames, mlNames, srNames));
         // Create and install the HTTP handler for the load API
         server.createContext("/user/login", new LoginHandler());
         // Create and install the HTTP handler for the clear API

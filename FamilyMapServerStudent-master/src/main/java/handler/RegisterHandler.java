@@ -3,6 +3,10 @@ package handler;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import jsondata.FemaleNames;
+import jsondata.LocationData;
+import jsondata.MaleNames;
+import jsondata.Surnames;
 import service.RegisterService;
 import service.requests.RegisterRequest;
 import service.results.RegisterResult;
@@ -11,6 +15,18 @@ import java.io.*;
 import java.net.HttpURLConnection;
 
 public class RegisterHandler implements HttpHandler {
+    private LocationData locData;
+    private FemaleNames fmlNames;
+    private MaleNames mlNames;
+    private Surnames srNames;
+
+    public RegisterHandler(LocationData locData, FemaleNames fmlNames, MaleNames mlNames, Surnames srNames) {
+        this.locData = locData;
+        this.fmlNames = fmlNames;
+        this.mlNames = mlNames;
+        this.srNames = srNames;
+    }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
@@ -22,7 +38,7 @@ public class RegisterHandler implements HttpHandler {
                 RegisterRequest request = (RegisterRequest)gson.fromJson(reqBody, RegisterRequest.class);
 
                 // Execute register logic via RegisterService object
-                RegisterService service = new RegisterService();
+                RegisterService service = new RegisterService(locData, fmlNames, mlNames, srNames);
                 RegisterResult result = service.register(request);
 
                 // Send HTTP Response
