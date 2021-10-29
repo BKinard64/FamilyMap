@@ -51,10 +51,12 @@ public class LoginService {
 
                     return new LoginResult(tokenString, username, personID, null, true);
                 } else {
-                    throw new DataAccessException("Invalid Password.");
+                    db.closeConnection(false);
+                    return new LoginResult("Error: Invalid password.", false);
                 }
             } else {
-                throw new DataAccessException("Username is not registered.");
+                db.closeConnection(false);
+                return new LoginResult("Error: Username is not registered.", false);
             }
         } catch (DataAccessException ex) {
             ex.printStackTrace();
@@ -63,7 +65,7 @@ public class LoginService {
             } catch (DataAccessException e) {
                 e.printStackTrace();
             }
-            return new LoginResult(ex.getMessage(), false);
+            return new LoginResult("Error: Internal server error.", false);
         }
     }
 }
