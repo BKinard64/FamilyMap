@@ -57,7 +57,7 @@ public class RegisterService {
 
                     // Create new User
                     User user = new User(r.getUsername(), r.getPassword(), r.getEmail(), r.getFirstName(), r.getLastName(),
-                            r.getGender(), null);
+                            r.getGender(), "null");
                     // Add User to Database
                     uDao.insert(user);
 
