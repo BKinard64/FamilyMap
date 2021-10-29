@@ -85,6 +85,13 @@ public class UserDaoTest {
     }
 
     @Test
+    public void deleteNonExistentUser() throws DataAccessException {
+        // Call the delete method on uDao
+        uDao.delete(bestUser.getUsername());
+        // Even though bestUser is not in database, delete does not throw an exception
+    }
+
+    @Test
     public void clearPass() throws DataAccessException {
         // Call the insert method on the uDao (defined in setUp()) and pass it bestUser (defined in setUp())
         uDao.insert(bestUser);

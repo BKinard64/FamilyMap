@@ -26,7 +26,7 @@ public class UserDao {
      * Insert a User into the User table.
      *
      * @param user the User to be inserted into the table.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void insert(User user) throws DataAccessException {
         // Create string to pass into the connection's prepareStatement method
@@ -55,7 +55,7 @@ public class UserDao {
      *
      * @param username the username being searched for.
      * @return a User object with the provided username.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public User find(String username) throws DataAccessException {
         User user;
@@ -90,7 +90,7 @@ public class UserDao {
      * Remove the User from the User table.
      *
      * @param username the username of the User to remove
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void delete(String username) throws DataAccessException {
         String sql = "DELETE FROM user WHERE username = ?;";
@@ -105,7 +105,7 @@ public class UserDao {
     /**
      * Delete all records from the User table
      *
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void clear() throws DataAccessException {
         try (Statement stmt = conn.createStatement()){

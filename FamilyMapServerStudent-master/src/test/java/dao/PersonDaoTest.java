@@ -114,6 +114,44 @@ public class PersonDaoTest {
     }
 
     @Test
+    public void deleteFamilyEmptyPass() throws DataAccessException {
+        // Call the insert method on the pDao (defined in setUp()) and pass it bestPerson (defined in setUp())
+        pDao.insert(bestPerson);
+        // Call the deleteFamily method on pDao
+        pDao.deleteFamily(bestPerson.getUsername());
+        // Call the find method on pDao, looking for bestPerson
+        Person compareTest = pDao.find(bestPerson.getId());
+        // Determine that a null reference was returned
+        assertNull(compareTest);
+    }
+
+    @Test
+    public void deleteFamilyPass() throws DataAccessException {
+        // Call the insert method on the pDao (defined in setUp()) and pass it bestPerson (defined in setUp())
+        pDao.insert(bestPerson);
+
+        // Create Person objects for bestPerson's family members and add them to the database
+        Person spouse = new Person("123s", "Ben123", "Spouse", "Button",
+                "f", "321f", "321m", "123b");
+        Person father = new Person("123f", "Ben123", "Father", "Button",
+                "m", "000f", "000m", "123m");
+        Person mother = new Person("123m", "Ben123", "Mother", "Button",
+                "f", "111f", "111m", "123f");
+        pDao.insert(spouse);
+        pDao.insert(father);
+        pDao.insert(mother);
+
+        // Call the deleteFamily method on pDao
+        pDao.deleteFamily(bestPerson.getUsername());
+
+        // Confirm that bestPerson and family are no longer in database
+        assertNull(pDao.find(bestPerson.getId()));
+        assertNull(pDao.find(spouse.getId()));
+        assertNull(pDao.find(mother.getId()));
+        assertNull(pDao.find(father.getId()));
+    }
+
+    @Test
     public void deletePass() throws DataAccessException {
         // Call the insert method on the pDao (defined in setUp()) and pass it bestPerson (defined in setUp())
         pDao.insert(bestPerson);
@@ -123,6 +161,13 @@ public class PersonDaoTest {
         Person compareTest = pDao.find(bestPerson.getId());
         // Determine that a null reference was returned
         assertNull(compareTest);
+    }
+
+    @Test
+    public void deleteNonExistentPerson() throws DataAccessException {
+        // Call the delete method on pDao
+        pDao.delete(bestPerson.getId());
+        // Even though bestPerson is not in database, delete does not throw an exception
     }
 
     @Test

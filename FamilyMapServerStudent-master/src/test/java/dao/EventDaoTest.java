@@ -144,7 +144,40 @@ public class EventDaoTest {
     }
 
     @Test
+    public void deleteNonExistentPerson() throws DataAccessException {
+        // Call the delete method on eDao
+        eDao.delete(bestEvent.getId());
+        // Even though bestEvent is not in database, delete does not throw an exception
+    }
+
+    @Test
     public void deleteFamilyEventsPass() throws DataAccessException {
+        // Call the insert method on the eDao (defined in setUp()) and pass it bestEvent (defined in setUp())
+        eDao.insert(bestEvent);
+
+        // Create an Event object for each member of bestPerson's family and add them to the database
+        Event spouseEvent = new Event("123se", "Ben123", "123s", 37.0F, 45.0F,
+                "USA", "Salt Lake City", "Birth", 2016);
+        Event fatherEvent = new Event("123fe", "Ben123", "123f", 29.0F, 53.0F,
+                "USA", "Las Vegas", "Birth", 1990);
+        Event motherEvent = new Event("123me", "Ben123", "123m", 30.0F, 40.0F,
+                "USA", "Los Angeles", "Birth", 1990);
+        eDao.insert(spouseEvent);
+        eDao.insert(fatherEvent);
+        eDao.insert(motherEvent);
+
+        // Call the deleteFamilyEvents method on eDao
+        eDao.deleteFamilyEvents(bestEvent.getUsername());
+
+        // Confirm bestEvent and family events are no longer in database
+        assertNull(eDao.find(bestEvent.getId()));
+        assertNull(eDao.find(spouseEvent.getId()));
+        assertNull(eDao.find(motherEvent.getId()));
+        assertNull(eDao.find(fatherEvent.getId()));
+    }
+
+    @Test
+    public void deleteFamilyEventsEmptyPass() throws DataAccessException {
         // Call the insert method on the eDao (defined in setUp()) and pass it bestEvent (defined in setUp())
         eDao.insert(bestEvent);
         // Call the deleteFamilyEvents method on eDao
