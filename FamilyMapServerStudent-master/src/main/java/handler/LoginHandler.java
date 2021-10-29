@@ -10,12 +10,16 @@ import service.results.LoginResult;
 import java.io.*;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the Login API
+ */
 public class LoginHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
             // Confirm the Request Method is a POST Method
             if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
+
                 // Deserialize JSON String to Request Object
                 Gson gson = new Gson();
                 Reader reqBody = new InputStreamReader(exchange.getRequestBody());
@@ -36,6 +40,7 @@ public class LoginHandler implements HttpHandler {
                 Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
                 gson.toJson(result, resBody);
                 resBody.close();
+
             } else {
                 // The Request Method was not of type POST
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);

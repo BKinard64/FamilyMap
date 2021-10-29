@@ -3,8 +3,6 @@ package service;
 import dao.*;
 import model.AuthToken;
 import model.Event;
-import model.Person;
-import model.User;
 import service.results.FamilyEventsResult;
 
 import java.util.List;
@@ -12,12 +10,14 @@ import java.util.List;
 /**
  * A service object for the event API.
  */
-public class FamilyEventsService {
+public class FamilyEventsService extends Service {
 
     /**
      * Create a FamilyEventsService object.
      */
-    public FamilyEventsService() {}
+    public FamilyEventsService() {
+        db = new Database();
+    }
 
     /**
      * Returns every event for each family member of the current User.
@@ -25,13 +25,10 @@ public class FamilyEventsService {
      * @return a FamilyEventsResult object.
      */
     public FamilyEventsResult familyEvents(String token) {
-        Database db = new Database();
         try {
             db.openConnection();
 
-            // Validate AuthToken
-            AuthTokenDao atDao = new AuthTokenDao(db.getConnection());
-            AuthToken authToken = atDao.find(token);
+            AuthToken authToken = validateAuthToken(token);
 
             if (authToken != null) {
 

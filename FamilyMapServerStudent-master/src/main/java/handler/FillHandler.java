@@ -16,11 +16,14 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the fill API
+ */
 public class FillHandler implements HttpHandler {
-    private LocationData locData;
-    private FemaleNames fmlNames;
-    private MaleNames mlNames;
-    private Surnames srNames;
+    private final LocationData locData;
+    private final FemaleNames fmlNames;
+    private final MaleNames mlNames;
+    private final Surnames srNames;
 
     public FillHandler(LocationData locData, FemaleNames fmlNames, MaleNames mlNames, Surnames srNames) {
         this.locData = locData;

@@ -1,7 +1,6 @@
 package dao;
 
 import model.Event;
-import model.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class EventDao {
      * Insert an Event to the Event table.
      *
      * @param event the Event to insert.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void insert(Event event) throws DataAccessException {
         // Create string to pass into the connection's prepareStatement method
@@ -59,7 +58,7 @@ public class EventDao {
      * Find an Event with the given event ID.
      *
      * @param eventID the ID of the Event to find.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      * @return an Event object with the corresponding event ID.
      */
     public Event find(String eventID) throws DataAccessException {
@@ -93,48 +92,10 @@ public class EventDao {
     }
 
     /**
-     * Get all the Events of the given Person
-     *
-     * @param personID the unique ID of the Person
-     * @return a List of Events associated with the Person
-     * @throws DataAccessException
-     */
-    public List<Event> getPersonEvents(String personID) throws DataAccessException {
-        List<Event> personEvents = new ArrayList<>();
-        ResultSet rs = null;
-        String sql = "SELECT * FROM event WHERE person_id = ?;";
-        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, personID);
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                Event event = new Event(rs.getString("id"), rs.getString("username"),
-                        rs.getString("person_id"), rs.getFloat("latitude"),
-                        rs.getFloat("longitude"), rs.getString("country"),
-                        rs.getString("city"), rs.getString("type"),
-                        rs.getInt("year"));
-                personEvents.add(event);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataAccessException("Error encountered while finding person's events");
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return personEvents;
-    }
-
-    /**
      * Find all the Events of every family member of the current User.
      *
      * @param username the username associated with the current User.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      * @return a list of Event objects representing the current User's family member's events.
      */
     public List<Event> getFamilyEvents(String username) throws DataAccessException {
@@ -172,7 +133,7 @@ public class EventDao {
      * Remove an Event from the Event table.
      *
      * @param eventID the unique ID of the Event to remove.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void delete(String eventID) throws DataAccessException {
         String sql = "DELETE FROM event WHERE id = ?;";
@@ -184,6 +145,12 @@ public class EventDao {
         }
     }
 
+    /**
+     * Remove all events associated with specified User
+     *
+     * @param username the username specifying which User's family events to remove from the database
+     * @throws DataAccessException thrown if SQLException occurs
+     */
     public void deleteFamilyEvents(String username) throws DataAccessException {
         String sql = "DELETE FROM event WHERE username = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -195,25 +162,9 @@ public class EventDao {
     }
 
     /**
-     * Remove all Events associated with a Person
-     *
-     * @param personID
-     * @throws DataAccessException
-     */
-    public void deletePersonEvents(String personID) throws DataAccessException {
-        String sql = "DELETE FROM event WHERE personID = ?;";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, personID);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new DataAccessException("Error encountered while deleting persons events.");
-        }
-    }
-
-    /**
      * Delete all records from the Event table.
      *
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void clear() throws DataAccessException {
         try (Statement stmt = conn.createStatement()){

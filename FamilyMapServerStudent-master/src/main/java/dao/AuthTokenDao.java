@@ -24,7 +24,7 @@ public class AuthTokenDao {
      * Insert an AuthToken into the AuthToken table.
      *
      * @param token the AuthToken to insert.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void insert(AuthToken token) throws DataAccessException {
         // Create string to pass into the connection's prepareStatement method
@@ -46,7 +46,7 @@ public class AuthTokenDao {
      * Find an AuthToken with the given ID.
      *
      * @param tokenID the ID of the AuthToken to find.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      * @return an AuthToken object corresponding to the given ID.
      */
     public AuthToken find(String tokenID) throws DataAccessException {
@@ -79,7 +79,7 @@ public class AuthTokenDao {
      * Remove an AuthToken from the AuthToken table.
      *
      * @param tokenID the ID of the AuthToken to remove.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void delete(String tokenID) throws DataAccessException {
         String sql = "DELETE FROM auth_token WHERE token = ?;";
@@ -94,7 +94,7 @@ public class AuthTokenDao {
     /**
      * Remove all records from the AuthToken table.
      *
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void clear() throws DataAccessException {
         try (Statement stmt = conn.createStatement()){

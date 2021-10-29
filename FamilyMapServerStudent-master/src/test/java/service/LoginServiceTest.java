@@ -94,7 +94,7 @@ public class LoginServiceTest {
         // Result should not be null
         assertNotNull(result);
         // Message should be because of invalid username
-        assertEquals("Username is not registered.", result.getMessage());
+        assertEquals("Error: Username is not registered.", result.getMessage());
         // The success indicator should be false
         assertFalse(result.isSuccess());
     }
@@ -108,7 +108,7 @@ public class LoginServiceTest {
         // Result should not be null
         assertNotNull(result);
         // Message should be because of invalid password
-        assertEquals("Invalid Password.", result.getMessage());
+        assertEquals("Error: Invalid password.", result.getMessage());
         // The success indicator should be false
         assertFalse(result.isSuccess());
     }

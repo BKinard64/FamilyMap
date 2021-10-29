@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.InetSocketAddress;
 
+/**
+ * The server for the FamilyMap Application
+ */
 public class Server {
     private static final int MAX_WAITING_CONNECTIONS = 12;
     private HttpServer server;
@@ -47,8 +50,6 @@ public class Server {
 
         // Map urls to appropriate handler classes
         registerHandlers();
-
-
 
         System.out.println("Starting server");
         // Have the server start receiving incoming client connections

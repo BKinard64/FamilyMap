@@ -10,12 +10,14 @@ import service.results.PersonResult;
 /**
  * A service object for the person/[personID] API.
  */
-public class PersonService {
+public class PersonService extends Service {
 
     /**
      * Create a PersonService object.
      */
-    public PersonService() {}
+    public PersonService() {
+        db = new Database();
+    }
 
     /**
      * Return a Person object.
@@ -24,14 +26,10 @@ public class PersonService {
      * @return a PersonResult object.
      */
     public PersonResult person(PersonRequest r) {
-        Database db = new Database();
         try {
             db.openConnection();
 
-            // Get AuthToken from Request Object and validate the AuthToken
-            String tokenString = r.getAuthToken();
-            AuthTokenDao atDao = new AuthTokenDao(db.getConnection());
-            AuthToken authToken = atDao.find(tokenString);
+            AuthToken authToken = validateAuthToken(r.getAuthToken());
 
             if (authToken != null) {
 

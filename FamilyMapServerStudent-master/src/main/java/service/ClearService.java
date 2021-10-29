@@ -7,12 +7,14 @@ import service.results.ClearResult;
 /**
  * A service object for the clear API.
  */
-public class ClearService {
+public class ClearService extends Service {
 
     /**
      * Create a ClearService object.
      */
-    public ClearService() {}
+    public ClearService() {
+        db = new Database();
+    }
 
     /**
      * Remove every record from the database.
@@ -20,7 +22,6 @@ public class ClearService {
      * @return a ClearResult object.
      */
     public ClearResult clear() {
-        Database db = new Database();
         try {
             db.openConnection();
             // Clear the database

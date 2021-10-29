@@ -84,6 +84,13 @@ public class AuthTokenDaoTest {
     }
 
     @Test
+    public void deleteNonExistentAuthToken() throws DataAccessException {
+        // Call the delete method on atDao
+        atDao.delete(bestAuthToken.getToken());
+        // Even though bestAuthToken is not in database, delete does not throw an exception
+    }
+
+    @Test
     public void clearPass() throws DataAccessException {
         // Call the insert method on the atDao (defined in setUp()) and pass it bestAuthToken (defined in setUp())
         atDao.insert(bestAuthToken);

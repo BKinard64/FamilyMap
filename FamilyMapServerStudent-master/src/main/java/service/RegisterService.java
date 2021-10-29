@@ -1,6 +1,5 @@
 package service;
 
-import dao.AuthTokenDao;
 import dao.DataAccessException;
 import dao.Database;
 import dao.UserDao;
@@ -9,26 +8,24 @@ import jsondata.LocationData;
 import jsondata.MaleNames;
 import jsondata.Surnames;
 import model.AncestryGenerator;
-import model.AuthToken;
 import model.User;
 import service.requests.RegisterRequest;
 import service.results.RegisterResult;
 
-import java.util.UUID;
-
 /**
  * A service object for the register API.
  */
-public class RegisterService {
-    private LocationData locData;
-    private FemaleNames fmlNames;
-    private MaleNames mlNames;
-    private Surnames srNames;
+public class RegisterService extends Service {
+    private final LocationData locData;
+    private final FemaleNames fmlNames;
+    private final MaleNames mlNames;
+    private final Surnames srNames;
 
     /**
      * Create a RegisterService object.
      */
     public RegisterService(LocationData locData, FemaleNames fmlNames, MaleNames mlNames, Surnames srNames) {
+        this.db = new Database();
         this.locData = locData;
         this.fmlNames = fmlNames;
         this.mlNames = mlNames;
@@ -42,7 +39,6 @@ public class RegisterService {
      * @return a RegisterResult object.
      */
     public RegisterResult register(RegisterRequest r) {
-        Database db = new Database();
         try {
             db.openConnection();
 
@@ -70,16 +66,11 @@ public class RegisterService {
                     String username = r.getUsername();
                     user = uDao.find(username);
 
-                    // Generate AuthToken and store in database
-                    String tokenString = UUID.randomUUID().toString();
-                    AuthToken authToken = new AuthToken(tokenString, username);
-                    new AuthTokenDao(db.getConnection()).insert(authToken);
+                    String tokenString = generateAuthToken(username);
 
-                    // Get Person ID associated with this user and then close connection to Database
-                    String personID = user.getPersonID();
                     db.closeConnection(true);
 
-                    return new RegisterResult(tokenString, username, personID, true);
+                    return new RegisterResult(tokenString, username, user.getPersonID(), true);
 
                 } else {
                     // Username already taken by another user

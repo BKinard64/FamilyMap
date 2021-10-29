@@ -14,11 +14,14 @@ import service.results.RegisterResult;
 import java.io.*;
 import java.net.HttpURLConnection;
 
+/**
+ * A handler for the register API
+ */
 public class RegisterHandler implements HttpHandler {
-    private LocationData locData;
-    private FemaleNames fmlNames;
-    private MaleNames mlNames;
-    private Surnames srNames;
+    private final LocationData locData;
+    private final FemaleNames fmlNames;
+    private final MaleNames mlNames;
+    private final Surnames srNames;
 
     public RegisterHandler(LocationData locData, FemaleNames fmlNames, MaleNames mlNames, Surnames srNames) {
         this.locData = locData;

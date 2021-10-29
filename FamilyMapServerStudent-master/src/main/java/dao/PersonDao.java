@@ -28,7 +28,7 @@ public class PersonDao {
      * Insert a Person into the Person table.
      *
      * @param person the Person object to be inserted.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void insert(Person person) throws DataAccessException {
         // Create string to pass into the connection's prepareStatement method
@@ -57,7 +57,7 @@ public class PersonDao {
      * Find a Person with the given person ID.
      *
      * @param personID the ID of the Person to find.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      * @return a Person object corresponding to the given person ID.
      */
     public Person find(String personID) throws DataAccessException {
@@ -93,7 +93,7 @@ public class PersonDao {
      * Find the family members of the current user.
      *
      * @param username the username associated with the current User.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      * @return a list of Person objects representing the family members of the current User.
      */
     public List<Person> getFamily(String username) throws DataAccessException {
@@ -130,7 +130,7 @@ public class PersonDao {
      * Remove a Person from the Person table.
      *
      * @param personID the ID of the Person to remove.
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void delete(String personID) throws DataAccessException {
         String sql = "DELETE FROM person WHERE id = ?;";
@@ -142,6 +142,12 @@ public class PersonDao {
         }
     }
 
+    /**
+     * Remove the family members of specified User from the database
+     *
+     * @param username the username specifying which User's family to remove from database
+     * @throws DataAccessException thrown if SQLException occurs
+     */
     public void deleteFamily(String username) throws DataAccessException {
         String sql = "DELETE FROM person WHERE username = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -155,7 +161,7 @@ public class PersonDao {
     /**
      * Delete all records from the Person table
      *
-     * @throws DataAccessException
+     * @throws DataAccessException thrown if SQLException occurs
      */
     public void clear() throws DataAccessException {
         try (Statement stmt = conn.createStatement()){

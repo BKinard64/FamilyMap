@@ -10,12 +10,14 @@ import service.results.EventResult;
 /**
  * A service object for the event/[eventID] API.
  */
-public class EventService {
+public class EventService extends Service {
 
     /**
      * Create an EventService object.
      */
-    public EventService() {}
+    public EventService() {
+        db = new Database();
+    }
 
     /**
      * Returns the single Event object with the provided event ID.
@@ -24,14 +26,10 @@ public class EventService {
      * @return an EventResult object.
      */
     public EventResult event(EventRequest r) {
-        Database db = new Database();
         try {
             db.openConnection();
 
-            // Get AuthToken from Request Object and validate the AuthToken
-            String tokenString = r.getAuthToken();
-            AuthTokenDao atDao = new AuthTokenDao(db.getConnection());
-            AuthToken authToken = atDao.find(tokenString);
+            AuthToken authToken = validateAuthToken(r.getAuthToken());
 
             if (authToken != null) {
 
@@ -40,9 +38,8 @@ public class EventService {
                 User user = uDao.find(authToken.getUsername());
 
                 // Get Event belonging to the ID in the Request
-                String eventID = r.getEventID();
                 EventDao eDao = new EventDao(db.getConnection());
-                Event e = eDao.find(eventID);
+                Event e = eDao.find(r.getEventID());
 
                 // Confirm the Event is in the Database
                 if (e != null) {
