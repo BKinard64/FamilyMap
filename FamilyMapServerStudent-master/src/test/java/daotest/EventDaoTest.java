@@ -1,5 +1,9 @@
-package dao;
+package daotest;
 
+import dao.DataAccessException;
+import dao.Database;
+import dao.EventDao;
+import dao.PersonDao;
 import model.Event;
 import model.Person;
 import org.junit.jupiter.api.AfterEach;
