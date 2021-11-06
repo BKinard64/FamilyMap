@@ -8,8 +8,8 @@ import jsondata.LocationData;
 import jsondata.MaleNames;
 import jsondata.Surnames;
 import service.RegisterService;
-import service.requests.RegisterRequest;
-import service.results.RegisterResult;
+import requests.RegisterRequest;
+import results.RegisterResult;
 
 import java.io.*;
 import java.net.HttpURLConnection;

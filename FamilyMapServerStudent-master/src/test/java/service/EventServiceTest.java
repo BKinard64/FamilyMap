@@ -7,8 +7,8 @@ import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.requests.EventRequest;
-import service.results.EventResult;
+import requests.EventRequest;
+import results.EventResult;
 
 import java.sql.Connection;
 

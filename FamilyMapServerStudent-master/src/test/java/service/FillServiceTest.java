@@ -12,14 +12,14 @@ import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.requests.FillRequest;
-import service.results.FillResult;
-
-import static org.junit.jupiter.api.Assertions.*;
+import requests.FillRequest;
+import results.FillResult;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FillServiceTest {
     private FillService service;

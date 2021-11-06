@@ -4,8 +4,8 @@ import dao.*;
 import model.Event;
 import model.Person;
 import model.User;
-import service.requests.LoadRequest;
-import service.results.LoadResult;
+import requests.LoadRequest;
+import results.LoadResult;
 
 /**
  * A service object for the load API.

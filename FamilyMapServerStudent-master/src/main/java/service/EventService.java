@@ -4,8 +4,8 @@ import dao.*;
 import model.AuthToken;
 import model.Event;
 import model.User;
-import service.requests.EventRequest;
-import service.results.EventResult;
+import requests.EventRequest;
+import results.EventResult;
 
 /**
  * A service object for the event/[eventID] API.

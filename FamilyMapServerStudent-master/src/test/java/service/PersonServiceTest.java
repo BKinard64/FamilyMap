@@ -7,8 +7,8 @@ import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.requests.PersonRequest;
-import service.results.PersonResult;
+import requests.PersonRequest;
+import results.PersonResult;
 
 import static org.junit.jupiter.api.Assertions.*;
 

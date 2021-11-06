@@ -8,8 +8,8 @@ import jsondata.LocationData;
 import jsondata.MaleNames;
 import jsondata.Surnames;
 import service.FillService;
-import service.requests.FillRequest;
-import service.results.FillResult;
+import requests.FillRequest;
+import results.FillResult;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
