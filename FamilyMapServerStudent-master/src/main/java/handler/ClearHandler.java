@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.ClearService;
-import service.results.ClearResult;
+import results.ClearResult;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

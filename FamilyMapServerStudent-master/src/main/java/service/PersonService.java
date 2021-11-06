@@ -4,8 +4,8 @@ import dao.*;
 import model.AuthToken;
 import model.Person;
 import model.User;
-import service.requests.PersonRequest;
-import service.results.PersonResult;
+import requests.PersonRequest;
+import results.PersonResult;
 
 /**
  * A service object for the person/[personID] API.

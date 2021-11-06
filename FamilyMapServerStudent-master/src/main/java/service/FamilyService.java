@@ -3,7 +3,7 @@ package service;
 import dao.*;
 import model.AuthToken;
 import model.Person;
-import service.results.FamilyResult;
+import results.FamilyResult;
 
 import java.util.List;
 

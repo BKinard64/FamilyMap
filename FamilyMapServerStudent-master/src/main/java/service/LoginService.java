@@ -3,8 +3,8 @@ package service;
 import dao.DataAccessException;
 import dao.Database;
 import model.User;
-import service.requests.LoginRequest;
-import service.results.LoginResult;
+import requests.LoginRequest;
+import results.LoginResult;
 
 /**
  * A service object for the login API.

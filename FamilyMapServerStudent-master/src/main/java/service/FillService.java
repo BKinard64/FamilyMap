@@ -8,8 +8,8 @@ import jsondata.MaleNames;
 import jsondata.Surnames;
 import model.AncestryGenerator;
 import model.User;
-import service.requests.FillRequest;
-import service.results.FillResult;
+import requests.FillRequest;
+import results.FillResult;
 
 /**
  * A service object for the fill API.

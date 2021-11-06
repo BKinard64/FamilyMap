@@ -6,9 +6,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.FamilyService;
 import service.PersonService;
-import service.requests.PersonRequest;
-import service.results.FamilyResult;
-import service.results.PersonResult;
+import requests.PersonRequest;
+import results.FamilyResult;
+import results.PersonResult;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

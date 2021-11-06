@@ -8,12 +8,11 @@ import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.results.FamilyEventsResult;
+import results.FamilyEventsResult;
 
 import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FamilyEventsServiceTest {
     private Database db;

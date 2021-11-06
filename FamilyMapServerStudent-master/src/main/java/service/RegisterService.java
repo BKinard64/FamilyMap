@@ -9,8 +9,8 @@ import jsondata.MaleNames;
 import jsondata.Surnames;
 import model.AncestryGenerator;
 import model.User;
-import service.requests.RegisterRequest;
-import service.results.RegisterResult;
+import requests.RegisterRequest;
+import results.RegisterResult;
 
 /**
  * A service object for the register API.

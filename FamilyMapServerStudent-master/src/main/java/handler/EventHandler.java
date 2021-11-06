@@ -6,9 +6,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.EventService;
 import service.FamilyEventsService;
-import service.requests.EventRequest;
-import service.results.EventResult;
-import service.results.FamilyEventsResult;
+import requests.EventRequest;
+import results.EventResult;
+import results.FamilyEventsResult;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

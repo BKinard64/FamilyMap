@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.LoadService;
-import service.requests.LoadRequest;
-import service.results.LoadResult;
+import requests.LoadRequest;
+import results.LoadResult;
 
 import java.io.*;
 import java.net.HttpURLConnection;

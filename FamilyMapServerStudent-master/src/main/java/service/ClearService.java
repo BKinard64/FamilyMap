@@ -2,7 +2,7 @@ package service;
 
 import dao.DataAccessException;
 import dao.Database;
-import service.results.ClearResult;
+import results.ClearResult;
 
 /**
  * A service object for the clear API.
