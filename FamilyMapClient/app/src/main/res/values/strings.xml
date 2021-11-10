@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FamilyMap</string>
+    <string name="app_name">Family Map</string>
     <string name="server_host">Server Host:</string>
     <string name="server_port">Server Port:</string>
     <string name="username">Username:</string>
@@ -7,4 +7,9 @@
     <string name="first_name">First Name:</string>
     <string name="last_name">Last Name:</string>
     <string name="email">Email:</string>
+    <string name="gender">Gender:</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="login">LOG IN</string>
+    <string name="register">REGISTER</string>
 </resources>
