@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import requests.LoginRequest;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +62,7 @@ public class LoginFragment extends Fragment {
         loginButton.setEnabled(false);
         registerButton.setEnabled(false);
 
-        // Add Listeners on EditText Fields to determine when buttons should be enabled/disabled
+        // Add Listeners on EditText/RadioButton Fields to determine when buttons should be enabled
         EditText serverHostField = view.findViewById(R.id.serverHostField);
         serverHostField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -159,6 +163,31 @@ public class LoginFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 isEmailSpecified = s.length() > 0;
                 registerButton.setEnabled(areFieldsSpecified(true));
+            }
+        });
+        RadioButton maleButton = view.findViewById(R.id.maleButton);
+        maleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isGenderSpecified = true;
+                registerButton.setEnabled(areFieldsSpecified(true));
+            }
+        });
+        RadioButton femaleButton = view.findViewById(R.id.femaleButton);
+        femaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isGenderSpecified = true;
+                registerButton.setEnabled(areFieldsSpecified(true));
+            }
+        });
+
+        // Create Listeners for the Login and Register Buttons
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginRequest request = new LoginRequest(usernameField.getText().toString(),
+                                                        passwordField.getText().toString());
             }
         });
 
