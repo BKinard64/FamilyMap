@@ -18,6 +18,7 @@ import results.RegisterResult;
 public class ServerProxy {
     private final String serverHost;
     private final String serverPort;
+    private HttpURLConnection http;
 
     public ServerProxy(String serverHost, String serverPort) {
         this.serverHost = serverHost;
@@ -27,16 +28,7 @@ public class ServerProxy {
     public LoginResult login(LoginRequest request) {
         try {
 
-            // Begin creating request to send to Server
-            URL url = new URL("http://" + serverHost + ":" + serverPort + "/user/login");
-            HttpURLConnection http = (HttpURLConnection)url.openConnection();
-
-            // Set method to POST and establish there will be a Request Body
-            http.setRequestMethod("POST");
-            http.setDoOutput(true);
-
-            // Connect to the Server
-            http.connect();
+            establishPostConnection(true);
 
             // Write the Request Body from the LoginRequest
             Gson gson = new Gson();
@@ -59,5 +51,51 @@ public class ServerProxy {
             return null;
         }
     }
-    public RegisterResult register(RegisterRequest request) { return null; }
+    public RegisterResult register(RegisterRequest request) {
+        try {
+
+            establishPostConnection(false);
+
+            // Write the Request Body from the RegisterRequest
+            Gson gson = new Gson();
+            Writer reqBody = new OutputStreamWriter(http.getOutputStream());
+            gson.toJson(request, reqBody);
+            reqBody.close();
+
+            // Deserialize the Response Body to a LoginResult
+            Reader resBody;
+            if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                resBody = new InputStreamReader(http.getInputStream());
+            } else {
+                resBody = new InputStreamReader(http.getErrorStream());
+            }
+
+            return (RegisterResult) gson.fromJson(resBody, RegisterResult.class);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void establishPostConnection(boolean isLogin) throws IOException {
+        // Set path according to intended API call
+        String path = "/user/";
+        if (isLogin) {
+            path = path + "login";
+        } else {
+            path = path + "register";
+        }
+
+        // Begin creating request to send to Server
+        URL url = new URL("http://" + serverHost + ":" + serverPort + path);
+        http = (HttpURLConnection)url.openConnection();
+
+        // Set method to POST and establish there will be a Request Body
+        http.setRequestMethod("POST");
+        http.setDoOutput(true);
+
+        // Connect to the Server
+        http.connect();
+    }
 }
