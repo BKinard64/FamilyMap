@@ -12,6 +12,8 @@ import java.net.URL;
 
 import requests.LoginRequest;
 import requests.RegisterRequest;
+import results.FamilyEventsResult;
+import results.FamilyResult;
 import results.LoginResult;
 import results.RegisterResult;
 
@@ -51,6 +53,7 @@ public class ServerProxy {
             return null;
         }
     }
+
     public RegisterResult register(RegisterRequest request) {
         try {
 
@@ -77,6 +80,10 @@ public class ServerProxy {
             return null;
         }
     }
+
+    public FamilyResult getFamily() { return null; }
+
+    public FamilyEventsResult getFamilyEvents() { return null; }
 
     private void establishPostConnection(boolean isLogin) throws IOException {
         // Set path according to intended API call
