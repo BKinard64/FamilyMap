@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import requests.LoginRequest;
+import requests.RegisterRequest;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -188,6 +189,23 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 LoginRequest request = new LoginRequest(usernameField.getText().toString(),
                                                         passwordField.getText().toString());
+            }
+        });
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String gender;
+                if (maleButton.isChecked()) {
+                    gender = "m";
+                } else {
+                    gender = "f";
+                }
+                RegisterRequest request = new RegisterRequest(usernameField.getText().toString(),
+                                                              passwordField.getText().toString(),
+                                                              emailField.getText().toString(),
+                                                              firstNameField.getText().toString(),
+                                                              lastNameField.getText().toString(),
+                                                              gender);
             }
         });
 
