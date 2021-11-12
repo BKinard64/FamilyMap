@@ -16,9 +16,18 @@ public class DataCache {
 
     private DataCache() {}
 
+    private String authToken;
     private Map<String, Person> people;
     private Map<String, Event> events;
     private Map<String, List<Event>> personEvents;
     private Set<String> paternalAncestors;
     private Set<String> maternalAncestors;
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
 }
