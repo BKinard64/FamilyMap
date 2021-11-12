@@ -2,8 +2,11 @@ package byu.cs240.familymapclient;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,13 +17,21 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import applogic.DataCache;
+import applogic.ServerProxy;
 import requests.LoginRequest;
 import requests.RegisterRequest;
+import results.LoginResult;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class LoginFragment extends Fragment {
+
+    private static final String LOGIN_SUCCESS_KEY = "Success status of Login Task";
 
     private boolean isServerHostSpecified;
     private boolean isServerPortSpecified;
@@ -30,6 +41,7 @@ public class LoginFragment extends Fragment {
     private boolean isLastNameSpecified;
     private boolean isEmailSpecified;
     private boolean isGenderSpecified;
+    private boolean isLoginTaskSuccessful;
 
     public LoginFragment() {
         isServerHostSpecified = false;
@@ -40,6 +52,7 @@ public class LoginFragment extends Fragment {
         isLastNameSpecified = false;
         isEmailSpecified = false;
         isGenderSpecified = false;
+        isLoginTaskSuccessful = false;
     }
 
     @Override
@@ -189,6 +202,26 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 LoginRequest request = new LoginRequest(usernameField.getText().toString(),
                                                         passwordField.getText().toString());
+
+                Handler uiThreadMessageHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        Bundle bundle = msg.getData();
+                        isLoginTaskSuccessful = bundle.getBoolean(LOGIN_SUCCESS_KEY);
+                    }
+                };
+
+                LoginTask task = new LoginTask(uiThreadMessageHandler, request,
+                                               serverHostField.getText().toString(),
+                                               serverPortField.getText().toString());
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.submit(task);
+
+                if (isLoginTaskSuccessful) {
+                    // Get Data Task
+                } else {
+                    // Pop up Toast with error message
+                }
             }
         });
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -220,5 +253,42 @@ public class LoginFragment extends Fragment {
                                 isEmailSpecified && isGenderSpecified;
         }
         return fieldsSpecified;
+    }
+
+    private static class LoginTask implements Runnable {
+        private final Handler handler;
+        private final LoginRequest request;
+        private final String serverHost;
+        private final String serverPort;
+
+        public LoginTask(Handler handler, LoginRequest request, String serverHost, String serverPort) {
+            this.handler = handler;
+            this.request = request;
+            this.serverHost = serverHost;
+            this.serverPort = serverPort;
+        }
+
+        @Override
+        public void run() {
+            ServerProxy serverProxy = new ServerProxy(serverHost, serverPort);
+
+            LoginResult result = serverProxy.login(request);
+
+            if (result.isSuccess()) {
+                DataCache.getInstance().setAuthToken(result.getAuthtoken());
+            }
+
+            sendMessage(result.isSuccess());
+        }
+
+        private void sendMessage(boolean isSuccess) {
+            Message message = Message.obtain();
+
+            Bundle messageBundle = new Bundle();
+            messageBundle.putBoolean(LOGIN_SUCCESS_KEY, isSuccess);
+            message.setData(messageBundle);
+
+            handler.sendMessage(message);
+        }
     }
 }
