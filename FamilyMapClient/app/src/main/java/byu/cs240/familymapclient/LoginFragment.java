@@ -16,14 +16,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import applogic.DataCache;
 import applogic.ServerProxy;
+import model.Person;
 import requests.LoginRequest;
 import requests.RegisterRequest;
+import results.FamilyEventsResult;
+import results.FamilyResult;
 import results.LoginResult;
 
 /**
@@ -32,6 +36,12 @@ import results.LoginResult;
 public class LoginFragment extends Fragment {
 
     private static final String LOGIN_SUCCESS_KEY = "Success status of Login Task";
+
+    private Listener listener;
+
+    public interface Listener {
+        void notifyDone(boolean isSuccess);
+    }
 
     private boolean isServerHostSpecified;
     private boolean isServerPortSpecified;
@@ -52,7 +62,11 @@ public class LoginFragment extends Fragment {
         isLastNameSpecified = false;
         isEmailSpecified = false;
         isGenderSpecified = false;
-        isLoginTaskSuccessful = false;
+        isLoginTaskSuccessful = true;
+    }
+
+    public void registerListener(Listener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -196,13 +210,15 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        // Create Listeners for the Login and Register Buttons
+        // Create Listener for the Login Button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create a LoginRequest with the provided username and password
                 LoginRequest request = new LoginRequest(usernameField.getText().toString(),
                                                         passwordField.getText().toString());
 
+                // Create a handler for the LoginTask
                 Handler uiThreadMessageHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
@@ -211,19 +227,28 @@ public class LoginFragment extends Fragment {
                     }
                 };
 
-                LoginTask task = new LoginTask(uiThreadMessageHandler, request,
+                // Instantiate a LoginTask and log the user in on a background task
+                LoginTask loginTask = new LoginTask(uiThreadMessageHandler, request,
                                                serverHostField.getText().toString(),
                                                serverPortField.getText().toString());
                 ExecutorService executor = Executors.newSingleThreadExecutor();
-                executor.submit(task);
+                executor.submit(loginTask);
 
+                // If the login was successful, retrieve the user's data in a background task
                 if (isLoginTaskSuccessful) {
-                    // Get Data Task
-                } else {
-                    // Pop up Toast with error message
+                    GetDataTask getDataTask = new GetDataTask(serverHostField.getText().toString(),
+                                                              serverPortField.getText().toString());
+                    executor.submit(getDataTask);
+                }
+
+                // Notify the MainActivity that the Login Fragment is done
+                if (listener != null) {
+                    listener.notifyDone(isLoginTaskSuccessful);
                 }
             }
         });
+
+        // Create Listener for the Register Button
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,12 +297,16 @@ public class LoginFragment extends Fragment {
         public void run() {
             ServerProxy serverProxy = new ServerProxy(serverHost, serverPort);
 
+            // Send login request to the server
             LoginResult result = serverProxy.login(request);
 
+            // If the request was successful store the auth token and personID in the DataCache
             if (result.isSuccess()) {
                 DataCache.getInstance().setAuthToken(result.getAuthtoken());
+                DataCache.getInstance().setPersonID(result.getPersonID());
             }
 
+            // Send success status back to UI Thread
             sendMessage(result.isSuccess());
         }
 
@@ -289,6 +318,29 @@ public class LoginFragment extends Fragment {
             message.setData(messageBundle);
 
             handler.sendMessage(message);
+        }
+    }
+
+    private static class GetDataTask implements Runnable {
+        private final String serverHost;
+        private final String serverPort;
+
+        public GetDataTask(String serverHost, String serverPort) {
+            this.serverHost = serverHost;
+            this.serverPort = serverPort;
+        }
+
+        @Override
+        public void run() {
+            ServerProxy serverProxy = new ServerProxy(serverHost, serverPort);
+
+            // Send person and event requests to the server
+            FamilyResult famResult = serverProxy.getFamily();
+            FamilyEventsResult famEventsResult = serverProxy.getFamilyEvents();
+
+            // Store the family and family events data in the DataCache
+            DataCache.getInstance().setPeople(famResult.getData());
+            DataCache.getInstance().setEvents(famEventsResult.getData());
         }
     }
 }
