@@ -28,21 +28,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
     }
 
     @Override
-    public void notifyDone(boolean isSuccess) {
-        String arg1;
-        String arg2;
-        if (isSuccess) {
-            Person user = DataCache.getInstance().getPerson();
-            arg1 = user.getFirstName();
-            arg2 = user.getLastName();
-        } else {
-            arg1 = "Error:";
-            arg2 = "Login/Register Attempt Failed";
-        }
-
+    public void notifyDone(String message) {
         Toast.makeText(
                 this,
-                getString(R.string.login_register_result, arg1, arg2),
+                getString(R.string.login_register_result, message),
                 Toast.LENGTH_SHORT)
                 .show();
     }

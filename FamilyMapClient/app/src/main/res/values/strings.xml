@@ -12,5 +12,5 @@
     <string name="female">Female</string>
     <string name="login">SIGN IN</string>
     <string name="register">REGISTER</string>
-    <string name="login_register_result">%s %s</string>
+    <string name="login_register_result">%s</string>
 </resources>

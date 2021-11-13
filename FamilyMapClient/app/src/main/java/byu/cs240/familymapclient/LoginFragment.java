@@ -35,12 +35,13 @@ import results.LoginResult;
  */
 public class LoginFragment extends Fragment {
 
-    private static final String LOGIN_SUCCESS_KEY = "Success status of Login Task";
+    private static final String SUCCESS_STATUS_KEY = "Success status of Task";
+    private static final String ERROR_KEY = "Error message";
 
     private Listener listener;
 
     public interface Listener {
-        void notifyDone(boolean isSuccess);
+        void notifyDone(String message);
     }
 
     private boolean isServerHostSpecified;
@@ -51,7 +52,6 @@ public class LoginFragment extends Fragment {
     private boolean isLastNameSpecified;
     private boolean isEmailSpecified;
     private boolean isGenderSpecified;
-    private boolean isLoginTaskSuccessful;
 
     public LoginFragment() {
         isServerHostSpecified = false;
@@ -62,7 +62,6 @@ public class LoginFragment extends Fragment {
         isLastNameSpecified = false;
         isEmailSpecified = false;
         isGenderSpecified = false;
-        isLoginTaskSuccessful = true;
     }
 
     public void registerListener(Listener listener) {
@@ -214,37 +213,36 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create a LoginRequest with the provided username and password
-                LoginRequest request = new LoginRequest(usernameField.getText().toString(),
-                                                        passwordField.getText().toString());
-
                 // Create a handler for the LoginTask
                 Handler uiThreadMessageHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
+                        String result;
                         Bundle bundle = msg.getData();
-                        isLoginTaskSuccessful = bundle.getBoolean(LOGIN_SUCCESS_KEY);
+                        if (bundle.getBoolean(SUCCESS_STATUS_KEY)) {
+                            result = DataCache.getInstance().getPerson().getFirstName() + " " +
+                                     DataCache.getInstance().getPerson().getLastName();
+
+
+                        } else {
+                            result = bundle.getString(ERROR_KEY);
+                        }
+
+                        // Notify the MainActivity that the Login Fragment is done
+                        if (listener != null) {
+                            listener.notifyDone(result);
+                        }
                     }
                 };
 
                 // Instantiate a LoginTask and log the user in on a background task
-                LoginTask loginTask = new LoginTask(uiThreadMessageHandler, request,
+                LoginTask loginTask = new LoginTask(uiThreadMessageHandler,
+                                               usernameField.getText().toString(),
+                                               passwordField.getText().toString(),
                                                serverHostField.getText().toString(),
                                                serverPortField.getText().toString());
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(loginTask);
-
-                // If the login was successful, retrieve the user's data in a background task
-                if (isLoginTaskSuccessful) {
-                    GetDataTask getDataTask = new GetDataTask(serverHostField.getText().toString(),
-                                                              serverPortField.getText().toString());
-                    executor.submit(getDataTask);
-                }
-
-                // Notify the MainActivity that the Login Fragment is done
-                if (listener != null) {
-                    listener.notifyDone(isLoginTaskSuccessful);
-                }
             }
         });
 
@@ -286,9 +284,10 @@ public class LoginFragment extends Fragment {
         private final String serverHost;
         private final String serverPort;
 
-        public LoginTask(Handler handler, LoginRequest request, String serverHost, String serverPort) {
+        public LoginTask(Handler handler, String username, String password, String serverHost,
+                         String serverPort) {
             this.handler = handler;
-            this.request = request;
+            this.request = new LoginRequest(username, password);
             this.serverHost = serverHost;
             this.serverPort = serverPort;
         }
@@ -300,21 +299,28 @@ public class LoginFragment extends Fragment {
             // Send login request to the server
             LoginResult result = serverProxy.login(request);
 
-            // If the request was successful store the auth token and personID in the DataCache
+
             if (result.isSuccess()) {
+                // If the request was successful store the auth token and personID in the DataCache
                 DataCache.getInstance().setAuthToken(result.getAuthtoken());
                 DataCache.getInstance().setPersonID(result.getPersonID());
+
+                // Get the data for the logged-in user
+                new GetDataTask(serverProxy).run();
             }
 
             // Send success status back to UI Thread
-            sendMessage(result.isSuccess());
+            sendMessage(result.isSuccess(), result.getMessage());
         }
 
-        private void sendMessage(boolean isSuccess) {
+        private void sendMessage(boolean isSuccess, String errorMessage) {
             Message message = Message.obtain();
 
             Bundle messageBundle = new Bundle();
-            messageBundle.putBoolean(LOGIN_SUCCESS_KEY, isSuccess);
+            messageBundle.putBoolean(SUCCESS_STATUS_KEY, isSuccess);
+            if (errorMessage != null) {
+                messageBundle.putString(ERROR_KEY, errorMessage);
+            }
             message.setData(messageBundle);
 
             handler.sendMessage(message);
@@ -322,18 +328,14 @@ public class LoginFragment extends Fragment {
     }
 
     private static class GetDataTask implements Runnable {
-        private final String serverHost;
-        private final String serverPort;
+        private final ServerProxy serverProxy;
 
-        public GetDataTask(String serverHost, String serverPort) {
-            this.serverHost = serverHost;
-            this.serverPort = serverPort;
+        public GetDataTask(ServerProxy serverProxy) {
+            this.serverProxy = serverProxy;
         }
 
         @Override
         public void run() {
-            ServerProxy serverProxy = new ServerProxy(serverHost, serverPort);
-
             // Send person and event requests to the server
             FamilyResult famResult = serverProxy.getFamily();
             FamilyEventsResult famEventsResult = serverProxy.getFamilyEvents();
