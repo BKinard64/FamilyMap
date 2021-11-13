@@ -29,6 +29,7 @@ import requests.RegisterRequest;
 import results.FamilyEventsResult;
 import results.FamilyResult;
 import results.LoginResult;
+import results.RegisterResult;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -250,18 +251,40 @@ public class LoginFragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String gender;
-                if (maleButton.isChecked()) {
-                    gender = "m";
-                } else {
-                    gender = "f";
-                }
-                RegisterRequest request = new RegisterRequest(usernameField.getText().toString(),
-                                                              passwordField.getText().toString(),
-                                                              emailField.getText().toString(),
-                                                              firstNameField.getText().toString(),
-                                                              lastNameField.getText().toString(),
-                                                              gender);
+                // Create a handler for the RegisterTask
+                Handler uiThreadMessageHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        String result;
+                        Bundle bundle = msg.getData();
+                        if (bundle.getBoolean(SUCCESS_STATUS_KEY)) {
+                            result = DataCache.getInstance().getPerson().getFirstName() + " " +
+                                    DataCache.getInstance().getPerson().getLastName();
+
+
+                        } else {
+                            result = bundle.getString(ERROR_KEY);
+                        }
+
+                        // Notify the MainActivity that the Login Fragment is done
+                        if (listener != null) {
+                            listener.notifyDone(result);
+                        }
+                    }
+                };
+
+                // Instantiate a RegisterTask and register the user on a background task
+                RegisterTask registerTask = new RegisterTask(uiThreadMessageHandler,
+                                                             usernameField.getText().toString(),
+                                                             passwordField.getText().toString(),
+                                                             emailField.getText().toString(),
+                                                             firstNameField.getText().toString(),
+                                                             lastNameField.getText().toString(),
+                                                             maleButton.isChecked() ? "m" : "f",
+                                                             serverHostField.getText().toString(),
+                                                             serverPortField.getText().toString());
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.submit(registerTask);
             }
         });
 
@@ -310,6 +333,55 @@ public class LoginFragment extends Fragment {
             }
 
             // Send success status back to UI Thread
+            sendMessage(result.isSuccess(), result.getMessage());
+        }
+
+        private void sendMessage(boolean isSuccess, String errorMessage) {
+            Message message = Message.obtain();
+
+            Bundle messageBundle = new Bundle();
+            messageBundle.putBoolean(SUCCESS_STATUS_KEY, isSuccess);
+            if (errorMessage != null) {
+                messageBundle.putString(ERROR_KEY, errorMessage);
+            }
+            message.setData(messageBundle);
+
+            handler.sendMessage(message);
+        }
+    }
+
+    private static class RegisterTask implements Runnable {
+        private final Handler handler;
+        private final RegisterRequest request;
+        private String serverHost;
+        private String serverPort;
+
+        public RegisterTask(Handler handler, String username, String password, String email,
+                            String firstName, String lastName, String gender, String serverHost,
+                            String serverPort) {
+            this.handler = handler;
+            this.request = new RegisterRequest(username, password, email, firstName, lastName,
+                                               gender);
+            this.serverHost = serverHost;
+            this.serverPort = serverPort;
+        }
+
+        @Override
+        public void run() {
+            ServerProxy serverProxy = new ServerProxy(serverHost, serverPort);
+
+            // Send register request to the server
+            RegisterResult result = serverProxy.register(request);
+
+            if (result.isSuccess()) {
+                // If the request was successful store the auth token and personID in the DataCache
+                DataCache.getInstance().setAuthToken(result.getAuthtoken());
+                DataCache.getInstance().setPersonID(result.getPersonID());
+
+                // Get the data for the newly registered user
+                new GetDataTask(serverProxy).run();
+            }
+
             sendMessage(result.isSuccess(), result.getMessage());
         }
 
