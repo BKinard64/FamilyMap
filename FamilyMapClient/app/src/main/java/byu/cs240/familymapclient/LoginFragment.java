@@ -30,6 +30,7 @@ import results.FamilyEventsResult;
 import results.FamilyResult;
 import results.LoginResult;
 import results.RegisterResult;
+import results.Result;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,10 +73,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @Override
@@ -321,7 +318,6 @@ public class LoginFragment extends Fragment {
 
             // Send login request to the server
             LoginResult result = serverProxy.login(request);
-
 
             if (result.isSuccess()) {
                 // If the request was successful store the auth token and personID in the DataCache
