@@ -70,4 +70,14 @@ public class DataCache {
             this.events.put(event.getId(), event);
         }
     }
+
+    public void clear() {
+        authToken = null;
+        personID = null;
+        people = null;
+        events = null;
+        personEvents = null;
+        paternalAncestors = null;
+        maternalAncestors = null;
+    }
 }

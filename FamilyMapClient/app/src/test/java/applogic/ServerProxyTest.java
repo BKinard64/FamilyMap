@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import requests.LoginRequest;
 import requests.RegisterRequest;
+import results.FamilyEventsResult;
+import results.FamilyResult;
 import results.LoginResult;
 import results.RegisterResult;
 
@@ -24,11 +26,13 @@ public class ServerProxyTest {
     @BeforeEach
     public void setUp() {
         serverProxy.clearDatabase();
+        DataCache.getInstance().clear();
     }
 
     @AfterEach
     public void cleanUp() {
         serverProxy.clearDatabase();
+        DataCache.getInstance().clear();
     }
 
     @Test
@@ -92,5 +96,53 @@ public class ServerProxyTest {
         assertNotNull(registerResult.getAuthtoken());
         assertNotNull(registerResult.getUsername());
         assertNotNull(registerResult.getPersonID());
+    }
+
+    @Test
+    public void getFamilyInvalidAuthToken() {
+        // Attempt to get the family without registering a user
+        FamilyResult familyResult = serverProxy.getFamily();
+
+        // Request should have failed due to no authtoken being provided
+        assertFalse(familyResult.isSuccess());
+        assertEquals("Error: Invalid auth token.", familyResult.getMessage());
+    }
+
+    @Test
+    public void getFamilySuccess() {
+        // Register the user defined in registerRequest
+        RegisterResult registerResult = serverProxy.register(registerRequest);
+        DataCache.getInstance().setAuthToken(registerResult.getAuthtoken());
+
+        // Attempt to get the family of the registered user
+        FamilyResult familyResult = serverProxy.getFamily();
+
+        // Request should have been successful
+        assertTrue(familyResult.isSuccess());
+        assertNotNull(familyResult.getData());
+    }
+
+    @Test
+    public void getFamilyEventsInvalidAuthToken() {
+        // Attempt to get the family events without registering a user
+        FamilyEventsResult familyEventsResult = serverProxy.getFamilyEvents();
+
+        // Attempt should have failed due to no auth token being provided
+        assertFalse(familyEventsResult.isSuccess());
+        assertEquals("Error: Invalid auth token.", familyEventsResult.getMessage());
+    }
+
+    @Test
+    public void getFamilyEventsSuccess() {
+        // Register the user defined in registerRequest
+        RegisterResult registerResult = serverProxy.register(registerRequest);
+        DataCache.getInstance().setAuthToken(registerResult.getAuthtoken());
+
+        // Attempt to get the family events of the registered user
+        FamilyEventsResult familyEventsResult = serverProxy.getFamilyEvents();
+
+        // Attempt should have been successful
+        assertTrue(familyEventsResult.isSuccess());
+        assertNotNull(familyEventsResult.getData());
     }
 }
