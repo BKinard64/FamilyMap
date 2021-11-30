@@ -215,14 +215,9 @@ public class LoginFragment extends Fragment {
                 Handler uiThreadMessageHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
-                        String result;
+                        String result = null;
                         Bundle bundle = msg.getData();
-                        if (bundle.getBoolean(SUCCESS_STATUS_KEY)) {
-                            result = DataCache.getInstance().getPerson().getFirstName() + " " +
-                                     DataCache.getInstance().getPerson().getLastName();
-
-
-                        } else {
+                        if (!bundle.getBoolean(SUCCESS_STATUS_KEY)) {
                             result = bundle.getString(ERROR_KEY);
                         }
 
@@ -252,14 +247,9 @@ public class LoginFragment extends Fragment {
                 Handler uiThreadMessageHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
-                        String result;
+                        String result = null;
                         Bundle bundle = msg.getData();
-                        if (bundle.getBoolean(SUCCESS_STATUS_KEY)) {
-                            result = DataCache.getInstance().getPerson().getFirstName() + " " +
-                                    DataCache.getInstance().getPerson().getLastName();
-
-
-                        } else {
+                        if (!bundle.getBoolean(SUCCESS_STATUS_KEY)) {
                             result = bundle.getString(ERROR_KEY);
                         }
 
