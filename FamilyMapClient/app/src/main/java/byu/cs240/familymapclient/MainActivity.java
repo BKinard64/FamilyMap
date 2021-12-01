@@ -7,9 +7,6 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import applogic.DataCache;
-import model.Person;
-
 public class MainActivity extends AppCompatActivity implements LoginFragment.Listener {
 
     @Override

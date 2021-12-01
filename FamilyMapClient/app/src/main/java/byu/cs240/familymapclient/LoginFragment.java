@@ -339,8 +339,8 @@ public class LoginFragment extends Fragment {
     private static class RegisterTask implements Runnable {
         private final Handler handler;
         private final RegisterRequest request;
-        private String serverHost;
-        private String serverPort;
+        private final String serverHost;
+        private final String serverPort;
 
         public RegisterTask(Handler handler, String username, String password, String email,
                             String firstName, String lastName, String gender, String serverHost,
@@ -401,6 +401,7 @@ public class LoginFragment extends Fragment {
             // Store the family and family events data in the DataCache
             DataCache.getInstance().setPeople(famResult.getData());
             DataCache.getInstance().setEvents(famEventsResult.getData());
+            DataCache.getInstance().setEventColors();
         }
     }
 }

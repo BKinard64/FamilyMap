@@ -3,6 +3,9 @@ package applogic;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,7 @@ public class DataCache {
     private String personID;
     private Map<String, Person> people;
     private Map<String, Event> events;
+    private Map<String, Float> eventColors;
     private Map<String, List<Event>> personEvents;
     private Set<String> paternalAncestors;
     private Set<String> maternalAncestors;
@@ -68,6 +72,39 @@ public class DataCache {
         this.events = new HashMap<>();
         for (Event event : events) {
             this.events.put(event.getId(), event);
+        }
+    }
+
+    public Map<String, Float> getEventColors() {
+        return eventColors;
+    }
+
+    public void setEventColors() {
+        // Create a list of all the available marker colors
+        List<Float> colors = new ArrayList<>();
+        colors.add(BitmapDescriptorFactory.HUE_BLUE);
+        colors.add(BitmapDescriptorFactory.HUE_RED);
+        colors.add(BitmapDescriptorFactory.HUE_GREEN);
+        colors.add(BitmapDescriptorFactory.HUE_YELLOW);
+        colors.add(BitmapDescriptorFactory.HUE_VIOLET);
+        colors.add(BitmapDescriptorFactory.HUE_ORANGE);
+        colors.add(BitmapDescriptorFactory.HUE_CYAN);
+        colors.add(BitmapDescriptorFactory.HUE_ROSE);
+        colors.add(BitmapDescriptorFactory.HUE_AZURE);
+        colors.add(BitmapDescriptorFactory.HUE_MAGENTA);
+
+        // Assign each unique eventType a unique color
+        eventColors = new HashMap<>();
+        int colorIndex = 0;
+        for (Event event : this.events.values()) {
+            if (eventColors.get(event.getType()) == null) {
+                eventColors.put(event.getType(), colors.get(colorIndex));
+                if (colorIndex == colors.size() - 1) {
+                    colorIndex = 0;
+                } else {
+                    colorIndex++;
+                }
+            }
         }
     }
 

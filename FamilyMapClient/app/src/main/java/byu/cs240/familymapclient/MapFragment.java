@@ -12,6 +12,13 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import applogic.DataCache;
+import model.Event;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +51,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map = googleMap;
         map.setOnMapLoadedCallback(this);
 
-        // Add markers
+        // Add markers for each event
+        for (Event event : DataCache.getInstance().getEvents().values()) {
+            // Assign marker its unique color based on eventType
+            float mrkrColor = DataCache.getInstance().getEventColors().get(event.getType());
+
+            // Add marker to the map by specifying its location and color
+            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(new LatLng(event.getLatitude(), event.getLongitude()))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(mrkrColor)));
+
+            // Set the marker's tag to be the model event object for the marker
+            marker.setTag(event);
+        }
     }
 
     @Override
