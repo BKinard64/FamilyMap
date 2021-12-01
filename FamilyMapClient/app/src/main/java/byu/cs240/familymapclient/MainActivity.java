@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
             // Replace Login Fragment with Map Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             MapFragment mapFragment = new MapFragment();
-            fragmentManager.beginTransaction().add(R.id.fragment_container, mapFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment).commit();
         } else {
             // Report the error
             Toast.makeText(

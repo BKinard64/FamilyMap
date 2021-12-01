@@ -97,8 +97,8 @@ public class DataCache {
         eventColors = new HashMap<>();
         int colorIndex = 0;
         for (Event event : this.events.values()) {
-            if (eventColors.get(event.getType()) == null) {
-                eventColors.put(event.getType(), colors.get(colorIndex));
+            if (eventColors.get(event.getType().toUpperCase()) == null) {
+                eventColors.put(event.getType().toUpperCase(), colors.get(colorIndex));
                 if (colorIndex == colors.size() - 1) {
                     colorIndex = 0;
                 } else {
