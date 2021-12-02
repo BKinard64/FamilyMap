@@ -1,5 +1,6 @@
 package byu.cs240.familymapclient;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -132,7 +133,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
                 // Make event info clickable
                 eventInfo.setClickable(true);
-                // TO-DO: Set onClickListener
+                eventInfo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mainActivity, PersonActivity.class);
+                        startActivity(intent);
+                    }
+                });
 
                 return true;
             }
