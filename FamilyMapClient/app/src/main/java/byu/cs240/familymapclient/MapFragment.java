@@ -28,6 +28,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
+import java.util.PriorityQueue;
+
 import applogic.DataCache;
 import model.Event;
 import model.Person;
@@ -95,11 +97,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 Event event = (Event)marker.getTag();
                 map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(event.getLatitude(),
                                                                            event.getLongitude())));
-
                 // Draw lines on map
                 removeLines();
                 drawSpouseLine(event);
                 drawFamilyLines(event);
+                drawLifeStoryLines(event);
 
                 // Update event information
                 Drawable genderIcon;
@@ -146,13 +148,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             // Draw spouse line
             if (spouseEvent != null) {
-                drawLine(event, spouseEvent, Color.MAGENTA, 20.0F);
+                drawLine(event, spouseEvent, Color.MAGENTA, 15.0F);
             }
         }
     }
 
     private void drawFamilyLines(Event event) {
-        drawParentLines(DataCache.getInstance().getPeople().get(event.getPersonID()), event, 20.0F);
+        drawParentLines(DataCache.getInstance().getPeople().get(event.getPersonID()), event, 15.0F);
     }
 
     private void drawParentLines(Person person, Event event, float width) {
@@ -184,6 +186,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             // Draw parent line for the mother
             drawParentLines(mother, motherEvent, width * 0.5F);
+        }
+    }
+
+    private void drawLifeStoryLines(Event event) {
+        // Identify person associated with selected event
+        String personID = event.getPersonID();
+
+        // Copy the PriorityQueue for the events of the given Person
+        PriorityQueue<Event> lifeEvents = new PriorityQueue<Event>(DataCache.getInstance().getPersonEvents().get(personID));
+
+        // Draw line from first event to second event
+        if (lifeEvents.peek() != null) {
+            drawStoryLine(lifeEvents.poll(), lifeEvents);
+        }
+    }
+
+    private void drawStoryLine(Event startEvent, PriorityQueue<Event> lifeEvents) {
+        if (lifeEvents.peek() != null) {
+            // Get the next earliest remaining event
+            Event endEvent = lifeEvents.poll();
+
+            // Draw line between start and end events
+            drawLine(startEvent, endEvent, Color.BLACK, 15.0F);
+
+            // Draw line from end event to next earliest event
+            drawStoryLine(endEvent, lifeEvents);
         }
     }
 

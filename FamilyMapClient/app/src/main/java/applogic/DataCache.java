@@ -93,6 +93,9 @@ public class DataCache {
                         new Comparator<Event>() {
                             @Override
                             public int compare(Event o1, Event o2) {
+                                if (o1.getYear() == o2.getYear()) {
+                                    return o1.getType().toLowerCase().compareTo(o2.getType().toLowerCase());
+                                }
                                 return o1.getYear() - o2.getYear();
                             }
                         });
