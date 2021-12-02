@@ -7,6 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
+
 public class MainActivity extends AppCompatActivity implements LoginFragment.Listener {
 
     @Override
@@ -22,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
             fragment.registerListener(this);
             fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
+
+        Iconify.with(new FontAwesomeModule());
     }
 
     @Override

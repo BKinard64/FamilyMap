@@ -1,5 +1,7 @@
 package byu.cs240.familymapclient;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,15 +23,21 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import applogic.DataCache;
 import model.Event;
+import model.Person;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
     private GoogleMap map;
+    private ImageView eventIcon;
     private TextView personName;
     private TextView eventDetails;
     private LinearLayout eventInfo;
@@ -50,6 +59,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        eventIcon = view.findViewById(R.id.event_icon);
         personName = view.findViewById(R.id.person_name);
         eventDetails = view.findViewById(R.id.event_details);
         eventInfo = view.findViewById(R.id.event_info);
@@ -86,10 +96,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(event.getLatitude(),
                                                                            event.getLongitude())));
 
-                // TO-DO: Draw lines on map
+                // Draw lines on map
+                removeLines();
+                drawSpouseLine(event);
+
 
                 // Update event information
-                // TO-DO: UPDATE ICON
+                Drawable genderIcon;
+                if (DataCache.getInstance().getPeople().get(event.getPersonID()).getGender().equals("m")) {
+                    genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male)
+                                                        .colorRes(R.color.male_icon).sizeDp(40);
+                } else {
+                    genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_female)
+                            .colorRes(R.color.female_icon).sizeDp(40);
+                }
+                eventIcon.setImageDrawable(genderIcon);
 
                 String firstName = DataCache.getInstance()
                                     .getPeople().get(event.getPersonID()).getFirstName();
@@ -102,7 +123,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 String year = "(" + event.getYear() + ")";
                 eventDetails.setText(eventType + " " + location + " " + year);
 
-                // Make event details clickable
+                // Make event info clickable
                 eventInfo.setClickable(true);
                 // TO-DO: Set onClickListener
 
@@ -113,4 +134,43 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapLoaded() {}
+
+    private void drawSpouseLine(Event event) {
+        // Identify the spouse
+        Person person = DataCache.getInstance().getPeople().get(event.getPersonID());
+        Person spouse = DataCache.getInstance().getPeople().get(person.getSpouseID());
+
+        if (spouse != null) {
+            // Get the earliest event of the spouse
+            Event spouseEvent = DataCache.getInstance().getPersonEvents().get(spouse.getId()).peek();
+
+            // Draw spouse line
+            if (spouseEvent != null) {
+                drawLine(event, spouseEvent, Color.MAGENTA, 5.0F);
+            }
+        }
+    }
+
+    private void drawLine(Event startEvent, Event endEvent, int lnColor, float width) {
+        // Create start and end points for the line
+        LatLng startPoint = new LatLng(startEvent.getLatitude(), startEvent.getLongitude());
+        LatLng endPoint = new LatLng(endEvent.getLatitude(), endEvent.getLongitude());
+
+        // Add line to map by specifying its endpoints, color, and width
+        PolylineOptions options = new PolylineOptions()
+                .add(startPoint)
+                .add(endPoint)
+                .color(lnColor)
+                .width(width);
+        Polyline line = map.addPolyline(options);
+
+        // Store line in DataCache
+        DataCache.getInstance().getMapLines().add(line);
+    }
+
+    private void removeLines() {
+        for (Polyline line : DataCache.getInstance().getMapLines()) {
+            line.remove();
+        }
+    }
 }

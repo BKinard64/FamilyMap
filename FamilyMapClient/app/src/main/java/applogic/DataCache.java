@@ -4,12 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import model.Event;
@@ -22,16 +25,19 @@ public class DataCache {
         return instance;
     }
 
-    private DataCache() {}
+    private DataCache() {
+        mapLines = new ArrayList<>();
+    }
 
     private String authToken;
     private String personID;
     private Map<String, Person> people;
     private Map<String, Event> events;
     private Map<String, Float> eventColors;
-    private Map<String, List<Event>> personEvents;
+    private Map<String, PriorityQueue<Event>> personEvents;
     private Set<String> paternalAncestors;
     private Set<String> maternalAncestors;
+    private List<Polyline> mapLines;
 
     public String getAuthToken() {
         return authToken;
@@ -75,6 +81,29 @@ public class DataCache {
         }
     }
 
+    public Map<String, PriorityQueue<Event>> getPersonEvents() {
+        return personEvents;
+    }
+
+    public void setPersonEvents() {
+        personEvents = new HashMap<>();
+        for (Event event : this.events.values()) {
+            if (personEvents.get(event.getPersonID()) == null) {
+                PriorityQueue<Event> initEventList = new PriorityQueue<>(3,
+                        new Comparator<Event>() {
+                            @Override
+                            public int compare(Event o1, Event o2) {
+                                return o1.getYear() - o2.getYear();
+                            }
+                        });
+                initEventList.add(event);
+                personEvents.put(event.getPersonID(), initEventList);
+            } else {
+                personEvents.get(event.getPersonID()).add(event);
+            }
+        }
+    }
+
     public Map<String, Float> getEventColors() {
         return eventColors;
     }
@@ -108,11 +137,16 @@ public class DataCache {
         }
     }
 
+    public List<Polyline> getMapLines() {
+        return mapLines;
+    }
+
     public void clear() {
         authToken = null;
         personID = null;
         people = null;
         events = null;
+        eventColors = null;
         personEvents = null;
         paternalAncestors = null;
         maternalAncestors = null;
