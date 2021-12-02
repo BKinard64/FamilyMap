@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import applogic.DataCache;
-import model.Person;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.Listener {
 
@@ -25,14 +25,25 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
             fragment.registerListener(this);
             fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
+
+        Iconify.with(new FontAwesomeModule());
     }
 
     @Override
     public void notifyDone(String message) {
-        Toast.makeText(
-                this,
-                getString(R.string.login_register_result, message),
-                Toast.LENGTH_SHORT)
-                .show();
+        // If the login/register attempt was successful
+        if (message == null) {
+            // Replace Login Fragment with Map Fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            MapFragment mapFragment = new MapFragment(this);
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment).commit();
+        } else {
+            // Report the error
+            Toast.makeText(
+                    this,
+                    getString(R.string.login_register_result, message),
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 }

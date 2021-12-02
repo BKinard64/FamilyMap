@@ -215,14 +215,9 @@ public class LoginFragment extends Fragment {
                 Handler uiThreadMessageHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
-                        String result;
+                        String result = null;
                         Bundle bundle = msg.getData();
-                        if (bundle.getBoolean(SUCCESS_STATUS_KEY)) {
-                            result = DataCache.getInstance().getPerson().getFirstName() + " " +
-                                     DataCache.getInstance().getPerson().getLastName();
-
-
-                        } else {
+                        if (!bundle.getBoolean(SUCCESS_STATUS_KEY)) {
                             result = bundle.getString(ERROR_KEY);
                         }
 
@@ -252,14 +247,9 @@ public class LoginFragment extends Fragment {
                 Handler uiThreadMessageHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
-                        String result;
+                        String result = null;
                         Bundle bundle = msg.getData();
-                        if (bundle.getBoolean(SUCCESS_STATUS_KEY)) {
-                            result = DataCache.getInstance().getPerson().getFirstName() + " " +
-                                    DataCache.getInstance().getPerson().getLastName();
-
-
-                        } else {
+                        if (!bundle.getBoolean(SUCCESS_STATUS_KEY)) {
                             result = bundle.getString(ERROR_KEY);
                         }
 
@@ -349,8 +339,8 @@ public class LoginFragment extends Fragment {
     private static class RegisterTask implements Runnable {
         private final Handler handler;
         private final RegisterRequest request;
-        private String serverHost;
-        private String serverPort;
+        private final String serverHost;
+        private final String serverPort;
 
         public RegisterTask(Handler handler, String username, String password, String email,
                             String firstName, String lastName, String gender, String serverHost,
@@ -411,6 +401,8 @@ public class LoginFragment extends Fragment {
             // Store the family and family events data in the DataCache
             DataCache.getInstance().setPeople(famResult.getData());
             DataCache.getInstance().setEvents(famEventsResult.getData());
+            DataCache.getInstance().setPersonEvents();
+            DataCache.getInstance().setEventColors();
         }
     }
 }
