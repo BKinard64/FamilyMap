@@ -5,16 +5,19 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,17 +41,21 @@ import model.Person;
  * A simple {@link Fragment} subclass.
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
+    private AppCompatActivity mainActivity;
     private GoogleMap map;
     private ImageView eventIcon;
     private TextView personName;
     private TextView eventDetails;
     private LinearLayout eventInfo;
 
-    public MapFragment() {}
+    public MapFragment(AppCompatActivity activity) {
+        mainActivity = activity;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -65,8 +72,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         personName = view.findViewById(R.id.person_name);
         eventDetails = view.findViewById(R.id.event_details);
         eventInfo = view.findViewById(R.id.event_info);
-
-        // TO-DO: Add search and setting menu icons
 
         return view;
     }
@@ -136,6 +141,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapLoaded() {}
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu, menu);
+
+        MenuItem searchMenuItem = menu.findItem(R.id.searchMenuItem);
+        searchMenuItem.setIcon(new IconDrawable(mainActivity, FontAwesomeIcons.fa_search)
+                                                .colorRes(R.color.white)
+                                                .actionBarSize());
+
+        MenuItem settingsMenuItem = menu.findItem(R.id.settingsMenuItem);
+        settingsMenuItem.setIcon(new IconDrawable(mainActivity, FontAwesomeIcons.fa_gear)
+                                                  .colorRes(R.color.white)
+                                                  .actionBarSize());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 
     private void drawSpouseLine(Event event) {
         // Identify the spouse

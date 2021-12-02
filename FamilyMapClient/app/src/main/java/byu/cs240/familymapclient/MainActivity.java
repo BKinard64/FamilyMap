@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
         if (message == null) {
             // Replace Login Fragment with Map Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            MapFragment mapFragment = new MapFragment();
+            MapFragment mapFragment = new MapFragment(this);
             fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment).commit();
         } else {
             // Report the error
