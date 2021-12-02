@@ -33,8 +33,8 @@ public class DataCache {
     private String personID;
     private Map<String, Person> people;
     private Map<String, Event> events;
-    private Map<String, Float> eventColors;
     private Map<String, PriorityQueue<Event>> personEvents;
+    private Map<String, Float> eventColors;
     private Set<String> paternalAncestors;
     private Set<String> maternalAncestors;
     private List<Polyline> mapLines;
@@ -135,6 +135,22 @@ public class DataCache {
                 }
             }
         }
+    }
+
+    public Set<String> getPaternalAncestors() {
+        return paternalAncestors;
+    }
+
+    public void setPaternalAncestors() {
+
+    }
+
+    public Set<String> getMaternalAncestors() {
+        return maternalAncestors;
+    }
+
+    public void setMaternalAncestors() {
+
     }
 
     public List<Polyline> getMapLines() {

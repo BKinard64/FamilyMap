@@ -99,7 +99,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 // Draw lines on map
                 removeLines();
                 drawSpouseLine(event);
-
+                drawFamilyLines(event);
 
                 // Update event information
                 Drawable genderIcon;
@@ -146,8 +146,44 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             // Draw spouse line
             if (spouseEvent != null) {
-                drawLine(event, spouseEvent, Color.MAGENTA, 5.0F);
+                drawLine(event, spouseEvent, Color.MAGENTA, 20.0F);
             }
+        }
+    }
+
+    private void drawFamilyLines(Event event) {
+        drawParentLines(DataCache.getInstance().getPeople().get(event.getPersonID()), event, 20.0F);
+    }
+
+    private void drawParentLines(Person person, Event event, float width) {
+        // Identify the current person's parents
+        Person father = DataCache.getInstance().getPeople().get(person.getFatherID());
+        Person mother = DataCache.getInstance().getPeople().get(person.getMotherID());
+
+        if (father != null) {
+            // Get the earliest event of the father
+            Event fatherEvent = DataCache.getInstance().getPersonEvents().get(father.getId()).peek();
+
+            // Draw father line
+            if (fatherEvent != null) {
+                drawLine(event, fatherEvent, Color.GREEN, width);
+            }
+
+            // Draw parent lines for the father
+            drawParentLines(father, fatherEvent, width * 0.5F);
+        }
+
+        if (mother != null) {
+            // Get the earliest event of the mother
+            Event motherEvent = DataCache.getInstance().getPersonEvents().get(mother.getId()).peek();
+
+            // Draw mother line
+            if (motherEvent != null) {
+                drawLine(event, motherEvent, Color.GREEN, width);
+            }
+
+            // Draw parent line for the mother
+            drawParentLines(mother, motherEvent, width * 0.5F);
         }
     }
 
@@ -172,5 +208,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         for (Polyline line : DataCache.getInstance().getMapLines()) {
             line.remove();
         }
+        DataCache.getInstance().getMapLines().clear();
     }
 }
