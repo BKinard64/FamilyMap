@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import applogic.DataCache;
@@ -47,6 +49,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private final AppCompatActivity activity;
     private Event selectedEvent;
+    private List<Polyline> mapLines;
     private GoogleMap map;
     private ImageView eventIcon;
     private TextView personName;
@@ -55,6 +58,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     public MapFragment(AppCompatActivity activity) {
         this.activity = activity;
+        mapLines = new ArrayList<>();
     }
 
     @Override
@@ -283,14 +287,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .width(width);
         Polyline line = map.addPolyline(options);
 
-        // Store line in DataCache
-        DataCache.getInstance().getMapLines().add(line);
+        // Store line
+        mapLines.add(line);
     }
 
     private void removeLines() {
-        for (Polyline line : DataCache.getInstance().getMapLines()) {
+        for (Polyline line : mapLines) {
             line.remove();
         }
-        DataCache.getInstance().getMapLines().clear();
+        mapLines.clear();
     }
 }

@@ -1,10 +1,13 @@
 package byu.cs240.familymapclient;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -45,7 +48,7 @@ public class PersonActivity extends AppCompatActivity {
         lastNameView.setText(person.getLastName());
 
         TextView genderView = findViewById(R.id.paGender);
-        genderView.setText(person.getGender().equals("m") ? "Male" : "Female");
+        genderView.setText(person.getGender().equals("m") ? getString(R.string.male) : getString(R.string.female));
 
         // Set the Expandable List View to hold the person's life event and family member data
         ExpandableListView eListView = findViewById(R.id.familyLifeLists);
@@ -56,6 +59,22 @@ public class PersonActivity extends AppCompatActivity {
 
         // Set the adapter
         eListView.setAdapter(new ExpandableListAdapter(lifeEvents, familyMembers, person));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+
+        return true;
     }
 
     private class ExpandableListAdapter extends BaseExpandableListAdapter {
