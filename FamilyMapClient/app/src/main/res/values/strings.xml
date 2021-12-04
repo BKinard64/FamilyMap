@@ -17,4 +17,13 @@
     <string name="map_event_details">Click on a marker to see event details</string>
     <string name="searchMenu">Search</string>
     <string name="settingsMenu">Settings</string>
+    <string name="pa_f_name">First Name</string>
+    <string name="pa_l_name">Last Name</string>
+    <string name="pa_gender">Gender</string>
+    <string name="life_events_title">Life Events</string>
+    <string name="family_members_title">Family</string>
+    <string name="father">Father</string>
+    <string name="mother">Mother</string>
+    <string name="spouse">Spouse</string>
+    <string name="child">Child</string>
 </resources>

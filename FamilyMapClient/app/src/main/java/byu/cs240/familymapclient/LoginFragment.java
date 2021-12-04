@@ -402,6 +402,7 @@ public class LoginFragment extends Fragment {
             DataCache.getInstance().setPeople(famResult.getData());
             DataCache.getInstance().setEvents(famEventsResult.getData());
             DataCache.getInstance().setPersonEvents();
+            DataCache.getInstance().setFamilyMembers();
             DataCache.getInstance().setEventColors();
         }
     }

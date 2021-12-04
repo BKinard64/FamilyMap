@@ -137,6 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mainActivity, PersonActivity.class);
+                        intent.putExtra(PersonActivity.PERSON_KEY, event.getPersonID());
                         startActivity(intent);
                     }
                 });
