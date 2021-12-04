@@ -1,13 +1,9 @@
 package applogic;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +30,7 @@ public class DataCache {
     private Map<String, Person> people;
     private Map<String, Event> events;
     private Map<String, PriorityQueue<Event>> personEvents;
+    private Map<String, List<Person>> familyMembers;
     private Map<String, Float> eventColors;
     private Set<String> paternalAncestors;
     private Set<String> maternalAncestors;
@@ -104,6 +101,38 @@ public class DataCache {
             } else {
                 personEvents.get(event.getPersonID()).add(event);
             }
+        }
+    }
+
+    public Map<String, List<Person>> getFamilyMembers() {
+        return familyMembers;
+    }
+
+    public void setFamilyMembers() {
+        familyMembers = new HashMap<>();
+        for (String personID : this.people.keySet()) {
+            List<Person> family = new ArrayList<>();
+            // Add the father, mother, and spouse
+            Person person = this.people.get(personID);
+            if (person.getFatherID() != null) {
+                family.add(this.people.get(person.getFatherID()));
+            }
+            if (person.getMotherID() != null) {
+                family.add(this.people.get(person.getMotherID()));
+            }
+            if (person.getSpouseID() != null) {
+                family.add(this.people.get(person.getSpouseID()));
+            }
+
+            // Add the children
+            for (Person child : this.people.values()) {
+                if (personID.equals(child.getFatherID()) || personID.equals(child.getMotherID())) {
+                    family.add(child);
+                }
+            }
+
+            // Store family members in map
+            familyMembers.put(personID, family);
         }
     }
 

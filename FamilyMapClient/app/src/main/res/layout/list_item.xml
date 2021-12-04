@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/family_member_info"
+    android:id="@+id/list_item"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/gender_icon"
+        android:id="@+id/list_item_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginEnd="8dp"/>
 
     <LinearLayout
-        android:id="@+id/family_member_text"
+        android:id="@+id/list_item_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/family_member"
+            android:id="@+id/list_item_text_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="Bob Sanders"/>
+            android:layout_marginBottom="6dp"/>
 
         <TextView
-            android:id="@+id/relationship"
+            android:id="@+id/list_item_text_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Father"/>
+            android:layout_marginTop="6dp" />
 
     </LinearLayout>
 

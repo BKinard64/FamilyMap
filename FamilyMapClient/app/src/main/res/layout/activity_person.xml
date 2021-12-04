@@ -28,6 +28,11 @@
             android:layout_marginBottom="8dp"
             android:text="@string/pa_f_name"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"/>
+
         <TextView
             android:id="@+id/paLastName"
             android:layout_width="match_parent"
@@ -44,6 +49,11 @@
             android:layout_marginBottom="8dp"
             android:text="@string/pa_l_name"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"/>
+
         <TextView
             android:id="@+id/paGender"
             android:layout_width="match_parent"
@@ -59,6 +69,11 @@
             android:layout_marginStart="6dp"
             android:layout_marginBottom="8dp"
             android:text="@string/pa_gender" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"/>
 
     </LinearLayout>
 
