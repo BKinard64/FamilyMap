@@ -191,6 +191,16 @@ public class PersonActivity extends AppCompatActivity {
                           " " +
                           DataCache.getInstance().getPeople().get(event.getPersonID()).getLastName();
             personName.setText(name);
+
+            // Enable a listener on life events that will open an event activity
+            lifeEventItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PersonActivity.this, EventActivity.class);
+                    intent.putExtra(EventActivity.EVENT_KEY, event.getId());
+                    startActivity(intent);
+                }
+            });
         }
 
         private void initializeFamilyMemberView(View familyMemberItemView, final int childPosition) {
