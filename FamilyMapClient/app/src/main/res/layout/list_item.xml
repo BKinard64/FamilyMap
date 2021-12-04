@@ -23,7 +23,8 @@
             android:id="@+id/list_item_text_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"/>
+            android:layout_marginBottom="6dp"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/list_item_text_bottom"
