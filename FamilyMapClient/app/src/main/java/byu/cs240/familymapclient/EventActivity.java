@@ -1,8 +1,14 @@
 package byu.cs240.familymapclient;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
+
+import applogic.DataCache;
+import model.Event;
 
 public class EventActivity extends AppCompatActivity {
 
@@ -12,5 +18,29 @@ public class EventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.event_fragment_container);
+
+        Intent intent = getIntent();
+        String eventID = intent.getStringExtra(EVENT_KEY);
+
+        MapFragment mapFragment = createMapFragment(eventID);
+
+        if (currentFragment == null) {
+            fragmentManager.beginTransaction().add(R.id.event_fragment_container, mapFragment).commit();
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.event_fragment_container, mapFragment).commit();
+        }
+    }
+
+    private MapFragment createMapFragment(String eventID) {
+        MapFragment mapFragment = new MapFragment(this);
+
+        Bundle arguments = new Bundle();
+        arguments.putString(MapFragment.FROM_EVENT_KEY, eventID);
+        mapFragment.setArguments(arguments);
+
+        return mapFragment;
     }
 }
