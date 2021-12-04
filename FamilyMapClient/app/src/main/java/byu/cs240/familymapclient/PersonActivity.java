@@ -214,6 +214,21 @@ public class PersonActivity extends AppCompatActivity {
 
             // Set the bottom text to the relationship
             TextView relationshipView = familyMemberItemView.findViewById(R.id.list_item_text_bottom);
+            String relationship = establishRelationship(person);
+            relationshipView.setText(relationship);
+
+            // Enable a listener on family members that will open their person activities
+            familyMemberItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PersonActivity.this, PersonActivity.class);
+                    intent.putExtra(PersonActivity.PERSON_KEY, person.getId());
+                    startActivity(intent);
+                }
+            });
+        }
+
+        private String establishRelationship(Person person) {
             String relationship = null;
 
             Person activityPersonFather = null;
@@ -245,8 +260,7 @@ public class PersonActivity extends AppCompatActivity {
                 relationship = getString(R.string.child);
             }
 
-            // Set the relationship
-            relationshipView.setText(relationship);
+            return relationship;
         }
 
         @Override
