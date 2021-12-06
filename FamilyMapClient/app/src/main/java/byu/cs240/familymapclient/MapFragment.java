@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import applogic.DataCache;
@@ -42,7 +44,12 @@ import model.Person;
  * A simple {@link Fragment} subclass.
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
-    private AppCompatActivity mainActivity;
+
+    public static final String FROM_EVENT_KEY = "Event passed by Event Activity";
+
+    private final AppCompatActivity activity;
+    private Event selectedEvent;
+    private List<Polyline> mapLines;
     private GoogleMap map;
     private ImageView eventIcon;
     private TextView personName;
@@ -50,13 +57,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private LinearLayout eventInfo;
 
     public MapFragment(AppCompatActivity activity) {
-        mainActivity = activity;
+        this.activity = activity;
+        mapLines = new ArrayList<>();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        if (activity.getClass() == MainActivity.class) {
+            setHasOptionsMenu(true);
+        }
     }
 
     @Override
@@ -73,6 +83,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         personName = view.findViewById(R.id.person_name);
         eventDetails = view.findViewById(R.id.event_details);
         eventInfo = view.findViewById(R.id.event_info);
+
+        if (getArguments() != null) {
+            String eventID = getArguments().getString(FROM_EVENT_KEY);
+            selectedEvent = DataCache.getInstance().getEvents().get(eventID);
+        }
 
         return view;
     }
@@ -101,48 +116,58 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
                 Event event = (Event)marker.getTag();
-                map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(event.getLatitude(),
-                                                                           event.getLongitude())));
-                // Draw lines on map
-                removeLines();
-                drawSpouseLine(event);
-                drawFamilyLines(event);
-                drawLifeStoryLines(event);
 
-                // Update event information
-                Drawable genderIcon;
-                if (DataCache.getInstance().getPeople().get(event.getPersonID()).getGender().equals("m")) {
-                    genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male)
-                                                        .colorRes(R.color.male_icon).sizeDp(40);
-                } else {
-                    genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_female)
-                            .colorRes(R.color.female_icon).sizeDp(40);
-                }
-                eventIcon.setImageDrawable(genderIcon);
-
-                String firstName = DataCache.getInstance()
-                                    .getPeople().get(event.getPersonID()).getFirstName();
-                String lastName = DataCache.getInstance()
-                                    .getPeople().get(event.getPersonID()).getLastName();
-                personName.setText(firstName + " " + lastName);
-
-                String eventType = event.getType().toUpperCase() + ":";
-                String location = event.getCity() + ", " + event.getCountry();
-                String year = "(" + event.getYear() + ")";
-                eventDetails.setText(eventType + " " + location + " " + year);
-
-                // Make event info clickable
-                eventInfo.setClickable(true);
-                eventInfo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mainActivity, PersonActivity.class);
-                        intent.putExtra(PersonActivity.PERSON_KEY, event.getPersonID());
-                        startActivity(intent);
-                    }
-                });
+                executeMarkerClickResponse(event);
 
                 return true;
+            }
+        });
+
+        // Have map center on selected event if being called from Event Activity
+        if (activity.getClass() == EventActivity.class) {
+            executeMarkerClickResponse(selectedEvent);
+        }
+    }
+
+    private void executeMarkerClickResponse(Event event) {
+        map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(event.getLatitude(),
+                event.getLongitude())));
+        // Draw lines on map
+        removeLines();
+        drawSpouseLine(event);
+        drawFamilyLines(event);
+        drawLifeStoryLines(event);
+
+        // Update event information
+        Drawable genderIcon;
+        if (DataCache.getInstance().getPeople().get(event.getPersonID()).getGender().equals("m")) {
+            genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male)
+                    .colorRes(R.color.male_icon).sizeDp(40);
+        } else {
+            genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_female)
+                    .colorRes(R.color.female_icon).sizeDp(40);
+        }
+        eventIcon.setImageDrawable(genderIcon);
+
+        String firstName = DataCache.getInstance()
+                .getPeople().get(event.getPersonID()).getFirstName();
+        String lastName = DataCache.getInstance()
+                .getPeople().get(event.getPersonID()).getLastName();
+        personName.setText(firstName + " " + lastName);
+
+        String eventType = event.getType().toUpperCase() + ":";
+        String location = event.getCity() + ", " + event.getCountry();
+        String year = "(" + event.getYear() + ")";
+        eventDetails.setText(eventType + " " + location + " " + year);
+
+        // Make event info clickable
+        eventInfo.setClickable(true);
+        eventInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, PersonActivity.class);
+                intent.putExtra(PersonActivity.PERSON_KEY, event.getPersonID());
+                startActivity(intent);
             }
         });
     }
@@ -156,12 +181,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         inflater.inflate(R.menu.main_menu, menu);
 
         MenuItem searchMenuItem = menu.findItem(R.id.searchMenuItem);
-        searchMenuItem.setIcon(new IconDrawable(mainActivity, FontAwesomeIcons.fa_search)
+        searchMenuItem.setIcon(new IconDrawable(activity, FontAwesomeIcons.fa_search)
                                                 .colorRes(R.color.white)
                                                 .actionBarSize());
 
         MenuItem settingsMenuItem = menu.findItem(R.id.settingsMenuItem);
-        settingsMenuItem.setIcon(new IconDrawable(mainActivity, FontAwesomeIcons.fa_gear)
+        settingsMenuItem.setIcon(new IconDrawable(activity, FontAwesomeIcons.fa_gear)
                                                   .colorRes(R.color.white)
                                                   .actionBarSize());
     }
@@ -262,14 +287,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .width(width);
         Polyline line = map.addPolyline(options);
 
-        // Store line in DataCache
-        DataCache.getInstance().getMapLines().add(line);
+        // Store line
+        mapLines.add(line);
     }
 
     private void removeLines() {
-        for (Polyline line : DataCache.getInstance().getMapLines()) {
+        for (Polyline line : mapLines) {
             line.remove();
         }
-        DataCache.getInstance().getMapLines().clear();
+        mapLines.clear();
     }
 }

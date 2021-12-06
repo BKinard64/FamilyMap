@@ -21,9 +21,7 @@ public class DataCache {
         return instance;
     }
 
-    private DataCache() {
-        mapLines = new ArrayList<>();
-    }
+    private DataCache() {}
 
     private String authToken;
     private String personID;
@@ -34,7 +32,6 @@ public class DataCache {
     private Map<String, Float> eventColors;
     private Set<String> paternalAncestors;
     private Set<String> maternalAncestors;
-    private List<Polyline> mapLines;
 
     public String getAuthToken() {
         return authToken;
@@ -183,10 +180,6 @@ public class DataCache {
 
     public void setMaternalAncestors() {
 
-    }
-
-    public List<Polyline> getMapLines() {
-        return mapLines;
     }
 
     public void clear() {
