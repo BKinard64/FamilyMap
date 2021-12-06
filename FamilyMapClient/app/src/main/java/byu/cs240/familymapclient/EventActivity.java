@@ -10,9 +10,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import applogic.DataCache;
-import model.Event;
-
 public class EventActivity extends AppCompatActivity {
 
     public static final String EVENT_KEY = "EventID";
