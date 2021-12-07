@@ -196,6 +196,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         if (item.getItemId() == R.id.searchMenuItem) {
             Intent intent = new Intent(activity, SearchActivity.class);
             startActivity(intent);
+        } else if (item.getItemId() == R.id.settingsMenuItem) {
+            Intent intent = new Intent(activity, SettingsActivity.class);
+            startActivity(intent);
         }
 
         return true;
