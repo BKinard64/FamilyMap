@@ -193,7 +193,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.searchMenuItem) {
+            Intent intent = new Intent(activity, SearchActivity.class);
+            startActivity(intent);
+        }
+
+        return true;
     }
 
     private void drawSpouseLine(Event event) {
