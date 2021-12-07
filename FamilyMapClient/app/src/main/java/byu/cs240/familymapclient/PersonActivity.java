@@ -201,7 +201,7 @@ public class PersonActivity extends AppCompatActivity {
             TextView eventInfo = lifeEventItemView.findViewById(R.id.list_item_text_top);
             Event event = lifeEvents.get(childPosition);
             String info = event.getType().toUpperCase() + ": " + event.getCity() + ", " +
-                          event.getCountry() + "(" + event.getYear() + ")";
+                          event.getCountry() + " (" + event.getYear() + ")";
             eventInfo.setText(info);
 
             // Set the bottom text to the person's name
