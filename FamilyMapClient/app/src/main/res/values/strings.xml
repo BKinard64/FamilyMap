@@ -27,4 +27,19 @@
     <string name="spouse">Spouse</string>
     <string name="child">Child</string>
     <string name="searchBarPrompt">Search</string>
+    <string name="life_story_title">Life Story Lines</string>
+    <string name="life_story_subtitle">SHOW LIFE STORY LINES</string>
+    <string name="family_tree_title">Family Tree Lines</string>
+    <string name="family_tree_subtitle">SHOW FAMILY TREE LINES</string>
+    <string name="spouse_title">Spouse Lines</string>
+    <string name="spouse_subtitle">SHOW SPOUSE LINES</string>
+    <string name="father_filter_title">Father\'s Side</string>
+    <string name="father_filter_subtitle">FILTER BY FATHER\'S SIDE OF FAMILY</string>
+    <string name="mother_filter_title">Mother\'s Side</string>
+    <string name="mother_filter_subtitle">FILTER BY MOTHER\'S SIDE OF FAMILY</string>
+    <string name="male_filter_title">Male Events</string>
+    <string name="female_filter_title">Female Events</string>
+    <string name="gender_filter_subtitle">FILTER EVENTS BASED ON GENDER</string>
+    <string name="logout">Logout</string>
+    <string name="logout_subtitle">RETURN TO LOGIN SCREEN</string>
 </resources>
