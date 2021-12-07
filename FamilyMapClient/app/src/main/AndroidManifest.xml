@@ -19,7 +19,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".SearchActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".EventActivity"
             android:exported="false"
