@@ -2,7 +2,6 @@ package byu.cs240.familymapclient;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -15,22 +14,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import applogic.DataCache;
 import applogic.ServerProxy;
-import model.Person;
 import requests.LoginRequest;
 import requests.RegisterRequest;
 import results.FamilyEventsResult;
 import results.FamilyResult;
 import results.LoginResult;
 import results.RegisterResult;
-import results.Result;
 
 /**
  * A simple {@link Fragment} subclass.

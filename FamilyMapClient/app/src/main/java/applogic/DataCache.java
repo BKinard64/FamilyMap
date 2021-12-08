@@ -1,7 +1,6 @@
 package applogic;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -51,10 +50,6 @@ public class DataCache {
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
-    }
-
-    public String getPersonID() {
-        return personID;
     }
 
     public void setPersonID(String personID) {
@@ -316,10 +311,6 @@ public class DataCache {
         }
     }
 
-    public Set<String> getMalePeople() {
-        return malePeople;
-    }
-
     public void setGenderGroups() {
         malePeople = new HashSet<>();
         femalePeople = new HashSet<>();
@@ -331,10 +322,6 @@ public class DataCache {
                 femalePeople.add(person.getId());
             }
         }
-    }
-
-    public Set<String> getFemalePeople() {
-        return femalePeople;
     }
 
     public Set<String> getPersonEventPool() {
