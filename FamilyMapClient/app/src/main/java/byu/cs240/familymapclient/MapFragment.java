@@ -33,8 +33,11 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 import applogic.DataCache;
 import model.Event;
@@ -97,19 +100,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map = googleMap;
         map.setOnMapLoadedCallback(this);
 
-        // Add markers for each event
-        for (Event event : DataCache.getInstance().getEvents().values()) {
-            // Assign marker its unique color based on eventType
-            float mrkrColor = DataCache.getInstance().getEventColors().get(event.getType().toUpperCase());
-
-            // Add marker to the map by specifying its location and color
-            Marker marker = map.addMarker(new MarkerOptions()
-                                    .position(new LatLng(event.getLatitude(), event.getLongitude()))
-                                    .icon(BitmapDescriptorFactory.defaultMarker(mrkrColor)));
-
-            // Set the marker's tag to be the model event object for the marker
-            marker.setTag(event);
-        }
+        addMapMarkers();
 
         // Set a listener for when marker is clicked
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -127,6 +118,88 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         if (activity.getClass() == EventActivity.class) {
             executeMarkerClickResponse(selectedEvent);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Update map in case Settings filters have changed
+        if (map != null) {
+            map.clear();
+            addMapMarkers();
+        }
+    }
+
+    private void addMapMarkers() {
+        // Determine set of Events to display based on filters
+        Set<String> eventPersonIDs = getPersonEventPool();
+
+        // Add markers for each event
+        for (Event event : DataCache.getInstance().getEvents().values()) {
+            if (eventPersonIDs.contains(event.getPersonID())) {
+                // Assign marker its unique color based on eventType
+                float mrkrColor = DataCache.getInstance().getEventColors().get(event.getType().toUpperCase());
+
+                // Add marker to the map by specifying its location and color
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .position(new LatLng(event.getLatitude(), event.getLongitude()))
+                        .icon(BitmapDescriptorFactory.defaultMarker(mrkrColor)));
+
+                // Set the marker's tag to be the model event object for the marker
+                marker.setTag(event);
+            }
+        }
+    }
+
+    private Set<String> getPersonEventPool() {
+        Set<String> eventPersonIDs = new HashSet<>();
+        Set<String> userAndSpouseIDs = new HashSet<>(); // Add this to final set before returning
+        Person user = DataCache.getInstance().getPerson();
+
+        // Male/Female Filters
+        if (DataCache.getInstance().isMaleEventsVisible() && DataCache.getInstance().isFemaleEventsVisible()) {
+            // Both Male and Female Events are visible
+            eventPersonIDs.addAll(DataCache.getInstance().getPeople().keySet());
+            userAndSpouseIDs.add(user.getId());
+            userAndSpouseIDs.add(user.getSpouseID());
+        } else if (DataCache.getInstance().isMaleEventsVisible()) {
+            // Only Male Events are visible
+            eventPersonIDs.addAll(DataCache.getInstance().getMalePeople());
+            if (user.getGender().equals("m")) {
+                userAndSpouseIDs.add(user.getId());
+            } else {
+                userAndSpouseIDs.add(user.getSpouseID());
+            }
+        } else if (DataCache.getInstance().isFemaleEventsVisible()) {
+            // Only Female Events are visible
+            eventPersonIDs.addAll(DataCache.getInstance().getFemalePeople());
+            if (user.getGender().equals("f")) {
+                userAndSpouseIDs.add(user.getId());
+            } else {
+                userAndSpouseIDs.add(user.getSpouseID());
+            }
+        } else {
+            // No markers should be put on map
+            return new HashSet<>();
+        }
+
+        // Father/Mother Side Filters
+        if (!(DataCache.getInstance().isFatherSideVisible()) && !(DataCache.getInstance().isMotherSideVisible())) {
+            // No ancestor event markers are visible
+            eventPersonIDs.clear();
+        } else if (!DataCache.getInstance().isFatherSideVisible()) {
+            // Only MATERNAL ancestors should have event markers visible
+            eventPersonIDs.retainAll(DataCache.getInstance().getMaternalAncestors());
+        } else if (!DataCache.getInstance().isMotherSideVisible()) {
+            // Only PATERNAL ancestors should have event markers visible
+            eventPersonIDs.retainAll(DataCache.getInstance().getPaternalAncestors());
+        }
+        // If both maternal/paternal ancestors should have event markers, just leave Set as is
+
+        // Add the user and their spouse (if appropriate) to final Set
+        eventPersonIDs.addAll(userAndSpouseIDs);
+
+        return eventPersonIDs;
     }
 
     private void executeMarkerClickResponse(Event event) {

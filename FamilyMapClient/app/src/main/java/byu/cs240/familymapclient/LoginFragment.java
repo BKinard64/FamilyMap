@@ -401,9 +401,7 @@ public class LoginFragment extends Fragment {
             // Store the family and family events data in the DataCache
             DataCache.getInstance().setPeople(famResult.getData());
             DataCache.getInstance().setEvents(famEventsResult.getData());
-            DataCache.getInstance().setPersonEvents();
-            DataCache.getInstance().setFamilyMembers();
-            DataCache.getInstance().setEventColors();
+            DataCache.getInstance().organizeData();
         }
     }
 }
