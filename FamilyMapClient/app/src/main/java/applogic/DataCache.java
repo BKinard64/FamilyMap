@@ -43,6 +43,7 @@ public class DataCache {
     private Set<String> maternalAncestors;
     private Set<String> malePeople;
     private Set<String> femalePeople;
+    private Set<String> personEventPool;
 
     public String getAuthToken() {
         return authToken;
@@ -157,6 +158,7 @@ public class DataCache {
         setMaternalAncestors();
         setGenderGroups();
         setEventColors();
+        setPersonEventPool();
     }
 
     public Map<String, PriorityQueue<Event>> getPersonEvents() {
@@ -333,6 +335,62 @@ public class DataCache {
 
     public Set<String> getFemalePeople() {
         return femalePeople;
+    }
+
+    public Set<String> getPersonEventPool() {
+        return personEventPool;
+    }
+
+    public void setPersonEventPool() {
+        Set<String> eventPersonIDs = new HashSet<>();
+        Set<String> userAndSpouseIDs = new HashSet<>(); // Add this to final set before returning
+        Person user = getPerson();
+
+        // Male/Female Filters
+        if (maleEventsVisible && femaleEventsVisible) {
+            // Both Male and Female Events are visible
+            eventPersonIDs.addAll(getPeople().keySet());
+            userAndSpouseIDs.add(user.getId());
+            userAndSpouseIDs.add(user.getSpouseID());
+        } else if (maleEventsVisible) {
+            // Only Male Events are visible
+            eventPersonIDs.addAll(malePeople);
+            if (user.getGender().equals("m")) {
+                userAndSpouseIDs.add(user.getId());
+            } else {
+                userAndSpouseIDs.add(user.getSpouseID());
+            }
+        } else if (femaleEventsVisible) {
+            // Only Female Events are visible
+            eventPersonIDs.addAll(femalePeople);
+            if (user.getGender().equals("f")) {
+                userAndSpouseIDs.add(user.getId());
+            } else {
+                userAndSpouseIDs.add(user.getSpouseID());
+            }
+        } else {
+            // No markers should be put on map
+            this.personEventPool = new HashSet<>();
+            return;
+        }
+
+        // Father/Mother Side Filters
+        if (!fatherSideVisible && !motherSideVisible) {
+            // No ancestor event markers are visible
+            eventPersonIDs.clear();
+        } else if (!fatherSideVisible) {
+            // Only MATERNAL ancestors should have event markers visible
+            eventPersonIDs.retainAll(DataCache.getInstance().getMaternalAncestors());
+        } else if (!motherSideVisible) {
+            // Only PATERNAL ancestors should have event markers visible
+            eventPersonIDs.retainAll(DataCache.getInstance().getPaternalAncestors());
+        }
+        // If both maternal/paternal ancestors should have event markers, just leave Set as is
+
+        // Add the user and their spouse (if appropriate) to final Set
+        eventPersonIDs.addAll(userAndSpouseIDs);
+
+        this.personEventPool = eventPersonIDs;
     }
 
     public void clear() {

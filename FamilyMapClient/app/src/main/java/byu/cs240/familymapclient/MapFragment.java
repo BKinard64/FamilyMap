@@ -137,7 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void addMapMarkers() {
         // Determine set of Events to display based on filters
-        Set<String> eventPersonIDs = getPersonEventPool();
+        Set<String> eventPersonIDs = DataCache.getInstance().getPersonEventPool();
 
         // Add markers for each event
         for (Event event : DataCache.getInstance().getEvents().values()) {
@@ -154,57 +154,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 marker.setTag(event);
             }
         }
-    }
-
-    private Set<String> getPersonEventPool() {
-        Set<String> eventPersonIDs = new HashSet<>();
-        Set<String> userAndSpouseIDs = new HashSet<>(); // Add this to final set before returning
-        Person user = DataCache.getInstance().getPerson();
-
-        // Male/Female Filters
-        if (DataCache.getInstance().isMaleEventsVisible() && DataCache.getInstance().isFemaleEventsVisible()) {
-            // Both Male and Female Events are visible
-            eventPersonIDs.addAll(DataCache.getInstance().getPeople().keySet());
-            userAndSpouseIDs.add(user.getId());
-            userAndSpouseIDs.add(user.getSpouseID());
-        } else if (DataCache.getInstance().isMaleEventsVisible()) {
-            // Only Male Events are visible
-            eventPersonIDs.addAll(DataCache.getInstance().getMalePeople());
-            if (user.getGender().equals("m")) {
-                userAndSpouseIDs.add(user.getId());
-            } else {
-                userAndSpouseIDs.add(user.getSpouseID());
-            }
-        } else if (DataCache.getInstance().isFemaleEventsVisible()) {
-            // Only Female Events are visible
-            eventPersonIDs.addAll(DataCache.getInstance().getFemalePeople());
-            if (user.getGender().equals("f")) {
-                userAndSpouseIDs.add(user.getId());
-            } else {
-                userAndSpouseIDs.add(user.getSpouseID());
-            }
-        } else {
-            // No markers should be put on map
-            return new HashSet<>();
-        }
-
-        // Father/Mother Side Filters
-        if (!(DataCache.getInstance().isFatherSideVisible()) && !(DataCache.getInstance().isMotherSideVisible())) {
-            // No ancestor event markers are visible
-            eventPersonIDs.clear();
-        } else if (!DataCache.getInstance().isFatherSideVisible()) {
-            // Only MATERNAL ancestors should have event markers visible
-            eventPersonIDs.retainAll(DataCache.getInstance().getMaternalAncestors());
-        } else if (!DataCache.getInstance().isMotherSideVisible()) {
-            // Only PATERNAL ancestors should have event markers visible
-            eventPersonIDs.retainAll(DataCache.getInstance().getPaternalAncestors());
-        }
-        // If both maternal/paternal ancestors should have event markers, just leave Set as is
-
-        // Add the user and their spouse (if appropriate) to final Set
-        eventPersonIDs.addAll(userAndSpouseIDs);
-
-        return eventPersonIDs;
     }
 
     private void executeMarkerClickResponse(Event event) {
@@ -403,7 +352,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void removeFilteredLines() {
         // Determine set of Events to display based on filters
-        Set<String> eventPersonIDs = getPersonEventPool();
+        Set<String> eventPersonIDs = DataCache.getInstance().getPersonEventPool();
         List<Polyline> removeList = new ArrayList<>();
 
         // Remove lines that involve at least one event not currently being displayed

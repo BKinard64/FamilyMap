@@ -21,6 +21,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import applogic.DataCache;
 import model.Event;
@@ -81,14 +82,18 @@ public class SearchActivity extends AppCompatActivity {
 
         // Find all the events that match the given criterion
         for (Event event : DataCache.getInstance().getEvents().values()) {
-            String city = event.getCity().toLowerCase();
-            String country = event.getCountry().toLowerCase();
-            String type = event.getType().toLowerCase();
-            String year = String.valueOf(event.getYear());
-            if (city.contains(criterion) || country.contains(criterion) || type.contains(criterion) ||
-                year.contains(criterion)) {
-                // If the criterion is in any of the city/country/type/year add event to the list
-                searchMatchEvents.add(event);
+            // If the event has not been filtered out, see if it matches the query
+            Set<String> eventPersonIDs = DataCache.getInstance().getPersonEventPool();
+            if (eventPersonIDs.contains(event.getPersonID())) {
+                String city = event.getCity().toLowerCase();
+                String country = event.getCountry().toLowerCase();
+                String type = event.getType().toLowerCase();
+                String year = String.valueOf(event.getYear());
+                if (city.contains(criterion) || country.contains(criterion) || type.contains(criterion) ||
+                        year.contains(criterion)) {
+                    // If the criterion is in any of the city/country/type/year add event to the list
+                    searchMatchEvents.add(event);
+                }
             }
         }
 
