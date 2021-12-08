@@ -380,6 +380,50 @@ public class DataCache {
         this.personEventPool = eventPersonIDs;
     }
 
+    public List<Event> findEventsMatchingSearch(String criterion) {
+        List<Event> searchMatchEvents = new ArrayList<>();
+
+        // Make search criterion case insensitive
+        criterion = criterion.toLowerCase();
+
+        // Find all the events that match the given criterion
+        for (Event event : this.events.values()) {
+            // If the event has not been filtered out, see if it matches the query
+            if (this.personEventPool.contains(event.getPersonID())) {
+                String city = event.getCity().toLowerCase();
+                String country = event.getCountry().toLowerCase();
+                String type = event.getType().toLowerCase();
+                String year = String.valueOf(event.getYear());
+                if (city.contains(criterion) || country.contains(criterion) || type.contains(criterion) ||
+                        year.contains(criterion)) {
+                    // If the criterion is in any of the city/country/type/year add event to the list
+                    searchMatchEvents.add(event);
+                }
+            }
+        }
+
+        return searchMatchEvents;
+    }
+
+    public List<Person> findPeopleMatchingSearch(String criterion) {
+        List<Person> searchMatchPeople = new ArrayList<>();
+
+        // Make search criterion case insensitive
+        criterion = criterion.toLowerCase();
+
+        // Find all the people that match the given criterion
+        for (Person person : this.people.values()) {
+            String firstName = person.getFirstName().toLowerCase();
+            String lastName = person.getLastName().toLowerCase();
+            if (firstName.contains(criterion) || lastName.contains(criterion)) {
+                // If the criterion is in either the first or last name, add person to the list
+                searchMatchPeople.add(person);
+            }
+        }
+
+        return searchMatchPeople;
+    }
+
     public void clear() {
         authToken = null;
         personID = null;

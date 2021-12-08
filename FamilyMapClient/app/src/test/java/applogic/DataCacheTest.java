@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
+import model.Event;
 import model.Person;
 import requests.LoginRequest;
 import results.FamilyEventsResult;
@@ -166,5 +168,80 @@ public class DataCacheTest {
         assertEquals(2, eventPersonIDs.size());
         assertTrue(eventPersonIDs.contains("Sheila_Parker"));
         assertTrue(eventPersonIDs.contains("Davis_Hyer"));
+    }
+
+    @Test
+    public void orderPersonEventsWithBirth() {
+        DataCache.getInstance().setPersonEvents();
+
+        Map<String, PriorityQueue<Event>> personEvents = DataCache.getInstance().getPersonEvents();
+        PriorityQueue<Event> sheilaEvents = personEvents.get("Sheila_Parker");
+
+        // Sheila should have 5 events
+        assertEquals(5, sheilaEvents.size());
+
+        // The first event should be birth
+        Event event = sheilaEvents.poll();
+        assertEquals("BIRTH", event.getType().toUpperCase());
+
+        // The next event should be marriage
+        event = sheilaEvents.poll();
+        assertEquals("MARRIAGE", event.getType().toUpperCase());
+
+        // The next two events should be completed asteroids
+        event = sheilaEvents.poll();
+        assertEquals("COMPLETED ASTEROIDS", event.getType().toUpperCase());
+        event = sheilaEvents.poll();
+        assertEquals("COMPLETED ASTEROIDS", event.getType().toUpperCase());
+
+        // The last event should be death
+        event = sheilaEvents.poll();
+        assertEquals("DEATH", event.getType().toUpperCase());
+    }
+
+    @Test
+    public void orderPersonEventsNoBirth() {
+        DataCache.getInstance().setPersonEvents();
+
+        Map<String, PriorityQueue<Event>> personEvents = DataCache.getInstance().getPersonEvents();
+        PriorityQueue<Event> kenEvents = personEvents.get("Ken_Rodham");
+
+        // Ken should have 2 events
+        assertEquals(2, kenEvents.size());
+
+        // The first event should be graduated from BYU
+        Event event = kenEvents.poll();
+        assertEquals("GRADUATED FROM BYU", event.getType().toUpperCase());
+
+        // The last event should be marriage
+        event = kenEvents.poll();
+        assertEquals("MARRIAGE", event.getType().toUpperCase());
+    }
+
+    @Test
+    public void searchResultsSuccess() {
+        DataCache.getInstance().organizeData();
+        List<Event> searchResultEvents = DataCache.getInstance().findEventsMatchingSearch("fr");
+        List<Person> searchResultsPeople = DataCache.getInstance().findPeopleMatchingSearch("fr");
+
+        // Events that should be returned by this search are Caught a Frog and Graduated From BYU
+        assertEquals(2, searchResultEvents.size());
+        assertEquals("Jones_Frog", searchResultEvents.get(0).getId());
+        assertEquals("BYU_graduation", searchResultEvents.get(1).getId());
+
+        // People that should be returned by this search is only Frank Jones
+        assertEquals(1, searchResultsPeople.size());
+        assertEquals("Frank_Jones", searchResultsPeople.get(0).getId());
+    }
+
+    @Test
+    public void noSearchResultsSuccess() {
+        DataCache.getInstance().organizeData();
+        List<Event> searchResultEvents = DataCache.getInstance().findEventsMatchingSearch("zy");
+        List<Person> searchResultsPeople = DataCache.getInstance().findPeopleMatchingSearch("zy");
+
+        // There should be no Events or People returned from this search
+        assertTrue(searchResultEvents.isEmpty());
+        assertTrue(searchResultsPeople.isEmpty());
     }
 }

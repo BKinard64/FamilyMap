@@ -19,9 +19,7 @@ import android.widget.TextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import applogic.DataCache;
 import model.Event;
@@ -74,38 +72,8 @@ public class SearchActivity extends AppCompatActivity {
 
     private boolean findEventsAndPeople(String criterion, RecyclerView searchResults) {
         // Create List Objects to pass to Adapter
-        List<Event> searchMatchEvents = new ArrayList<>();
-        List<Person> searchMatchPeople = new ArrayList<>();
-
-        // Make search criterion case insensitive
-        criterion = criterion.toLowerCase();
-
-        // Find all the events that match the given criterion
-        for (Event event : DataCache.getInstance().getEvents().values()) {
-            // If the event has not been filtered out, see if it matches the query
-            Set<String> eventPersonIDs = DataCache.getInstance().getPersonEventPool();
-            if (eventPersonIDs.contains(event.getPersonID())) {
-                String city = event.getCity().toLowerCase();
-                String country = event.getCountry().toLowerCase();
-                String type = event.getType().toLowerCase();
-                String year = String.valueOf(event.getYear());
-                if (city.contains(criterion) || country.contains(criterion) || type.contains(criterion) ||
-                        year.contains(criterion)) {
-                    // If the criterion is in any of the city/country/type/year add event to the list
-                    searchMatchEvents.add(event);
-                }
-            }
-        }
-
-        // Find all the people that match the given criterion
-        for (Person person : DataCache.getInstance().getPeople().values()) {
-            String firstName = person.getFirstName().toLowerCase();
-            String lastName = person.getLastName().toLowerCase();
-            if (firstName.contains(criterion) || lastName.contains(criterion)) {
-                // If the criterion is in either the first or last name, add person to the list
-                searchMatchPeople.add(person);
-            }
-        }
+        List<Event> searchMatchEvents = DataCache.getInstance().findEventsMatchingSearch(criterion);
+        List<Person> searchMatchPeople = DataCache.getInstance().findPeopleMatchingSearch(criterion);
 
         // Create the adapter for the Search Activity
         FamilyMapSearchAdapter adapter = new FamilyMapSearchAdapter(searchMatchEvents, searchMatchPeople);

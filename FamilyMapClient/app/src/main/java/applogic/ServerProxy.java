@@ -14,7 +14,6 @@ import java.net.URL;
 import requests.LoadRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
-import results.ClearResult;
 import results.FamilyEventsResult;
 import results.FamilyResult;
 import results.LoadResult;
@@ -122,36 +121,6 @@ public class ServerProxy {
 
             Gson gson = new Gson();
             return (FamilyEventsResult)gson.fromJson(resBody, FamilyEventsResult.class);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public ClearResult clearDatabase() {
-        try {
-            // Begin creating request to send to Server
-            URL url = new URL("http://" + serverHost + ":" + serverPort + "/clear");
-            http = (HttpURLConnection)url.openConnection();
-
-            // Set method to POST and establish there will not be a Request Body
-            http.setRequestMethod("POST");
-            http.setDoOutput(false);
-
-            // Connect to the Server
-            http.connect();
-
-            // Deserialize the Response Body to a ClearResult
-            Reader resBody;
-            if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                resBody = new InputStreamReader(http.getInputStream());
-            } else {
-                resBody = new InputStreamReader(http.getErrorStream());
-            }
-
-            Gson gson = new Gson();
-            return (ClearResult)gson.fromJson(resBody, ClearResult.class);
 
         } catch (IOException e) {
             e.printStackTrace();
