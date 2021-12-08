@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 
 import applogic.DataCache;
 
@@ -94,6 +96,17 @@ public class SettingsActivity extends AppCompatActivity {
                 DataCache.getInstance().setFemaleEventsVisible(isChecked);
                 DataCache.getInstance().setFilterStatusChanged(true);
                 DataCache.getInstance().setPersonEventPool();
+            }
+        });
+
+        // Write Event Handling for Logout View
+        LinearLayout logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }
