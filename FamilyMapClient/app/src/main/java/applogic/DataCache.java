@@ -383,11 +383,23 @@ public class DataCache {
     public void clear() {
         authToken = null;
         personID = null;
+        lifeStoryLinesEnabled = true;
+        familyTreeLinesEnabled = true;
+        spouseLinesEnabled = true;
+        fatherSideVisible = true;
+        motherSideVisible = true;
+        maleEventsVisible = true;
+        femaleEventsVisible = true;
+        filterStatusChanged = false;
         people = null;
         events = null;
-        eventColors = null;
         personEvents = null;
+        familyMembers = null;
+        eventColors = null;
         paternalAncestors = null;
         maternalAncestors = null;
+        malePeople = null;
+        femalePeople = null;
+        personEventPool = null;
     }
 }
