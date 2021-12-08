@@ -33,6 +33,7 @@ public class DataCache {
     private boolean motherSideVisible = true;
     private boolean maleEventsVisible = true;
     private boolean femaleEventsVisible = true;
+    private boolean filterStatusChanged = false;
     private Map<String, Person> people;
     private Map<String, Event> events;
     private Map<String, PriorityQueue<Event>> personEvents;
@@ -117,6 +118,14 @@ public class DataCache {
 
     public void setFemaleEventsVisible(boolean femaleEventsVisible) {
         this.femaleEventsVisible = femaleEventsVisible;
+    }
+
+    public boolean isFilterStatusChanged() {
+        return filterStatusChanged;
+    }
+
+    public void setFilterStatusChanged(boolean filterStatusChanged) {
+        this.filterStatusChanged = filterStatusChanged;
     }
 
     public Map<String, Person> getPeople() {

@@ -124,10 +124,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onResume() {
         super.onResume();
         // Update map in case Settings filters have changed
-        if (map != null) {
+        if (map != null && DataCache.getInstance().isFilterStatusChanged()) {
             map.clear();
+            mapLines.clear();
             addMapMarkers();
+            eventIcon.setImageDrawable(null);
+            personName.setText(getText(R.string.map_event_details));
+            eventDetails.setText("");
         }
+        DataCache.getInstance().setFilterStatusChanged(false);
     }
 
     private void addMapMarkers() {
@@ -205,11 +210,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private void executeMarkerClickResponse(Event event) {
         map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(event.getLatitude(),
                 event.getLongitude())));
+
         // Draw lines on map
-        removeLines();
-        drawSpouseLine(event);
-        drawFamilyLines(event);
-        drawLifeStoryLines(event);
+        removeAllLines();
+        if (DataCache.getInstance().isMaleEventsVisible() &&
+            DataCache.getInstance().isFemaleEventsVisible() &&
+            DataCache.getInstance().isSpouseLinesEnabled()) {
+            // Only draw spouse lines if they are enabled and both male/female events are visible
+            drawSpouseLine(event);
+        }
+        if (DataCache.getInstance().isFamilyTreeLinesEnabled()) {
+            // Only draw family tree lines if enabled
+            drawFamilyLines(event);
+        }
+        if (DataCache.getInstance().isLifeStoryLinesEnabled()) {
+            // Only draw life story lines if enabled
+            drawLifeStoryLines(event);
+        }
+        removeFilteredLines();
 
         // Update event information
         Drawable genderIcon;
@@ -368,14 +386,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .width(width);
         Polyline line = map.addPolyline(options);
 
-        // Store line
+        // Store line with tag
+        List<Event> endPoints = new ArrayList<>();
+        endPoints.add(startEvent);
+        endPoints.add(endEvent);
+        line.setTag(endPoints);
         mapLines.add(line);
     }
 
-    private void removeLines() {
+    private void removeAllLines() {
         for (Polyline line : mapLines) {
             line.remove();
         }
         mapLines.clear();
+    }
+
+    private void removeFilteredLines() {
+        // Determine set of Events to display based on filters
+        Set<String> eventPersonIDs = getPersonEventPool();
+        List<Polyline> removeList = new ArrayList<>();
+
+        // Remove lines that involve at least one event not currently being displayed
+        for (Polyline line : mapLines) {
+            List<Event> endPoints = (List<Event>) line.getTag();
+            Event startEvent = endPoints.get(0);
+            Event endEvent = endPoints.get(1);
+            if (!(eventPersonIDs.contains(startEvent.getPersonID())) || !(eventPersonIDs.contains(endEvent.getPersonID()))) {
+                line.remove();
+                removeList.add(line);
+            }
+        }
+
+        // Remove lines from collection that were removed from displaying on the map
+        for (Polyline line : removeList) {
+            mapLines.remove(line);
+        }
     }
 }

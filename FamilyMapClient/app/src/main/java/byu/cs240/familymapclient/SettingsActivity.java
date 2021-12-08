@@ -22,6 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DataCache.getInstance().setLifeStoryLinesEnabled(isChecked);
+                DataCache.getInstance().setFilterStatusChanged(true);
             }
         });
 
@@ -31,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DataCache.getInstance().setFamilyTreeLinesEnabled(isChecked);
+                DataCache.getInstance().setFilterStatusChanged(true);
             }
         });
 
@@ -40,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DataCache.getInstance().setSpouseLinesEnabled(isChecked);
+                DataCache.getInstance().setFilterStatusChanged(true);
             }
         });
 
@@ -49,6 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DataCache.getInstance().setFatherSideVisible(isChecked);
+                DataCache.getInstance().setFilterStatusChanged(true);
             }
         });
 
@@ -58,6 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DataCache.getInstance().setMotherSideVisible(isChecked);
+                DataCache.getInstance().setFilterStatusChanged(true);
             }
         });
 
@@ -67,6 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DataCache.getInstance().setMaleEventsVisible(isChecked);
+                DataCache.getInstance().setFilterStatusChanged(true);
             }
         });
 
@@ -76,6 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DataCache.getInstance().setFemaleEventsVisible(isChecked);
+                DataCache.getInstance().setFilterStatusChanged(true);
             }
         });
     }
