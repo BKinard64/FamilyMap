@@ -21,6 +21,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 import applogic.DataCache;
 import model.Event;
@@ -89,7 +90,12 @@ public class PersonActivity extends AppCompatActivity {
         public ExpandableListAdapter(PriorityQueue<Event> lifeEvents, List<Person> familyMembers, Person activityPerson) {
             this.lifeEvents = new ArrayList<>();
             while (!lifeEvents.isEmpty()) {
-                this.lifeEvents.add(lifeEvents.poll());
+                // Remove events that are currently being filtered
+                Set<String> eventPersonIDs = DataCache.getInstance().getPersonEventPool();
+                Event event = lifeEvents.poll();
+                if (eventPersonIDs.contains(event.getPersonID())) {
+                    this.lifeEvents.add(event);
+                }
             }
             this.familyMembers = familyMembers;
             this.activityPerson = activityPerson;
