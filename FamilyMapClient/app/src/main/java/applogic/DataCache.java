@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.Polyline;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -25,6 +26,14 @@ public class DataCache {
 
     private String authToken;
     private String personID;
+    private boolean lifeStoryLinesEnabled = true;
+    private boolean familyTreeLinesEnabled = true;
+    private boolean spouseLinesEnabled = true;
+    private boolean fatherSideVisible = true;
+    private boolean motherSideVisible = true;
+    private boolean maleEventsVisible = true;
+    private boolean femaleEventsVisible = true;
+    private boolean filterStatusChanged = false;
     private Map<String, Person> people;
     private Map<String, Event> events;
     private Map<String, PriorityQueue<Event>> personEvents;
@@ -32,6 +41,9 @@ public class DataCache {
     private Map<String, Float> eventColors;
     private Set<String> paternalAncestors;
     private Set<String> maternalAncestors;
+    private Set<String> malePeople;
+    private Set<String> femalePeople;
+    private Set<String> personEventPool;
 
     public String getAuthToken() {
         return authToken;
@@ -51,6 +63,70 @@ public class DataCache {
 
     public Person getPerson() {
         return this.people.get(this.personID);
+    }
+
+    public boolean isLifeStoryLinesEnabled() {
+        return lifeStoryLinesEnabled;
+    }
+
+    public void setLifeStoryLinesEnabled(boolean lifeStoryLinesEnabled) {
+        this.lifeStoryLinesEnabled = lifeStoryLinesEnabled;
+    }
+
+    public boolean isFamilyTreeLinesEnabled() {
+        return familyTreeLinesEnabled;
+    }
+
+    public void setFamilyTreeLinesEnabled(boolean familyTreeLinesEnabled) {
+        this.familyTreeLinesEnabled = familyTreeLinesEnabled;
+    }
+
+    public boolean isSpouseLinesEnabled() {
+        return spouseLinesEnabled;
+    }
+
+    public void setSpouseLinesEnabled(boolean spouseLinesEnabled) {
+        this.spouseLinesEnabled = spouseLinesEnabled;
+    }
+
+    public boolean isFatherSideVisible() {
+        return fatherSideVisible;
+    }
+
+    public void setFatherSideVisible(boolean fatherSideVisible) {
+        this.fatherSideVisible = fatherSideVisible;
+    }
+
+    public boolean isMotherSideVisible() {
+        return motherSideVisible;
+    }
+
+    public void setMotherSideVisible(boolean motherSideVisible) {
+        this.motherSideVisible = motherSideVisible;
+    }
+
+    public boolean isMaleEventsVisible() {
+        return maleEventsVisible;
+    }
+
+    public void setMaleEventsVisible(boolean maleEventsVisible) {
+        this.maleEventsVisible = maleEventsVisible;
+    }
+
+    public boolean isFemaleEventsVisible() {
+        return femaleEventsVisible;
+    }
+
+    public void setFemaleEventsVisible(boolean femaleEventsVisible) {
+        this.femaleEventsVisible = femaleEventsVisible;
+    }
+
+    public boolean isFilterStatusChanged() {
+        return filterStatusChanged;
+    }
+
+    public void setFilterStatusChanged(boolean filterStatusChanged) {
+        this.filterStatusChanged = filterStatusChanged;
     }
 
     public Map<String, Person> getPeople() {
@@ -73,6 +149,16 @@ public class DataCache {
         for (Event event : events) {
             this.events.put(event.getId(), event);
         }
+    }
+
+    public void organizeData() {
+        setPersonEvents();
+        setFamilyMembers();
+        setPaternalAncestors();
+        setMaternalAncestors();
+        setGenderGroups();
+        setEventColors();
+        setPersonEventPool();
     }
 
     public Map<String, PriorityQueue<Event>> getPersonEvents() {
@@ -171,7 +257,20 @@ public class DataCache {
     }
 
     public void setPaternalAncestors() {
+        Person user = getPerson();
+        paternalAncestors = new HashSet<>();
 
+        String fatherID = user.getFatherID();
+        if (fatherID != null) {
+            // Add user's fatherID to this Set
+            paternalAncestors.add(fatherID);
+
+            // Get the father's ancestors and add them to the Set
+            Person father = this.people.get(fatherID);
+            if (father != null) {
+                getAncestors(father, paternalAncestors);
+            }
+        }
     }
 
     public Set<String> getMaternalAncestors() {
@@ -179,7 +278,119 @@ public class DataCache {
     }
 
     public void setMaternalAncestors() {
+        Person user = getPerson();
+        maternalAncestors = new HashSet<>();
 
+        String motherID = user.getMotherID();
+        if (motherID != null) {
+            // Add user's mother to this Set
+            maternalAncestors.add(motherID);
+
+            // Get the mother's ancestors and add them to the Set
+            Person mother = this.people.get(motherID);
+            if (mother != null) {
+                getAncestors(mother, maternalAncestors);
+            }
+        }
+    }
+
+    private void getAncestors(Person person, Set<String> ancestors) {
+        // Add father to Set
+        String fatherID = person.getFatherID();
+        if (fatherID != null) {
+            ancestors.add(fatherID);
+            Person father = this.people.get(person.getFatherID());
+            if (father != null) {
+                getAncestors(father, ancestors);
+            }
+        }
+
+        // Add mother to Set
+        String motherID = person.getMotherID();
+        if (motherID != null) {
+            ancestors.add(motherID);
+            Person mother = this.people.get(person.getMotherID());
+            if (mother != null) {
+                getAncestors(mother, ancestors);
+            }
+        }
+    }
+
+    public Set<String> getMalePeople() {
+        return malePeople;
+    }
+
+    public void setGenderGroups() {
+        malePeople = new HashSet<>();
+        femalePeople = new HashSet<>();
+
+        for (Person person : this.people.values()) {
+            if (person.getGender().equals("m")) {
+                malePeople.add(person.getId());
+            } else {
+                femalePeople.add(person.getId());
+            }
+        }
+    }
+
+    public Set<String> getFemalePeople() {
+        return femalePeople;
+    }
+
+    public Set<String> getPersonEventPool() {
+        return personEventPool;
+    }
+
+    public void setPersonEventPool() {
+        Set<String> eventPersonIDs = new HashSet<>();
+        Set<String> userAndSpouseIDs = new HashSet<>(); // Add this to final set before returning
+        Person user = getPerson();
+
+        // Male/Female Filters
+        if (maleEventsVisible && femaleEventsVisible) {
+            // Both Male and Female Events are visible
+            eventPersonIDs.addAll(getPeople().keySet());
+            userAndSpouseIDs.add(user.getId());
+            userAndSpouseIDs.add(user.getSpouseID());
+        } else if (maleEventsVisible) {
+            // Only Male Events are visible
+            eventPersonIDs.addAll(malePeople);
+            if (user.getGender().equals("m")) {
+                userAndSpouseIDs.add(user.getId());
+            } else {
+                userAndSpouseIDs.add(user.getSpouseID());
+            }
+        } else if (femaleEventsVisible) {
+            // Only Female Events are visible
+            eventPersonIDs.addAll(femalePeople);
+            if (user.getGender().equals("f")) {
+                userAndSpouseIDs.add(user.getId());
+            } else {
+                userAndSpouseIDs.add(user.getSpouseID());
+            }
+        } else {
+            // No markers should be put on map
+            this.personEventPool = new HashSet<>();
+            return;
+        }
+
+        // Father/Mother Side Filters
+        if (!fatherSideVisible && !motherSideVisible) {
+            // No ancestor event markers are visible
+            eventPersonIDs.clear();
+        } else if (!fatherSideVisible) {
+            // Only MATERNAL ancestors should have event markers visible
+            eventPersonIDs.retainAll(DataCache.getInstance().getMaternalAncestors());
+        } else if (!motherSideVisible) {
+            // Only PATERNAL ancestors should have event markers visible
+            eventPersonIDs.retainAll(DataCache.getInstance().getPaternalAncestors());
+        }
+        // If both maternal/paternal ancestors should have event markers, just leave Set as is
+
+        // Add the user and their spouse (if appropriate) to final Set
+        eventPersonIDs.addAll(userAndSpouseIDs);
+
+        this.personEventPool = eventPersonIDs;
     }
 
     public void clear() {

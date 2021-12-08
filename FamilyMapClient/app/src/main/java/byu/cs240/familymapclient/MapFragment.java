@@ -33,8 +33,11 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 import applogic.DataCache;
 import model.Event;
@@ -97,19 +100,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map = googleMap;
         map.setOnMapLoadedCallback(this);
 
-        // Add markers for each event
-        for (Event event : DataCache.getInstance().getEvents().values()) {
-            // Assign marker its unique color based on eventType
-            float mrkrColor = DataCache.getInstance().getEventColors().get(event.getType().toUpperCase());
-
-            // Add marker to the map by specifying its location and color
-            Marker marker = map.addMarker(new MarkerOptions()
-                                    .position(new LatLng(event.getLatitude(), event.getLongitude()))
-                                    .icon(BitmapDescriptorFactory.defaultMarker(mrkrColor)));
-
-            // Set the marker's tag to be the model event object for the marker
-            marker.setTag(event);
-        }
+        addMapMarkers();
 
         // Set a listener for when marker is clicked
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -129,14 +120,63 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Update map in case Settings filters have changed
+        if (map != null && DataCache.getInstance().isFilterStatusChanged()) {
+            map.clear();
+            mapLines.clear();
+            addMapMarkers();
+            eventIcon.setImageDrawable(null);
+            personName.setText(getText(R.string.map_event_details));
+            eventDetails.setText("");
+        }
+        DataCache.getInstance().setFilterStatusChanged(false);
+    }
+
+    private void addMapMarkers() {
+        // Determine set of Events to display based on filters
+        Set<String> eventPersonIDs = DataCache.getInstance().getPersonEventPool();
+
+        // Add markers for each event
+        for (Event event : DataCache.getInstance().getEvents().values()) {
+            if (eventPersonIDs.contains(event.getPersonID())) {
+                // Assign marker its unique color based on eventType
+                float mrkrColor = DataCache.getInstance().getEventColors().get(event.getType().toUpperCase());
+
+                // Add marker to the map by specifying its location and color
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .position(new LatLng(event.getLatitude(), event.getLongitude()))
+                        .icon(BitmapDescriptorFactory.defaultMarker(mrkrColor)));
+
+                // Set the marker's tag to be the model event object for the marker
+                marker.setTag(event);
+            }
+        }
+    }
+
     private void executeMarkerClickResponse(Event event) {
         map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(event.getLatitude(),
                 event.getLongitude())));
+
         // Draw lines on map
-        removeLines();
-        drawSpouseLine(event);
-        drawFamilyLines(event);
-        drawLifeStoryLines(event);
+        removeAllLines();
+        if (DataCache.getInstance().isMaleEventsVisible() &&
+            DataCache.getInstance().isFemaleEventsVisible() &&
+            DataCache.getInstance().isSpouseLinesEnabled()) {
+            // Only draw spouse lines if they are enabled and both male/female events are visible
+            drawSpouseLine(event);
+        }
+        if (DataCache.getInstance().isFamilyTreeLinesEnabled()) {
+            // Only draw family tree lines if enabled
+            drawFamilyLines(event);
+        }
+        if (DataCache.getInstance().isLifeStoryLinesEnabled()) {
+            // Only draw life story lines if enabled
+            drawLifeStoryLines(event);
+        }
+        removeFilteredLines();
 
         // Update event information
         Drawable genderIcon;
@@ -195,6 +235,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.searchMenuItem) {
             Intent intent = new Intent(activity, SearchActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.settingsMenuItem) {
+            Intent intent = new Intent(activity, SettingsActivity.class);
             startActivity(intent);
         }
 
@@ -292,14 +335,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .width(width);
         Polyline line = map.addPolyline(options);
 
-        // Store line
+        // Store line with tag
+        List<Event> endPoints = new ArrayList<>();
+        endPoints.add(startEvent);
+        endPoints.add(endEvent);
+        line.setTag(endPoints);
         mapLines.add(line);
     }
 
-    private void removeLines() {
+    private void removeAllLines() {
         for (Polyline line : mapLines) {
             line.remove();
         }
         mapLines.clear();
+    }
+
+    private void removeFilteredLines() {
+        // Determine set of Events to display based on filters
+        Set<String> eventPersonIDs = DataCache.getInstance().getPersonEventPool();
+        List<Polyline> removeList = new ArrayList<>();
+
+        // Remove lines that involve at least one event not currently being displayed
+        for (Polyline line : mapLines) {
+            List<Event> endPoints = (List<Event>) line.getTag();
+            Event startEvent = endPoints.get(0);
+            Event endEvent = endPoints.get(1);
+            if (!(eventPersonIDs.contains(startEvent.getPersonID())) || !(eventPersonIDs.contains(endEvent.getPersonID()))) {
+                line.remove();
+                removeList.add(line);
+            }
+        }
+
+        // Remove lines from collection that were removed from displaying on the map
+        for (Polyline line : removeList) {
+            mapLines.remove(line);
+        }
     }
 }
